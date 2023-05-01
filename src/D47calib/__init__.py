@@ -256,12 +256,12 @@ class D47calib(ogls.InverseTPolynomial):
 
 
 
-def combine_D47calibs(calibs, degrees = [0,2], same_T = [], same_D47 = []):
+def combine_D47calibs(calibs, degrees = [0,2], same_T = []):
 	'''
 	Combine `D47calib` instances.
 	
-	Example of valid `same_T` or `same_D47` parameter:
-	`{{'LGB-2', DHC-2-8'}, {'ETH-1-1100-SAM', 'ETH-1-1100'}}`.
+	Example of valid `same_T` parameter:
+	`[{'LGB-2', DHC-2-8'}, {'ETH-1-1100-SAM', 'ETH-1-1100'}]`.
 	'''
 
 	samples = [s for c in calibs for s in c.samples]
@@ -273,8 +273,6 @@ def combine_D47calibs(calibs, degrees = [0,2], same_T = [], same_D47 = []):
 	for i in range(len(samples)):
 		for j in range(len(samples)):
 			if i != j:
-				if samples[i] == samples[j] or {samples[i], samples[j]} in same_D47:
-					sD47[i,j] = (sD47[i,i] * sD47[j,j])**.5
 				if samples[i] == samples[j] or {samples[i], samples[j]} in same_T:
 					sT[i,j] = (sT[i,i] * sT[j,j])**.5
 	

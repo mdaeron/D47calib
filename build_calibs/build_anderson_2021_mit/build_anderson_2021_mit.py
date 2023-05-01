@@ -68,11 +68,10 @@ C.export('anderson_2021_mit', '../anderson_2021_mit.py')
 C.export_data('anderson_2021_mit_data.csv', label = True, T_correl = True, D47_correl = True)
 
 fig = figure()
-ax = subplot(111)
 C.invT_xaxis()
 C.plot_error_bars()
 C.plot_data()
 C.plot_bff()
 C.plot_bff_ci()
-C.invT_xaxis()
+
 savefig(f'anderson_2021_mit.pdf')
