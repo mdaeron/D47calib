@@ -96,7 +96,75 @@ class D47calib(ogls.InverseTPolynomial):
 		if 'color' not in kw:
 			kw['color'] = self.color
 		return ogls.InverseTPolynomial.plot_bff_ci(self, **kw)
+
+	def new_T47(self, D47 = None, sD47 = None, T=None, sT = None, return_SE = False):
+		'''
+		Convert between Δ47 and T47 values.
 		
+		The returned output depends on the input types. When computing T from Δ47:
+		
+		| D47   | sD47  |        |  T    | sT_from_sD47 | sT_from_calib | sT_from_both  |
+		|:-----:|:-----:|:------:|:-----:|:------------:|:-------------:|:-------------:|
+		| float |       | &rarr; | float |              | float         | float         |
+		| 1-D   |       | &rarr; | 1-D   |              | 2-D           | 2-D           |
+		| float | float | &rarr; | float | float        | float         | float         |
+		| 1-D   | float | &rarr; | 1-D   | 1-D          | 2-D           | 2-D           |
+		| float | 1-D   | &rarr; | float | 1-D          | float         | 1-D           |
+		| 1-D   | 1-D   | &rarr; | 1-D   | 1-D          | 2-D           | 2-D           |
+		| 1-D   | 2-D   | &rarr; | 1-D   | 2-D          | 2-D           | 2-D           |
+
+		Conversely, when computing Δ47 from T:
+
+		| T     | sT    |        |  D47  | sD47_from_sT | sD47_from_calib | sD47_from_both  |
+		|:-----:|:-----:|:------:|:-----:|:------------:|:---------------:|:---------------:|
+		| float |       | &rarr; | float |              | float           | float           |
+		| 1-D   |       | &rarr; | 1-D   |              | 2-D             | 2-D             |
+		| float | float | &rarr; | float | float        | float           | float           |
+		| 1-D   | float | &rarr; | 1-D   | 1-D          | 2-D             | 2-D             |
+		| float | 1-D   | &rarr; | float | 1-D          | float           | 1-D             |
+		| 1-D   | 1-D   | &rarr; | 1-D   | 1-D          | 2-D             | 2-D             |
+		| 1-D   | 2-D   | &rarr; | 1-D   | 2-D          | 2-D             | 2-D             |
+
+
+		When returned `sT` or `sD47` values are 1-D arrays, these correspond to standard errors on `T` or `D47`.
+		When returned `sT` or `sD47` values are 2-D arrays, these correspond to the fullvariance-covariance
+		matrix of `T` or `D47`.
+		
+		In both cases, one may force returned 2-D values to be 1-D arrays instead by setting `return_SE = True`.
+		
+		Raises an error if both `T` and `D47` are specified.
+		
+		**Arguments:**		
+
+		* `D47`: Δ47 value(s) to convert into temperature (`float` or 1-D array)
+		* `sD47`: Δ47 uncertainties, which may be:
+		  - `None` (default)
+		  - `float`
+		  - 1-D array (standard errors on `D47`)
+		  - 2-D array (variance-covariance matrix for `D47`)
+		* `T`: T value(s) to convert into Δ47 (`float` or 1-D array)
+		* `sT`: T uncertainties, which may be:
+		  - `None` (default)
+		  - `float`
+		  - 1-D array (standard errors on `T`)
+		  - 2-D array (variance-covariance matrix for `T`)
+		  
+		**Returns (if `D47` was specified):**
+		
+		* `T` (temperatures computed from `D47`)
+		* `sT_from_sD47` (uncertainties from `sD47` only)
+		* `sT_from_calib` (uncertainties from calibration only)
+		* `sT_from_both` (combined uncertainties from `sD47` and calibration)
+
+		**Returns (if `T` was specified):**
+		
+		* `D47` (temperatures computed from `D47`)
+		* `sD47_from_sT` (uncertainties from `sT` only)
+		* `sD47_from_calib` (uncertainties from calibration only)
+		* `sD47_from_both` (combined uncertainties from `sT` and calibration)
+		'''
+
+		return None
 
 	def T47(self, D47 = None, sD47 = None, T=None, sT = None):
 		if D47 is not None:

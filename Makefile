@@ -1,4 +1,4 @@
-all: combine
+all: combine doc
 	@echo "All done!"
 
 combine: calibs
@@ -24,3 +24,8 @@ calibs:
 	@cd ./build_calibs/build_huyghe_2022; python build_huyghe_2022.py
 	@echo "Saving calibrations..."
 	@cd ./build_calibs; python save_to_calibs.py
+
+.PHONY: doc
+doc:
+	@echo "Building documentation..."
+	@python build_doc.py
