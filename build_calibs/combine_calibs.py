@@ -1,6 +1,7 @@
 from D47calib import *
 from D47calib.calibs import *
-from scipy.stats import chi2
+
+# from scipy.stats import chi2
 
 # l = 7
 
@@ -89,9 +90,9 @@ C.color = (0,0,0)
 C.description = 'Combined I-CDES calibration'
 C.label = 'Combined I-CDES calibration'
 
-C.export('combined_2023', '../combined_2023.py')
+C.export('combined_2023', 'combined_2023.py')
 C.export_data('combined_2023_data.csv', label = True, T_correl = True, D47_correl = True)
 
 with open('../src/D47calib/calibs.py', 'a') as fid:
-		with open('../combined_2023.py') as gid:
+		with open('combined_2023.py') as gid:
 			fid.write(gid.read())

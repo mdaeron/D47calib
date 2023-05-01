@@ -2,6 +2,9 @@ all: combine
 	@echo "All done!"
 
 combine: calibs
+	@echo "Building Devils Laghetto (2023)..."
+	@cd ./build_calibs/build_devils_laghetto_2023; python build_devils_laghetto_2023.py
+	@cd ./build_calibs; python save_to_calibs.py
 	@echo "Combining calibrations..."
 	@cd ./build_calibs; python combine_calibs.py
 

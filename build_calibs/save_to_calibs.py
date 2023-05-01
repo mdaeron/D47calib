@@ -10,6 +10,7 @@ with open('../src/D47calib/calibs.py', 'w') as fid:
 		'anderson_2021_lsce.py',
 		'fiebig_2021.py',
 		'huyghe_2022.py',
+		'devils_laghetto_2023.py',
 		]:
 	
 		with open(file) as gid:
