@@ -2,6 +2,7 @@
 Apply an arbitrary filter to each docstring
 '''
 
+from pathlib import Path
 import pdoc
 
 substitutions = [
@@ -52,8 +53,7 @@ def myfilter(docstr):
 pdoc.render.env.filters['myfilter'] = myfilter
 pdoc.render.configure(template_directory = 'pdoc_templates')
 
-with open('docs/index.html', 'w') as fid:
-	fid.write(pdoc.pdoc('D47calib'))
+pdoc.pdoc('D47calib', output_directory = Path('docs'))
 
 # foo = '''
 # Create foo δ13C bar Δ47 δ18O_VSMOW `δ13C_VPDB`, `Δ48`.
