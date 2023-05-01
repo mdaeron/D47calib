@@ -52,7 +52,7 @@ def myfilter(docstr):
 pdoc.render.env.filters['myfilter'] = myfilter
 pdoc.render.configure(template_directory = 'pdoc_templates')
 
-with open('doc/index.html', 'w') as fid:
+with open('docs/index.html', 'w') as fid:
 	fid.write(pdoc.pdoc('D47calib'))
 
 # foo = '''
