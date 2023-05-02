@@ -110,48 +110,47 @@ class D47calib(_ogls.InverseTPolynomial):
 		return_covar = False,
 		):
 		'''
-		Convert from Δ47 to T (if `D47` is specified as input)
-		or from T to Δ47 (if `T` is specified as input).
-
-		Only one of either `D47` or `T` may be specified.
-
-		`T` input may be specified as a scalar, or as a 1-D array.
-		`D47` output will then have the same type as `T`.
-
+		When `D47` is input, computes corresponding T value(s).
 		`D47` input may be specified as a scalar, or as a 1-D array.
-		`T` output will then have the same type as `D47`.
+		`T` output will then have the same type and size as `D47`.
+
+		When `T` is input, computes corresponding Δ47 value(s).
+		`T` input may be specified as a scalar, or as a 1-D array.
+		`D47` output will then have the same type and size as `T`.
 		
+		Only one of either `D47` or `T` may be specified as input.
+
 		**Arguments:**		
 
 		* `D47`: Δ47 value(s) to convert into temperature (`float` or 1-D array)
 		* `sD47`: Δ47 uncertainties, which may be:
 		  - `None` (default)
-		  - `float` or `int`
+		  - `float` or `int` (uniform standard error on `D47`)
 		  - 1-D array (standard errors on `D47`)
 		  - 2-D array (covariance matrix for `D47`)
 		* `T`: T value(s) to convert into Δ47 (`float` or 1-D array), in degrees C
 		* `sT`: T uncertainties, which may be:
 		  - `None` (default)
-		  - `float` or `int`
+		  - `float` or `int` (uniform standard error on `T`)
 		  - 1-D array (standard errors on `T`)
 		  - 2-D array (variance-covariance matrix for `T`)
 		* `error_from`: if set to `'both'` (default), returned errors take into account
 		  input uncertainties (`sT` or `sD47`) as well as calibration uncertainties;
 		  if set to `'calib'`, only calibration uncertainties are accounted for;
-		  if set to `'sT'` or `'sD47'`, calibration uncertainties are ignored
+		  if set to `'sT'` or `'sD47'`, calibration uncertainties are ignored.
 		* `return_covar`: (False by default) whether to return the full covariance matrix
 		  for returned `T` or `D47` values, otherwise return standard errors for the returned
 		  `T` or `D47` values instead.
 		  
-		**Returns (if `D47` was specified):**
+		**Returns (with `D47` input):**
 		
-		* `T` (temperatures computed from `D47`)
-		* `sT` (uncertainties on `T`, whether as standard errors or covariance matrix)
+		* `T`: temperature value(s) computed from `D47`
+		* `sT`: uncertainties on `T` value(s), whether as standard error(s) or covariance matrix
 
-		**Returns (if `T` was specified):**
+		**Returns (with `T` input):**
 		
-		* `D47` (temperatures computed from `D47`)
-		* `sD47` (uncertainties on `D47`, whether as standard errors or covariance matrix)
+		* `D47`: Δ47 value(s) computed from `D47`
+		* `sD47`: uncertainties on `D47` value(s), whether as standard error(s) or covariance matrix
 		'''
 
 		if D47 is None and T is None:
