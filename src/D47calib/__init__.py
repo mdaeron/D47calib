@@ -56,7 +56,7 @@ class D47calib(_ogls.InverseTPolynomial):
 		
 		self.bff_deriv = lambda x: _np.array([k * self.bfp[f'a{k}'] * x**(k-1) for k in degrees if k > 0]).sum(axis = 0)
 		
-		xi = _np.linspace(2000**-1,200**-1,1000)
+		xi = _np.linspace(0,200**-1,1001)
 		self.inv_bff = _interp1d(self.bff(xi), xi)
 
 		self.D47_from_T = lambda T: self.bff((T+273.15)**-1)
@@ -101,74 +101,116 @@ class D47calib(_ogls.InverseTPolynomial):
 			kw['color'] = self.color
 		return _ogls.InverseTPolynomial.plot_bff_ci(self, **kw)
 
-	def new_T47(self, D47 = None, sD47 = None, T=None, sT = None, return_SE = False):
+	def new_T47(self,
+		D47 = None,
+		sD47 = None,
+		T=None,
+		sT = None,
+		error_from = 'both',
+		return_covar = False,
+		):
 		'''
-		Convert between Δ47 and T47 values.
-		
-		The returned output depends on the input types. When computing T from Δ47:
-		
-		| D47   | sD47  |        |  T    | sT_from_sD47 | sT_from_calib | sT_from_both  |
-		|:-----:|:-----:|:------:|:-----:|:------------:|:-------------:|:-------------:|
-		| float |       | &rarr; | float |              | float         | float         |
-		| 1-D   |       | &rarr; | 1-D   |              | 2-D           | 2-D           |
-		| float | float | &rarr; | float | float        | float         | float         |
-		| 1-D   | float | &rarr; | 1-D   | 1-D          | 2-D           | 2-D           |
-		| float | 1-D   | &rarr; | float | 1-D          | float         | 1-D           |
-		| 1-D   | 1-D   | &rarr; | 1-D   | 1-D          | 2-D           | 2-D           |
-		| 1-D   | 2-D   | &rarr; | 1-D   | 2-D          | 2-D           | 2-D           |
+		Convert from Δ47 to T (if `D47` is specified as input)
+		or from T to Δ47 (if `T` is specified as input).
 
-		Conversely, when computing Δ47 from T:
+		Only one of either `D47` or `T` may be specified.
 
-		| T     | sT    |        |  D47  | sD47_from_sT | sD47_from_calib | sD47_from_both  |
-		|:-----:|:-----:|:------:|:-----:|:------------:|:---------------:|:---------------:|
-		| float |       | &rarr; | float |              | float           | float           |
-		| 1-D   |       | &rarr; | 1-D   |              | 2-D             | 2-D             |
-		| float | float | &rarr; | float | float        | float           | float           |
-		| 1-D   | float | &rarr; | 1-D   | 1-D          | 2-D             | 2-D             |
-		| float | 1-D   | &rarr; | float | 1-D          | float           | 1-D             |
-		| 1-D   | 1-D   | &rarr; | 1-D   | 1-D          | 2-D             | 2-D             |
-		| 1-D   | 2-D   | &rarr; | 1-D   | 2-D          | 2-D             | 2-D             |
+		`T` input may be specified as a scalar, or as a 1-D array.
+		`D47` output will then have the same type as `T`.
 
-
-		When returned `sT` or `sD47` values are 1-D arrays, these correspond to standard errors on `T` or `D47`.
-		When returned `sT` or `sD47` values are 2-D arrays, these correspond to the fullvariance-covariance
-		matrix of `T` or `D47`.
-		
-		In both cases, one may force returned 2-D values to be 1-D arrays instead by setting `return_SE = True`.
-		
-		Raises an error if both `T` and `D47` are specified.
+		`D47` input may be specified as a scalar, or as a 1-D array.
+		`T` output will then have the same type as `D47`.
 		
 		**Arguments:**		
 
 		* `D47`: Δ47 value(s) to convert into temperature (`float` or 1-D array)
 		* `sD47`: Δ47 uncertainties, which may be:
 		  - `None` (default)
-		  - `float`
+		  - `float` or `int`
 		  - 1-D array (standard errors on `D47`)
-		  - 2-D array (variance-covariance matrix for `D47`)
-		* `T`: T value(s) to convert into Δ47 (`float` or 1-D array)
+		  - 2-D array (covariance matrix for `D47`)
+		* `T`: T value(s) to convert into Δ47 (`float` or 1-D array), in degrees C
 		* `sT`: T uncertainties, which may be:
 		  - `None` (default)
-		  - `float`
+		  - `float` or `int`
 		  - 1-D array (standard errors on `T`)
 		  - 2-D array (variance-covariance matrix for `T`)
+		* `error_from`: if set to `'both'` (default), returned errors take into account
+		  input uncertainties (`sT` or `sD47`) as well as calibration uncertainties;
+		  if set to `'calib'`, only calibration uncertainties are accounted for;
+		  if set to `'sT'` or `'sD47'`, calibration uncertainties are ignored
+		* `return_covar`: (False by default) whether to return the full covariance matrix
+		  for returned `T` or `D47` values, otherwise return standard errors for the returned
+		  `T` or `D47` values instead.
 		  
 		**Returns (if `D47` was specified):**
 		
 		* `T` (temperatures computed from `D47`)
-		* `sT_from_sD47` (uncertainties from `sD47` only)
-		* `sT_from_calib` (uncertainties from calibration only)
-		* `sT_from_both` (combined uncertainties from `sD47` and calibration)
+		* `sT` (uncertainties on `T`, whether as standard errors or covariance matrix)
 
 		**Returns (if `T` was specified):**
 		
 		* `D47` (temperatures computed from `D47`)
-		* `sD47_from_sT` (uncertainties from `sT` only)
-		* `sD47_from_calib` (uncertainties from calibration only)
-		* `sD47_from_both` (combined uncertainties from `sT` and calibration)
+		* `sD47` (uncertainties on `D47`, whether as standard errors or covariance matrix)
 		'''
 
-		return None
+		if D47 is None and T is None:
+			raise ValueError('Either D47 or T must be specified, but both are undefined.')
+
+		if D47 is not None and T is not None:
+			raise ValueError('Either D47 or T must be specified, but not both.')
+
+		if T is not None:
+			
+			D47 = self.D47_from_T(T)
+			Np = len(self.degrees)
+			N = D47.size
+
+			### Compute covariance matrix of (*bfp, *T):
+			CM = _np.zeros((Np+N, Np+N))
+
+			if error_from in ['calib', 'both']:
+				CM[:Np, :Np] = self.bfp_CM[:,:]
+
+			if (sT is not None) and error_from in ['sT', 'both']:
+				_sT = _np.asarray(sT)
+				if _sT.ndim == 0:
+					for k in range(N):
+						CM[Np+k, Np+k] = _sT**2
+				elif _sT.ndim == 1:
+					for k in range(N):
+						CM[Np+k, Np+k] = _sT[k]**2
+				elif _sT.ndim == 2:
+					CM[-N:, -N:] = _sT[:,:]
+
+			### Compute Jacobian of D47(T) relative to (*bfp, *T):
+			_T = _np.asarray(T)
+			if _T.ndim == 0:
+				_T = _np.expand_dims(_T, 0)
+			J = _np.zeros((N, Np+N))
+			if (sT is not None) and error_from in ['sT', 'both']:
+				for k in range(N):
+					J[k, Np+k] = (self.D47_from_T(_T[k] + .01) - self.D47_from_T(_T[k] - .01)) / .02
+			if error_from in ['calib', 'both']:
+				for k in range(Np):
+					p1 = {_: self.bfp[_] for _ in self.bfp}
+					p1[f'a{self.degrees[k]}'] += 0.001 * self.bfp_CM[k,k]**.5
+					p2 = {_: self.bfp[_] for _ in self.bfp}
+					p2[f'a{self.degrees[k]}'] -= 0.001 * self.bfp_CM[k,k]**.5
+					J[:, k] = (self.model_fun(p1, (_T+273.15)**-1) - self.model_fun(p2, (_T+273.15)**-1)) / (0.002 * self.bfp_CM[k,k]**.5)
+
+			### Error propagation:
+			CM_D47 = J @ CM @ J.T
+
+			if return_covar:
+				return D47, CM_D47
+			else:
+				return D47, _np.diag(CM_D47)**.5
+
+		if D47 is not None:
+			# todo: implement new_T47(D47)
+			pass
+
 
 	def T47(self, D47 = None, sD47 = None, T=None, sT = None):
 		if D47 is not None:
