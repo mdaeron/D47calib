@@ -1,9 +1,4 @@
-'''
-.. include:: ../../doc/calibs.md
-'''
-
-from . import D47calib
-
+from D47calib import D47calib
 breitenbach_2018 = D47calib(
 	samples = ['BSP-1', 'DSP-1', 'GPC-1', 'MCP-1', 'NAICA-1', 'OWB-1'],
 	T = [8.9, 3.2, 24.5, 18.6, 47.0, 9.1],

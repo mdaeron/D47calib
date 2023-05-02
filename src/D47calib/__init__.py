@@ -1,4 +1,8 @@
-"""Generate, combine, display and apply Δ47 calibrations"""
+"""
+Generate, combine, display and apply Δ47 calibrations
+
+.. include:: ../../docpages/calibs.md
+"""
 
 __author__    = 'Mathieu Daëron'
 __contact__   = 'daeron@lsce.ipsl.fr'
@@ -9,13 +13,13 @@ __date__      = '2023-04-30'
 __version__   = '0.1.0'
 
 
-import ogls
-import numpy as np
-from scipy.linalg import block_diag
-from scipy.interpolate import interp1d
+import ogls as _ogls
+import numpy as _np
+from scipy.linalg import block_diag as _block_diag
+from scipy.interpolate import interp1d as _interp1d
 
 
-class D47calib(ogls.InverseTPolynomial):
+class D47calib(_ogls.InverseTPolynomial):
 
 	def __init__(self,
 		samples, T, D47,
@@ -33,27 +37,27 @@ class D47calib(ogls.InverseTPolynomial):
 		self.description = description
 
 
-		self.D47 = np.asarray(D47, dtype = 'float')
+		self.D47 = _np.asarray(D47, dtype = 'float')
 		self.N = self.D47.size
 
 		if sD47 is None:
-			self.sD47 = np.zeros((self.N, self.N))
+			self.sD47 = _np.zeros((self.N, self.N))
 		else:
-			self.sD47 = np.asarray(sD47)
+			self.sD47 = _np.asarray(sD47)
 			if len(self.sD47.shape) == 1:
-				self.sD47 = np.diag(self.sD47**2)
+				self.sD47 = _np.diag(self.sD47**2)
 			elif len(self.sD47.shape) == 0:
-				self.sD47 = np.eye(self.D47.size) * self.sD47**2
+				self.sD47 = _np.eye(self.D47.size) * self.sD47**2
 
-		ogls.InverseTPolynomial.__init__(self, T=T, Y=D47, sT=sT, sY=sD47, degrees = degrees, xpower = xpower, **kw)
+		_ogls.InverseTPolynomial.__init__(self, T=T, Y=D47, sT=sT, sY=sD47, degrees = degrees, xpower = xpower, **kw)
 		
 		if regress_now:
 			self.regress()
 		
-		self.bff_deriv = lambda x: np.array([k * self.bfp[f'a{k}'] * x**(k-1) for k in degrees if k > 0]).sum(axis = 0)
+		self.bff_deriv = lambda x: _np.array([k * self.bfp[f'a{k}'] * x**(k-1) for k in degrees if k > 0]).sum(axis = 0)
 		
-		xi = np.linspace(2000**-1,200**-1,1000)
-		self.inv_bff = interp1d(self.bff(xi), xi)
+		xi = _np.linspace(2000**-1,200**-1,1000)
+		self.inv_bff = _interp1d(self.bff(xi), xi)
 
 		self.D47_from_T = lambda T: self.bff((T+273.15)**-1)
 		self.T_from_D47 = lambda D47: self.inv_bff(D47)**-1 - 273.15
@@ -61,7 +65,7 @@ class D47calib(ogls.InverseTPolynomial):
 		self.T_from_D47_deriv = lambda D47: self.D47_from_T_deriv(self.T_from_D47(D47))**-1
 		
 	def invT_xaxis(self, ylabel = 'Δ$_{47}$ (‰)', **kw):
-		return ogls.InverseTPolynomial.invT_xaxis(self, ylabel = ylabel, **kw)
+		return _ogls.InverseTPolynomial.invT_xaxis(self, ylabel = ylabel, **kw)
 
 
 	def plot_data(self, label = False, **kw):
@@ -69,19 +73,19 @@ class D47calib(ogls.InverseTPolynomial):
 			kw['mec'] = self.color
 		if label is not False:
 			kw['label'] = self.label if label is True else label
-		return ogls.InverseTPolynomial.plot_data(self, **kw)
+		return _ogls.InverseTPolynomial.plot_data(self, **kw)
 
 
 	def plot_error_bars(self, **kw):
 		if 'ecolor' not in kw:
 			kw['ecolor'] = self.color
-		return ogls.InverseTPolynomial.plot_error_bars(self, **kw)
+		return _ogls.InverseTPolynomial.plot_error_bars(self, **kw)
 
 
 	def plot_error_ellipses(self, **kw):
 		if 'ec' not in kw:
 			kw['ec'] = self.color
-		return ogls.InverseTPolynomial.plot_error_ellipses(self, **kw)
+		return _ogls.InverseTPolynomial.plot_error_ellipses(self, **kw)
 
 
 	def plot_bff(self, label = False, **kw):
@@ -89,13 +93,13 @@ class D47calib(ogls.InverseTPolynomial):
 			kw['color'] = self.color
 		if label is not False:
 			kw['label'] = self.label if label is True else label
-		return ogls.InverseTPolynomial.plot_bff(self, **kw)
+		return _ogls.InverseTPolynomial.plot_bff(self, **kw)
 
 
 	def plot_bff_ci(self, **kw):
 		if 'color' not in kw:
 			kw['color'] = self.color
-		return ogls.InverseTPolynomial.plot_bff_ci(self, **kw)
+		return _ogls.InverseTPolynomial.plot_bff_ci(self, **kw)
 
 	def new_T47(self, D47 = None, sD47 = None, T=None, sT = None, return_SE = False):
 		'''
@@ -176,11 +180,11 @@ class D47calib(ogls.InverseTPolynomial):
 				sT = None
 			else:
 				sT = abs(sD47 * local_deriv)
-			if isinstance(T, np.ndarray):
+			if isinstance(T, _np.ndarray):
 				sTcalib = abs(self.bff_se((T+273.15)**-1) * local_deriv)
 				return T, sT, sTcalib
 			else:
-				sTcalib = abs(self.bff_se(np.array([(T+273.15)**-1])) * local_deriv)
+				sTcalib = abs(self.bff_se(_np.array([(T+273.15)**-1])) * local_deriv)
 				return T, sT, float(sTcalib)
 		else:
 			if T is None:
@@ -191,11 +195,11 @@ class D47calib(ogls.InverseTPolynomial):
 				sD47 = None
 			else:
 				sD47 = abs(sT * local_deriv)
-			if isinstance(D47, np.ndarray):
+			if isinstance(D47, _np.ndarray):
 				sD47calib = self.bff_se((T+273.15)**-1)
 				return D47, sD47, sD47calib
 			else:
-				sD47calib = self.bff_se(np.array([(T+273.15)**-1]))
+				sD47calib = self.bff_se(_np.array([(T+273.15)**-1]))
 				return D47, sD47, float(sD47calib)
 	
 
@@ -235,14 +239,14 @@ class D47calib(ogls.InverseTPolynomial):
 		if calibname is None:
 			calibname = self.label
 
-		Nr = np.array(Nr)
+		Nr = _np.array(Nr)
 		if len(colors) < Nr.size:
 			print('WARNING: Too few colors to plot different numbers of replicates; generating new colors.')
 			from colorsys import hsv_to_rgb
 			hsv = [(x*1.0/Nr.size, 1, .9) for x in range(Nr.size)]
 			colors = [hsv_to_rgb(*x) for x in hsv]
 
-		Ti = np.linspace(Tmin, Tmax)
+		Ti = _np.linspace(Tmin, Tmax)
 		D47, sD47, sD47_calib  = self.T47(T = Ti)
 
 		ymax, ymin = 0, 1e6
@@ -289,21 +293,21 @@ class D47calib(ogls.InverseTPolynomial):
 				f.write(f'{sep}Dataset')
 
 			if T_correl:
-				inv_diag_sT = np.diag(np.diag(self.sT)**-.5)
+				inv_diag_sT = _np.diag(_np.diag(self.sT)**-.5)
 				Tcorrel = inv_diag_sT @ self.sT @ inv_diag_sT
 				f.write(sep.join(['']+[f'Tcorrel_{k+1:0{n}d}' for k in range(self.N)]))
 
 			if D47_correl:
-				inv_diag_sD47 = np.diag(np.diag(self.sD47)**-.5)
+				inv_diag_sD47 = _np.diag(_np.diag(self.sD47)**-.5)
 				D47correl = inv_diag_sD47 @ self.sD47 @ inv_diag_sD47
 				f.write(sep.join(['']+[f'D47correl_{k+1:0{n}d}' for k in range(self.N)]))
 
 			for k, (s, T, sT, D47, sD47) in enumerate(zip(
 				self.samples,
 				self.T,
-				np.diag(self.sT)**.5,
+				_np.diag(self.sT)**.5,
 				self.D47,
-				np.diag(self.sD47)**.5,
+				_np.diag(self.sD47)**.5,
 				)):
 				f.write('\n' + sep.join([f'{k+1:0{n}d}', s, f'{T:.2f}', f'{sT:.2f}', f'{D47:.4f}', f'{sD47:.4f}']))
 				if label:
@@ -335,8 +339,8 @@ def combine_D47calibs(calibs, degrees = [0,2], same_T = []):
 	samples = [s for c in calibs for s in c.samples]
 	T = [t for c in calibs for t in c.T]
 	D47 = [x for c in calibs for x in c.D47]
-	sD47 = block_diag(*[c.sD47 for c in calibs])
-	sT = block_diag(*[c.sT for c in calibs])
+	sD47 = _block_diag(*[c.sD47 for c in calibs])
+	sT = _block_diag(*[c.sT for c in calibs])
 
 	for i in range(len(samples)):
 		for j in range(len(samples)):
@@ -356,3 +360,4 @@ def combine_D47calibs(calibs, degrees = [0,2], same_T = []):
 
 	return calib
 
+from ._calibs import *

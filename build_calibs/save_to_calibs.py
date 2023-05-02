@@ -1,11 +1,6 @@
-with open('../src/D47calib/calibs.py', 'w') as fid:
+with open('../src/D47calib/_calibs.py', 'w') as fid:
 
-	fid.write("""'''
-.. include:: ../../doc/calibs.md
-'''
-
-from . import D47calib
-""")
+	fid.write('from D47calib import D47calib')
 
 	for file in [
 		'breitenbach_2018.py',

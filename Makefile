@@ -1,7 +1,7 @@
-all: combine doc
+all: calibs combine doc
 	@echo "All done!"
 
-combine: calibs
+combine: savecalibs
 	@echo "Building Devils Laghetto (2023)..."
 	@cd ./build_calibs/build_devils_laghetto_2023; python build_devils_laghetto_2023.py
 	@cd ./build_calibs; python save_to_calibs.py
@@ -22,10 +22,11 @@ calibs:
 	@cd ./build_calibs/build_fiebig_2021; python build_fiebig_2021.py
 	@echo "Processing Huyghe et al. (2022)..."
 	@cd ./build_calibs/build_huyghe_2022; python build_huyghe_2022.py
+
+savecalibs:
 	@echo "Saving calibrations..."
 	@cd ./build_calibs; python save_to_calibs.py
 
-.PHONY: doc
 doc:
 	@echo "Building documentation..."
 	@python build_doc.py

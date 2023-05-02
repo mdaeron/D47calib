@@ -1,5 +1,4 @@
 from D47calib import *
-from D47calib.calibs import *
 
 K = [fiebig_2021.samples.index(_) for _ in ['LGB-2', 'DVH-2', 'DHC2-8']]
 

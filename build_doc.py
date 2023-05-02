@@ -51,9 +51,10 @@ def myfilter(docstr):
 	return ('```'.join(work))
 
 pdoc.render.env.filters['myfilter'] = myfilter
-pdoc.render.configure(template_directory = 'pdoc_templates')
+pdoc.render.configure(template_directory = 'pdoc_templates', search = False)
 
-pdoc.pdoc('D47calib', output_directory = Path('docs'))
+with open('docs/index.html', 'w') as fid:
+	fid.write(pdoc.pdoc('D47calib'))
 
 # foo = '''
 # Create foo δ13C bar Δ47 δ18O_VSMOW `δ13C_VPDB`, `Δ48`.
