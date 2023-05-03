@@ -101,7 +101,7 @@ class D47calib(_ogls.InverseTPolynomial):
 			kw['color'] = self.color
 		return _ogls.InverseTPolynomial.plot_bff_ci(self, **kw)
 
-	def new_T47(self,
+	def T47(self,
 		D47 = None,
 		sD47 = None,
 		T=None,
@@ -187,15 +187,21 @@ class D47calib(_ogls.InverseTPolynomial):
 			if _T.ndim == 0:
 				_T = _np.expand_dims(_T, 0)
 			J = _np.zeros((N, Np+N))
+
 			if (sT is not None) and error_from in ['sT', 'both']:
 				for k in range(N):
-					J[k, Np+k] = (self.D47_from_T(_T[k] + .01) - self.D47_from_T(_T[k] - .01)) / .02
+					J[k, Np+k] = self.D47_from_T_deriv(_T[k])
+
 			if error_from in ['calib', 'both']:
+
 				for k in range(Np):
+				
 					p1 = {_: self.bfp[_] for _ in self.bfp}
 					p1[f'a{self.degrees[k]}'] += 0.001 * self.bfp_CM[k,k]**.5
+
 					p2 = {_: self.bfp[_] for _ in self.bfp}
 					p2[f'a{self.degrees[k]}'] -= 0.001 * self.bfp_CM[k,k]**.5
+
 					J[:, k] = (self.model_fun(p1, (_T+273.15)**-1) - self.model_fun(p2, (_T+273.15)**-1)) / (0.002 * self.bfp_CM[k,k]**.5)
 
 			### Error propagation:
@@ -207,41 +213,58 @@ class D47calib(_ogls.InverseTPolynomial):
 				return D47, _np.diag(CM_D47)**.5
 
 		if D47 is not None:
-			# todo: implement new_T47(D47)
-			pass
 
-
-	def T47(self, D47 = None, sD47 = None, T=None, sT = None):
-		if D47 is not None:
-			if T is not None:
-				raise ValueError("both D47 and T are specified.")
 			T = self.T_from_D47(D47)
-			local_deriv = self.T_from_D47_deriv(D47)
-			if sD47 is None:
-				sT = None
+			Np = len(self.degrees)
+			N = T.size
+
+			### Compute covariance matrix of (*bfp, *T):
+			CM = _np.zeros((Np+N, Np+N))
+
+			if error_from in ['calib', 'both']:
+				CM[:Np, :Np] = self.bfp_CM[:,:]
+
+			if (sD47 is not None) and error_from in ['sD47', 'both']:
+				_sD47 = _np.asarray(sD47)
+				if _sD47.ndim == 0:
+					for k in range(N):
+						CM[Np+k, Np+k] = _sD47**2
+				elif _sD47.ndim == 1:
+					for k in range(N):
+						CM[Np+k, Np+k] = _sD47[k]**2
+				elif _sD47.ndim == 2:
+					CM[-N:, -N:] = _sD47[:,:]
+
+			### Compute Jacobian of T(D47) relative to (*bfp, *D47):
+			_D47 = _np.asarray(D47)
+			if _D47.ndim == 0:
+				_D47 = _np.expand_dims(_D47, 0)
+			J = _np.zeros((N, Np+N))
+			if (sD47 is not None) and error_from in ['sD47', 'both']:
+				for k in range(N):
+					J[k, Np+k] = self.T_from_D47_deriv(_D47[k])
+			if error_from in ['calib', 'both']:
+				
+				xi = _np.linspace(0,200**-1,1001)[1:]
+				for k in range(Np):
+				
+					p1 = {_: self.bfp[_] for _ in self.bfp}
+					p1[f'a{self.degrees[k]}'] += 0.001 * self.bfp_CM[k,k]**.5
+					T_from_D47_p1 = _interp1d(self.model_fun(p1, xi), xi**-1 - 273.15)
+
+					p2 = {_: self.bfp[_] for _ in self.bfp}
+					p2[f'a{self.degrees[k]}'] -= 0.001 * self.bfp_CM[k,k]**.5
+					T_from_D47_p2 = _interp1d(self.model_fun(p2, xi), xi**-1 - 273.15)
+
+					J[:, k] = (T_from_D47_p1(_D47) - T_from_D47_p2(_D47)) / (0.002 * self.bfp_CM[k,k]**.5)
+
+			### Error propagation:
+			CM_T = J @ CM @ J.T
+
+			if return_covar:
+				return T, CM_T
 			else:
-				sT = abs(sD47 * local_deriv)
-			if isinstance(T, _np.ndarray):
-				sTcalib = abs(self.bff_se((T+273.15)**-1) * local_deriv)
-				return T, sT, sTcalib
-			else:
-				sTcalib = abs(self.bff_se(_np.array([(T+273.15)**-1])) * local_deriv)
-				return T, sT, float(sTcalib)
-		else:
-			if T is None:
-				raise ValueError("neither D47 nor T are specified.")
-			D47 = self.D47_from_T(T)
-			local_deriv = self.D47_from_T_deriv(T)
-			if sT is None:
-				sD47 = None
-			else:
-				sD47 = abs(sT * local_deriv)
-			if isinstance(D47, _np.ndarray):
-				sD47calib = self.bff_se((T+273.15)**-1)
-				return D47, sD47, sD47calib
-			else:
-				sD47calib = self.bff_se(_np.array([(T+273.15)**-1]))
-				return D47, sD47, float(sD47calib)
+				return T, _np.diag(CM_T)**.5
 	
 
 	def export(self, name, filename):
