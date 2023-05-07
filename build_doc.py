@@ -56,12 +56,97 @@ pdoc.render.configure(template_directory = 'pdoc_templates', search = False)
 with open('docs/index.html', 'w') as fid:
 	fid.write(pdoc.pdoc('D47calib'))
 
-# foo = '''
-# Create foo δ13C bar Δ47 δ18O_VSMOW `δ13C_VPDB`, `Δ48`.
-# 
-# ````py
-# Create foo δ13C bar `Δ47` δ18O_VSMOW.
-# ```
-# '''
-# 
-# print(myfilter(foo))
+from matplotlib import pyplot as ppl
+from D47calib import *
+
+# mycalib = D47calib(
+#         samples     = ['FOO', 'BAR'],
+#         T           = [0.   , 25.  ],
+#         D47         = [0.7  , 0.6  ],
+#         sT          = 1.,
+#         sD47        = 0.01,
+#         regress_now = True,
+#         )
+# T, sT = mycalib.T47(D47 = 0.650) # yields T = 11.7, sT = 1.9
+# print(T, sT)
+
+
+calib = combined_2023
+
+fig = ppl.figure(figsize = (5,3))
+ppl.subplots_adjust(bottom = .25, left = .15)
+ax = calib.invT_xaxis()
+ax.set_xlim((0, 270**-2))
+ppl.savefig('docs/example_invT_xaxis_2.png', dpi = 100)
+ppl.close(fig)
+
+calib.xpower = 4
+fig = ppl.figure(figsize = (5,3))
+ppl.subplots_adjust(bottom = .25, left = .15)
+ax = calib.invT_xaxis(Ti = [1000, 100, 50, 25, 0])
+ax.set_xlim((0, 270**-4))
+ppl.savefig('docs/example_invT_xaxis_4.png', dpi = 100)
+ppl.close(fig)
+calib.xpower = 2
+
+calib = huyghe_2022
+
+fig = ppl.figure(figsize = (5,3))
+ppl.subplots_adjust(bottom = .25, left = .15)
+calib.invT_xaxis(Ti = [0,10,25])
+calib.plot_data(label = True)
+ppl.legend()
+ppl.ylabel('$Δ_{47}$ (‰ I-CDES)')
+ppl.savefig('docs/example_plot_data.png', dpi = 100)
+ppl.close(fig)
+
+
+fig = ppl.figure(figsize = (5,3))
+ppl.subplots_adjust(bottom = .25, left = .15)
+calib.invT_xaxis(Ti = [0,10,25])
+calib.plot_error_bars(alpha = .4)
+calib.plot_data(label = True)
+ppl.ylabel('$Δ_{47}$ (‰ I-CDES)')
+ppl.legend()
+ppl.savefig('docs/example_plot_error_bars.png', dpi = 100)
+
+fig = ppl.figure(figsize = (5,3))
+ppl.subplots_adjust(bottom = .25, left = .15)
+calib.invT_xaxis(Ti = [0,10,25])
+calib.plot_error_ellipses(alpha = .4)
+calib.plot_data(label = True)
+ppl.ylabel('$Δ_{47}$ (‰ I-CDES)')
+ppl.legend()
+ppl.savefig('docs/example_plot_error_ellipses.png', dpi = 100)
+
+fig = ppl.figure(figsize = (5,3))
+ppl.subplots_adjust(bottom = .25, left = .15)
+calib.invT_xaxis(Ti = [0,10,25])
+calib.plot_bff(label = True, dashes = (8,2,2,2))
+calib.plot_data()
+ppl.ylabel('$Δ_{47}$ (‰ I-CDES)')
+ppl.legend()
+ppl.savefig('docs/example_plot_bff.png', dpi = 100)
+
+fig = ppl.figure(figsize = (5,3))
+ppl.subplots_adjust(bottom = .25, left = .15)
+calib.invT_xaxis(Ti = [0,10,25])
+calib.plot_bff_ci(alpha = .15)
+calib.plot_bff(label = True, dashes = (8,2,2,2))
+calib.plot_data()
+ppl.ylabel('$Δ_{47}$ (‰ I-CDES)')
+ppl.legend()
+ppl.savefig('docs/example_plot_bff_ci.png', dpi = 100)
+
+import numpy as np
+calib = combined_2023
+
+X = np.linspace(1473**-2, 270**-2)
+D47, sD47 = calib.T47(T = X**-0.5 - 273.15)
+
+fig = ppl.figure(figsize = (5,3))
+ppl.subplots_adjust(bottom = .25, left = .15)
+calib.invT_xaxis()
+ppl.plot(X, 1000 * sD47, 'r-')
+ppl.ylabel('Calibration SE on $Δ_{47}$ values (ppm)')
+ppl.savefig('docs/example_SE47.png', dpi = 100)

@@ -8,7 +8,7 @@ __author__    = 'Mathieu Daëron'
 __contact__   = 'daeron@lsce.ipsl.fr'
 __copyright__ = 'Copyright (c) 2023 Mathieu Daëron'
 __license__   = 'MIT License - https://opensource.org/licenses/MIT'
-__docformat__ = "restructuredtext"
+# __docformat__ = "restructuredtext"
 __date__      = '2023-04-30'
 __version__   = '0.1.0'
 
@@ -17,9 +17,14 @@ import ogls as _ogls
 import numpy as _np
 from scipy.linalg import block_diag as _block_diag
 from scipy.interpolate import interp1d as _interp1d
+from matplotlib import pyplot as _ppl
 
 
 class D47calib(_ogls.InverseTPolynomial):
+	"""
+	Δ47 calibration class based on OGLS regression
+	of Δ47 as a polynomial function of inverse T.
+	"""
 
 	def __init__(self,
 		samples, T, D47,
@@ -29,14 +34,81 @@ class D47calib(_ogls.InverseTPolynomial):
 		label = '',
 		description = '',
 		regress_now = False,
-		**kw):
+		**kwargs):
+		"""
+		### Parameters
+		
+		+ **samples**: a list of N sample names.
+		+ **T**: a 1-D array (or array-like) of temperatures values (in degrees C), of size N.
+		+ **D47**: a 1-D array (or array-like) of Δ47 values (in permil), of size N.
+		+ **sT**: uncertainties on `T`. If specified as:
+		  + a scalar: `sT` is treated as the standard error applicable to all `T` values;
+		  + a 1-D array-like of size N: `sT` is treated as the standard errors of `T`;
+		  + a 2-D array-like of size (N, N): `sT` is treated as the (co)variance matrix of `T`.
+		+ **sD47**: uncertainties on `D47`. If specified as:
+		  + a scalar: `sD47` is treated as the standard error applicable to all `D47` values;
+		  + a 1-D array-like of size N: `sD47` is treated as the standard errors of `D47`;
+		  + a 2-D array-like of size (N, N): `sD47` is treated as the (co)variance matrix of `D47`.
+		+ **degrees**: degrees of the polynomial regression, e.g., `[0, 2]` or `[0, 1, 2, 3, 4]`.
+		+ **color**: a matplotlib-compliant color specification used in plots.
+		+ **label**: a short description of the calibration.
+		+ **description**: a longer description, including relevant references/DOIs.
+		+ **regress_now**: if `True`, perform the regression immediately upon instantiation.
+		This is not necessary when `bfp` and `CM_bfp` are specified at instantiation time.
+		+ **kwargs**: keyword arguments passed to the underlying `ogls.InverseTPolynomial()` call.
+		
+		### Notable attributes
+
+		+ **N**:
+		The total number of observations (samples) in the calibration data.
+		+ **samples**:
+		The list sample names.
+		+ **T**:
+		1-D `ndarray` of temperatures in degrees C.
+		+ **D47**:
+		1-D `ndarray` of Δ47 values in permil.
+		+ **sT**:
+		2-D `ndarray` equal to the full (co)variance matrix for `T`.
+		+ **D47**:
+		2-D `ndarray` equal to the full (co)variance matrix for `D47`.
+		+ **xpower**:
+		By default, all `D47calib` graphical methods plot Δ47 as a function of 1/T<sup>2</sup>.
+		It is possible to change this behavior to use a different power of 1/T.
+		This is done by redefining the `xpower` attribute to a different, non-zero `int` value
+		(e.g. `foo.xpower = 1` to plot as a function of 1/T instead of 1/T<sup>2</sup>).
+		+ **bfp**:
+		The best-fit parameters of the regression.
+		This is a `dict` with keys equal to the polynomial coefficients (see `bff` definition below)
+		+ **bff()**:
+		The best-fit polynomial function of inverse T, defined as:
+		`bff(x) = sum(bfp[f'a{k}'] * x**k for k in degrees)`
+		Note that `bff` takes `x = 1/(T+273.15)` (instead of `T`) as input.
+
+		
+		### Examples
+		
+		A very simple example:
+		
+		````py
+		from D47calib import D47calib
+
+		mycalib = D47calib(
+			samples     = ['FOO', 'BAR'],
+			T           = [0.   , 25.  ],
+			D47         = [0.7  , 0.6  ],
+			sT          = 1.,
+			sD47        = 0.01,
+			regress_now = True,
+			)
+		
+		T, sT = mycalib.T47(D47 = 0.650) # yields T = 11.7, sT = 1.9
+		````
+		"""
 
 		self.samples = samples[:]
 		self.color = color
 		self.label = label
 		self.description = description
-
-
 		self.D47 = _np.asarray(D47, dtype = 'float')
 		self.N = self.D47.size
 
@@ -49,57 +121,286 @@ class D47calib(_ogls.InverseTPolynomial):
 			elif len(self.sD47.shape) == 0:
 				self.sD47 = _np.eye(self.D47.size) * self.sD47**2
 
-		_ogls.InverseTPolynomial.__init__(self, T=T, Y=D47, sT=sT, sY=sD47, degrees = degrees, xpower = xpower, **kw)
+		_ogls.InverseTPolynomial.__init__(self, T=T, Y=D47, sT=sT, sY=sD47, degrees = degrees, xpower = xpower, **kwargs)
 		
 		if regress_now:
 			self.regress()
 		
-		self.bff_deriv = lambda x: _np.array([k * self.bfp[f'a{k}'] * x**(k-1) for k in degrees if k > 0]).sum(axis = 0)
+		self._bff_deriv = lambda x: _np.array([k * self.bfp[f'a{k}'] * x**(k-1) for k in degrees if k > 0]).sum(axis = 0)
 		
 		xi = _np.linspace(0,200**-1,1001)
-		self.inv_bff = _interp1d(self.bff(xi), xi)
+		self._inv_bff = _interp1d(self.bff(xi), xi)
 
-		self.D47_from_T = lambda T: self.bff((T+273.15)**-1)
-		self.T_from_D47 = lambda D47: self.inv_bff(D47)**-1 - 273.15
-		self.D47_from_T_deriv = lambda T: -(T+273.15)**-2 * self.bff_deriv((T+273.15)**-1)
-		self.T_from_D47_deriv = lambda D47: self.D47_from_T_deriv(self.T_from_D47(D47))**-1
+		self._D47_from_T = lambda T: self.bff((T+273.15)**-1)
+		self._T_from_D47 = lambda D47: self._inv_bff(D47)**-1 - 273.15
+		self._D47_from_T_deriv = lambda T: -(T+273.15)**-2 * self._bff_deriv((T+273.15)**-1)
+		self._T_from_D47_deriv = lambda D47: self._D47_from_T_deriv(self._T_from_D47(D47))**-1
 		
-	def invT_xaxis(self, ylabel = 'Δ$_{47}$ (‰)', **kw):
-		return _ogls.InverseTPolynomial.invT_xaxis(self, ylabel = ylabel, **kw)
+	def invT_xaxis(self,
+		xlabel = None,
+		Ti = [0,20,50,100,250,1000],
+		):
+		"""
+		Create and return an `Axes` object with X values equal to 1/T<sup>2</sup>,
+		but labeled in degrees Celsius.
+		
+		### Parameters
+		
+		+ **xlabel**:
+		Custom label for X axis (`r'$1\,/\,T^2$'` by default)
+		+ **Ti**:
+		Specify tick locations for X axis, in degrees C.
 
+		### Returns
 
-	def plot_data(self, label = False, **kw):
-		if 'mec' not in kw:
-			kw['mec'] = self.color
+		+ an `matplotlib.axes.Axes` instance
+
+		### Examples
+
+		````py
+		from matplotlib import pyplot as ppl
+		from D47calib import combined_2023 as calib
+
+		fig = ppl.figure(figsize = (5,3))
+		ppl.subplots_adjust(bottom = .25, left = .15)
+		ax = calib.invT_xaxis()
+		ax.set_xlim((0, 270**-2))
+		ppl.savefig('example_invT_xaxis_2.png', dpi = 100)
+		`````
+		This should result in something like this:
+
+		<img align="center" src="example_invT_xaxis_2.png">
+
+		It is also possible to define the X axis using a different power of 1/T
+		by first redefining the `xpower` attribute:
+		
+		````py
+		calib.xpower = 4
+		fig = ppl.figure(figsize = (5,3))
+		ppl.subplots_adjust(bottom = .25, left = .15)
+		ax = calib.invT_xaxis(Ti = [1000, 100, 50, 25, 0])
+		ax.set_xlim((0, 270**-4))
+		ppl.savefig('example_invT_xaxis_4.png', dpi = 100)
+		````
+
+		This should result in something like this:
+
+		<img align="center" src="example_invT_xaxis_4.png">
+		"""
+		if xlabel is None:
+			xlabel = f'$1\\,/\\,T^{self.xpower}$' if self.xpower > 1 else '1/T'
+		_ppl.xlabel(xlabel)
+		_ppl.xticks([(273.15 + t) ** -self.xpower for t in sorted(Ti)[::-1]])
+		ax = _ppl.gca()
+		ax.set_xticklabels([f"${t}\\,$°C" for t in sorted(Ti)[::-1]])
+		ax.tick_params(which="major")
+
+		return ax
+		
+
+	def plot_data(self, label = False, **kwargs):
+		"""
+		Plot Δ47 value of each sample as a function of 1/T<sup>2</sup>.
+		
+		### Parameters
+		
+		+ **label**:
+		  + If `label` is a string, use this string as `label` for the underlyig
+		  `matplotlib.pyplot.plot()` call.
+		  + If `label = True`, use the caller's `label` attribute instead.
+		  + If `label = False`, no label is specified (default behavior).
+		+ **kwargs**:
+		keyword arguments passed to the underlying `matplotlib.pyplot.plot()` call.
+
+		### Returns
+
+		+ the return value(s) of the underlying `matplotlib.pyplot.plot()` call.
+
+		### Example
+		
+		````py
+		from matplotlib import pyplot as ppl
+		from D47calib import huyghe_2022 as calib
+
+		fig = ppl.figure(figsize = (5,3))
+		ppl.subplots_adjust(bottom = .25, left = .15)
+		calib.invT_xaxis(Ti = [0,10,25])
+		calib.plot_data(label = True)
+		ppl.ylabel('$Δ_{47}$ (‰ I-CDES)')
+		ppl.legend()
+		ppl.savefig('example_plot_data.png', dpi = 100)
+		`````
+
+		This should result in something like this:
+
+		<img align="center" src="example_plot_data.png">
+		"""
+		if 'mec' not in kwargs:
+			kwargs['mec'] = self.color
 		if label is not False:
-			kw['label'] = self.label if label is True else label
-		return _ogls.InverseTPolynomial.plot_data(self, **kw)
+			kwargs['label'] = self.label if label is True else label
+		return _ogls.InverseTPolynomial.plot_data(self, **kwargs)
 
 
-	def plot_error_bars(self, **kw):
-		if 'ecolor' not in kw:
-			kw['ecolor'] = self.color
-		return _ogls.InverseTPolynomial.plot_error_bars(self, **kw)
+	def plot_error_bars(self, **kwargs):
+		"""
+		Plot Δ47 error bars (±1.96 SE) of each sample as a function of 1/T<sup>2</sup>.
+		
+		### Parameters
+		
+		+ **kwargs**:
+		keyword arguments passed to the underlying `matplotlib.pyplot.errrobar()` call.
+
+		### Returns
+
+		+ the return value(s) of the underlying `matplotlib.pyplot.errorbar()` call.
+
+		### Example
+		
+		````py
+		from matplotlib import pyplot as ppl
+		from D47calib import huyghe_2022 as calib
+
+		fig = ppl.figure(figsize = (5,3))
+		ppl.subplots_adjust(bottom = .25, left = .15)
+		calib.invT_xaxis(Ti = [0,10,25])
+		calib.plot_error_bars(alpha = .4)
+		calib.plot_data(label = True)
+		ppl.ylabel('$Δ_{47}$ (‰ I-CDES)')
+		ppl.legend()
+		ppl.savefig('example_plot_error_bars.png', dpi = 100)
+		`````
+
+		This should result in something like this:
+
+		<img align="center" src="example_plot_error_bars.png">
+		"""
+		if 'ecolor' not in kwargs:
+			kwargs['ecolor'] = self.color
+		return _ogls.InverseTPolynomial.plot_error_bars(self, **kwargs)
 
 
-	def plot_error_ellipses(self, **kw):
-		if 'ec' not in kw:
-			kw['ec'] = self.color
-		return _ogls.InverseTPolynomial.plot_error_ellipses(self, **kw)
+	def plot_error_ellipses(self, **kwargs):
+		"""
+		Plot Δ47 error ellipses (95 % confidence) of each sample as a function of 1/T<sup>2</sup>.
+		
+		### Parameters
+		
+		+ **kwargs**:
+		keyword arguments passed to the underlying `matplotlib.patches.Ellipse()` call.
+
+		### Returns
+
+		+ the return value(s) of the underlying `matplotlib.patches.Ellipse()` call.
+
+		### Example
+		
+		````py
+		from matplotlib import pyplot as ppl
+		from D47calib import huyghe_2022 as calib
+
+		fig = ppl.figure(figsize = (5,3))
+		ppl.subplots_adjust(bottom = .25, left = .15)
+		calib.invT_xaxis(Ti = [0,10,25])
+		calib.plot_error_ellipses(alpha = .4)
+		calib.plot_data(label = True)
+		ppl.ylabel('$Δ_{47}$ (‰ I-CDES)')
+		ppl.legend()
+		ppl.savefig('example_plot_error_ellipses.png', dpi = 100)
+		`````
+
+		This should result in something like this:
+
+		<img align="center" src="example_plot_error_ellipses.png">
+		"""
+		if 'ec' not in kwargs:
+			kwargs['ec'] = self.color
+		return _ogls.InverseTPolynomial.plot_error_ellipses(self, **kwargs)
 
 
-	def plot_bff(self, label = False, **kw):
-		if 'color' not in kw:
-			kw['color'] = self.color
+	def plot_bff(self, label = False, **kwargs):
+		"""
+		Plot best-fit regression of Δ47 as a function of 1/T<sup>2</sup>.
+		
+		### Parameters
+		
+		+ **label**:
+		  + If `label` is a string, use this string as `label` for the underlyig
+		  `matplotlib.pyplot.plot()` call.
+		  + If `label = True`, use the caller's `label` attribute instead.
+		  + If `label = False`, no label is specified (default behavior).
+		+ **kwargs**:
+		keyword arguments passed to the underlying `matplotlib.pyplot.plot()` call.
+
+		### Returns
+
+		+ the return value(s) of the underlying `matplotlib.pyplot.plot()` call.
+
+		### Example
+		
+		````py
+		from matplotlib import pyplot as ppl
+		from D47calib import huyghe_2022 as calib
+
+		fig = ppl.figure(figsize = (5,3))
+		ppl.subplots_adjust(bottom = .25, left = .15)
+		calib.invT_xaxis(Ti = [0,10,25])
+		calib.plot_bff(label = True, dashes = (8,2,2,2))
+		calib.plot_data()
+		ppl.ylabel('$Δ_{47}$ (‰ I-CDES)')
+		ppl.legend()
+		ppl.savefig('example_plot_bff.png', dpi = 100)
+		`````
+
+		This should result in something like this:
+
+		<img align="center" src="example_plot_bff.png">
+		"""
+		if 'color' not in kwargs:
+			kwargs['color'] = self.color
 		if label is not False:
-			kw['label'] = self.label if label is True else label
-		return _ogls.InverseTPolynomial.plot_bff(self, **kw)
+			kwargs['label'] = self.label if label is True else label
+		return _ogls.InverseTPolynomial.plot_bff(self, **kwargs)
 
 
-	def plot_bff_ci(self, **kw):
-		if 'color' not in kw:
-			kw['color'] = self.color
-		return _ogls.InverseTPolynomial.plot_bff_ci(self, **kw)
+	def plot_bff_ci(self, **kwargs):
+		"""
+		Plot 95 % confidence region for best-fit regression of Δ47 as a function of 1/T<sup>2</sup>.
+		
+		### Parameters
+		
+		+ **label**:
+		+ **kwargs**:
+		keyword arguments passed to the underlying `matplotlib.pyplot.fill_between()` call.
+
+		### Returns
+
+		+ the return value(s) of the underlying `matplotlib.pyplot.fill_between()` call.
+
+		### Example
+		
+		````py
+		from matplotlib import pyplot as ppl
+		from D47calib import huyghe_2022 as calib
+
+		fig = ppl.figure(figsize = (5,3))
+		ppl.subplots_adjust(bottom = .25, left = .15)
+		calib.invT_xaxis(Ti = [0,10,25])
+		calib.plot_bff_ci(alpha = .15)
+		calib.plot_bff(label = True, dashes = (8,2,2,2))
+		calib.plot_data()
+		ppl.ylabel('$Δ_{47}$ (‰ I-CDES)')
+		ppl.legend()
+		ppl.savefig('example_plot_bff_ci.png', dpi = 100)
+		`````
+
+		This should result in something like this:
+
+		<img align="center" src="example_plot_bff_ci.png">
+		"""
+		if 'color' not in kwargs:
+			kwargs['color'] = self.color
+		return _ogls.InverseTPolynomial.plot_bff_ci(self, **kwargs)
 
 	def T47(self,
 		D47 = None,
@@ -151,6 +452,28 @@ class D47calib(_ogls.InverseTPolynomial):
 		
 		* `D47`: Δ47 value(s) computed from `D47`
 		* `sD47`: uncertainties on `D47` value(s), whether as standard error(s) or covariance matrix
+
+		### Example
+		
+		````py
+		import numpy as np
+		from matplotlib import pyplot as ppl
+		from D47calib import combined_2023 as calib
+
+		X = np.linspace(1473**-2, 270**-2)
+		D47, sD47 = calib.T47(T = X**-0.5 - 273.15)
+		
+		fig = ppl.figure(figsize = (5,3))
+		ppl.subplots_adjust(bottom = .25, left = .15)
+		calib.invT_xaxis()
+		ppl.plot(X, 1000 * sD47, 'r-')
+		ppl.ylabel('Calibration SE on $Δ_{47}$ values (ppm)')
+		ppl.savefig('example_SE47.png', dpi = 100)
+		`````
+
+		This should result in something like this:
+		
+		<img src="example_SE47.png">
 		'''
 
 		if D47 is None and T is None:
@@ -161,7 +484,7 @@ class D47calib(_ogls.InverseTPolynomial):
 
 		if T is not None:
 			
-			D47 = self.D47_from_T(T)
+			D47 = self._D47_from_T(T)
 			Np = len(self.degrees)
 			N = D47.size
 
@@ -190,7 +513,7 @@ class D47calib(_ogls.InverseTPolynomial):
 
 			if (sT is not None) and error_from in ['sT', 'both']:
 				for k in range(N):
-					J[k, Np+k] = self.D47_from_T_deriv(_T[k])
+					J[k, Np+k] = self._D47_from_T_deriv(_T[k])
 
 			if error_from in ['calib', 'both']:
 
@@ -210,11 +533,11 @@ class D47calib(_ogls.InverseTPolynomial):
 			if return_covar:
 				return D47, CM_D47
 			else:
-				return D47, _np.diag(CM_D47)**.5
+				return D47, float(_np.diag(CM_D47)**.5) if D47.ndim == 0 else _np.diag(CM_D47)**.5
 
 		if D47 is not None:
 
-			T = self.T_from_D47(D47)
+			T = self._T_from_D47(D47)
 			Np = len(self.degrees)
 			N = T.size
 
@@ -242,7 +565,7 @@ class D47calib(_ogls.InverseTPolynomial):
 			J = _np.zeros((N, Np+N))
 			if (sD47 is not None) and error_from in ['sD47', 'both']:
 				for k in range(N):
-					J[k, Np+k] = self.T_from_D47_deriv(_D47[k])
+					J[k, Np+k] = self._T_from_D47_deriv(_D47[k])
 			if error_from in ['calib', 'both']:
 				
 				xi = _np.linspace(0,200**-1,1001)[1:]
@@ -264,28 +587,8 @@ class D47calib(_ogls.InverseTPolynomial):
 			if return_covar:
 				return T, CM_T
 			else:
-				return T, _np.diag(CM_T)**.5
+				return T, float(_np.diag(CM_T)**.5) if T.ndim == 0 else _np.diag(CM_T)**.5
 	
-
-	def export(self, name, filename):
-		with open(filename, 'w') as f:
-			f.write(f'''
-{name} = D47calib(
-	samples = {self.samples},
-	T = {list(self.T)},
-	D47 = {list(self.D47)},
-	sT = {[list(l) for l in self.sT]},
-	sD47 = {[list(l) for l in self.sD47]},
-	description = {repr(self.description)},
-	label = {repr(self.label)},
-	color = {self.color},
-	degrees = {list(self.degrees)},
-	bfp = {self.bfp},
-	bfp_CM = {[list(l) for l in self.bfp_CM]},
-	chisq = {self.chisq},
-	Nf = {self.Nf},
-	)
-''')
 
 	def plot_T47_errors(
 		self,
@@ -389,6 +692,26 @@ class D47calib(_ogls.InverseTPolynomial):
 						else f'{D47correl[k,_]:.6f}'
 						for _ in range(self.N)]))
 				
+
+	def export(self, name, filename):
+		with open(filename, 'w') as f:
+			f.write(f'''
+{name} = D47calib(
+	samples = {self.samples},
+	T = {list(self.T)},
+	D47 = {list(self.D47)},
+	sT = {[list(l) for l in self.sT]},
+	sD47 = {[list(l) for l in self.sD47]},
+	description = {repr(self.description)},
+	label = {repr(self.label)},
+	color = {self.color},
+	degrees = {list(self.degrees)},
+	bfp = {self.bfp},
+	bfp_CM = {[list(l) for l in self.bfp_CM]},
+	chisq = {self.chisq},
+	Nf = {self.Nf},
+	)
+''')
 
 
 
