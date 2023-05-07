@@ -36,25 +36,9 @@ substitutions = [
 	('T47', 'T<sub>47</sub>'),
 	]
 
-def myfilter(docstr):
-	work = docstr.split('```')
-	for k in range(len(work)):
-		if k:
-			work[k] = work[k].lstrip('`')
-		if k%2 == 0:
-			work[k] = work[k].split('`')
-			for j in range(len(work[k])):
-				if not j%2:
-					for x,y in substitutions:
-						work[k][j] = work[k][j].replace(x,y)
-			work[k] = '`'.join(work[k])
-	return ('```'.join(work))
 
-pdoc.render.env.filters['myfilter'] = myfilter
-pdoc.render.configure(template_directory = 'pdoc_templates', search = False)
 
-with open('docs/index.html', 'w') as fid:
-	fid.write(pdoc.pdoc('D47calib'))
+
 
 from matplotlib import pyplot as ppl
 from D47calib import *
@@ -150,3 +134,49 @@ calib.invT_xaxis()
 ppl.plot(X, 1000 * sD47, 'r-')
 ppl.ylabel('Calibration SE on $Δ_{47}$ values (ppm)')
 ppl.savefig('docs/example_SE47.png', dpi = 100)
+
+calib = devils_laghetto_2023
+fig = ppl.figure(figsize = (3.5,4))
+ppl.subplots_adjust(bottom = .2, left = .15)
+calib.plot_T47_errors(
+	calibname = 'Devils Laghetto calibration',
+	Nr = [1,2,4,16],
+	Tmin  =0,
+	Tmax = 40,
+	)
+ppl.savefig('docs/example_SE_T.png', dpi = 100)
+
+huyghe_2022.export_data(
+			csvfile = 'docs/example_export_data.csv',
+			D47_correl = True,
+			)
+
+with open('docs/example_export_data.csv') as fid:
+	lines = fid.readlines()
+N = len(lines[0].split(','))
+lines = [lines[0]] + [','.join(['----' for _ in range(N)])] + lines[1:]
+for k in range(len(lines)):
+	lines[k] = '|' + lines[k].strip().replace(',', '|') + '|'
+with open('docs/example_export_data.md', 'w') as fid:
+	fid.write('<style>td, th {font-size: 75%; line-height: 75%;}</style>\n\n' + '\n'.join(lines) + '\n\n')
+		
+
+def myfilter(docstr):
+	work = docstr.split('```')
+	for k in range(len(work)):
+		if k:
+			work[k] = work[k].lstrip('`')
+		if k%2 == 0:
+			work[k] = work[k].split('`')
+			for j in range(len(work[k])):
+				if not j%2:
+					for x,y in substitutions:
+						work[k][j] = work[k][j].replace(x,y)
+			work[k] = '`'.join(work[k])
+	return ('```'.join(work))
+
+pdoc.render.env.filters['myfilter'] = myfilter
+pdoc.render.configure(template_directory = 'pdoc_templates', search = False)
+
+with open('docs/index.html', 'w') as fid:
+	fid.write(pdoc.pdoc('D47calib'))

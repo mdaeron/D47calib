@@ -600,8 +600,49 @@ class D47calib(_ogls.InverseTPolynomial):
 		colors = [(1,0,0),(1,.5,0),(.25,.75,0),(0,.5,1),(0.5,0.5,0.5)],
 		yscale = 'lin',
 		):
+		"""
+		Plot SE of T reconstructed using the calibration as a function of T for various
+		combinations of analytical precision and number of analytical replicates.
 
+		**Arguments**		
+
+		+ **calibname**:
+		Which calibration name to display. By default, use `label` attribute.
+		+ **rD47**:
+		Analytical precision of a single analysis.
+		+ **Nr**:
+		A list of lines to plot, each corresponding to a given number of replicates.
+		+ **Tmin**:
+		Minimum T to plot.
+		+ **Tmax**:
+		Maximum T to plot.
+		+ **colors**:
+		A list of colors to distinguish the plotted lines.
+		+ **yscale**:
+		  + If `'lin'`, the Y axis uses a linear scale.
+		  + If `'log'`, the Y axis uses a logarithmic scale.
+		  
+		**Example**
+		
+		````py
 		from matplotlib import pyplot as ppl
+		from D47calib import devils_laghetto_2023 as calib
+
+		fig = ppl.figure(figsize = (3.5,4))
+		ppl.subplots_adjust(bottom = .2, left = .15)
+		calib.plot_T47_errors(
+			calibname = 'Devils Laghetto calibration',
+			Nr = [1,2,4,16],
+			Tmin  =0,
+			Tmax = 40,
+			)
+		ppl.savefig('example_SE_T.png', dpi = 100)
+		````
+
+		This should result in something like this:
+		
+		<img src="example_SE_T.png">
+		"""
 
 		if calibname is None:
 			calibname = self.label
@@ -614,43 +655,74 @@ class D47calib(_ogls.InverseTPolynomial):
 			colors = [hsv_to_rgb(*x) for x in hsv]
 
 		Ti = _np.linspace(Tmin, Tmax)
-		D47, sD47, sD47_calib  = self.T47(T = Ti)
+		D47i, _  = self.T47(T = Ti)
+		_, sT_calib = self.T47(D47 = D47i, error_from = 'calib')
 
 		ymax, ymin = 0, 1e6
 		for N,c in zip(Nr, colors):
-			sD47 = rD47 / N**.5
-			T, sT, sT_calib = self.T47(D47 = D47, sD47 = sD47)
-			ppl.plot(Ti, sT, '-', color = c, label=f'Analytical SE for {N} replicates')
+			_, sT = self.T47(D47 = D47i, sD47 = rD47 / N**.5, error_from = 'sD47')
+			_ppl.plot(Ti, sT, '-', color = c, label=f'SE for {N} replicate{"s" if N > 1 else ""}')
 			ymin = min(ymin, min(sT))
 			ymax = max(ymax, max(sT))
 		
-		ppl.plot(Ti, sT_calib, 'k--', label='Independent SE from calibration alone')
+		_ppl.plot(Ti, sT_calib, 'k--', label='SE from calibration')
 
-		ppl.legend(fontsize=9)
-		ppl.xlabel("T (°C)")
+		_ppl.legend(fontsize=9)
+		_ppl.xlabel("T (°C)")
 
-		ppl.ylabel("Standard error on reconstructed T (°C)")
+		_ppl.ylabel("Standard error on reconstructed T (°C)")
 
 		# yticks([0,.5,1,1.5,2])
-		ppl.title(f"{calibname},\nassuming external Δ$_{{47}}$ repeatability of {rD47:.3f} ‰", size = 9)
-		ppl.grid( alpha = .25)
+		_ppl.title(f"{calibname},\nassuming external Δ$_{{47}}$ repeatability of {rD47:.3f} ‰", size = 9)
+		_ppl.grid( alpha = .25)
 		if yscale == 'lin':
-			ppl.axis([Ti[0], Ti[-1], 0, ymax*1.05])
+			_ppl.axis([Ti[0], Ti[-1], 0, ymax*1.05])
 			t1, t2 = self.T.min(), self.T.max()
-			ppl.plot([t1, t2], [0, 0], 'k-', alpha = .25, lw = 8, solid_capstyle = 'butt', clip_on = False)
-			ppl.text((t1+t2)/2, 0, 'range of observations\n', alpha = .4, size = 7, ha = 'center', va = 'bottom', style = 'italic')
-		else:
+			_ppl.plot([t1, t2], [0, 0], 'k-', alpha = .25, lw = 8, solid_capstyle = 'butt', clip_on = False)
+			_ppl.text((t1+t2)/2, 0, 'range of observations\n', alpha = .4, size = 7, ha = 'center', va = 'bottom', style = 'italic')
+			_ppl.axis([None, None, None, _ppl.axis()[-1]*1.25])
+		elif yscale == 'log':
 			ymin /= 2
-			ppl.axis([Ti[0], Ti[-1], ymin, ymax*1.05])
-			ppl.yscale('log')
+			_ppl.axis([Ti[0], Ti[-1], ymin, ymax*1.05])
+			_ppl.yscale('log')
 			t1, t2 = self.T.min(), self.T.max()
-			ppl.plot([t1, t2], [ymin, ymin], 'k-', alpha = .25, lw = 8, solid_capstyle = 'butt', clip_on = False)
-			ppl.text((t1+t2)/2, ymin, 'range of observations\n', alpha = .4, size = 7, ha = 'center', va = 'bottom', style = 'italic')
+			_ppl.plot([t1, t2], [ymin, ymin], 'k-', alpha = .25, lw = 8, solid_capstyle = 'butt', clip_on = False)
+			_ppl.text((t1+t2)/2, ymin, 'range of observations\n', alpha = .4, size = 7, ha = 'center', va = 'bottom', style = 'italic')
 
 	def export_data(self, csvfile, sep = ',', label = False, T_correl = False, D47_correl = False):
-		'''
+		"""
 		Write calibration data to a csv file.
-		'''
+		
+		### Parameters
+		
+		+ **csvfile**:
+		The filename to write data to.
+		+ **sep**:
+		The separator between CSV fields.
+		+ **label**:
+		  + If specified as `True`, include a `Dataset` column with the calibration's `label` attribute.
+		  + If specified as a `str`, include a `Dataset` column with that string.
+		  + If specified as `False`, do not include a `Dataset` column.
+		+ **T_correl**:
+		  + If `True`, include correlations between all `T` values.
+		+ **D47_correl**:
+		  + If `True`, include correlations between all `D47` values.
+		
+		### Example
+
+		````py
+		D47calib.huyghe_2022.export_data(
+			csvfile = 'example_export_data.csv',
+			T_correl = True,
+			D47_correl = True,
+			)
+		````
+
+		This should result in something like this ([link](example_export_data.csv)):
+		
+		.. include:: ../../docs/example_export_data.md
+
+		"""
 		n = len(str(self.N))
 
 		with open(csvfile, 'w') as f:
@@ -678,7 +750,10 @@ class D47calib(_ogls.InverseTPolynomial):
 				)):
 				f.write('\n' + sep.join([f'{k+1:0{n}d}', s, f'{T:.2f}', f'{sT:.2f}', f'{D47:.4f}', f'{sD47:.4f}']))
 				if label:
-					f.write(f'{sep}{self.label}')
+					if label is True:
+						f.write(f'{sep}{self.label}')
+					else:
+						f.write(f'{sep}{label}')
 				if T_correl:
 					f.write(sep.join(['']+[
 						f'{Tcorrel[k,_]:.0f}'
