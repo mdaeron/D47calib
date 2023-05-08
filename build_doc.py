@@ -158,7 +158,7 @@ lines = [lines[0]] + [','.join(['----' for _ in range(N)])] + lines[1:]
 for k in range(len(lines)):
 	lines[k] = '|' + lines[k].strip().replace(',', '|') + '|'
 with open('docs/example_export_data.md', 'w') as fid:
-	fid.write('<style>td, th {font-size: 75%; line-height: 75%;}</style>\n\n' + '\n'.join(lines) + '\n\n')
+	fid.write('<style>td, th {font-size: 80%; line-height: 80%;}</style>\n\n' + '\n'.join(lines) + '\n\n')
 		
 
 def myfilter(docstr):

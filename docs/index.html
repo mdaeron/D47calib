@@ -86,7 +86,7 @@
                     <h1 class="modulename">
 D47calib    </h1>
 
-                        <div class="docstring"><p>Generate, combine, display and apply Δ<sub>47</sub> calibrations</p>
+                		<div class="docstring"><p>Generate, combine, display and apply Δ<sub>47</sub> calibrations</p>
 
 <h1 id="calibrations-included">Calibrations included</h1>
 
@@ -904,66 +904,149 @@ D47calib    </h1>
 </span><span id="L-769"><a href="#L-769"><span class="linenos">769</span></a>				
 </span><span id="L-770"><a href="#L-770"><span class="linenos">770</span></a>
 </span><span id="L-771"><a href="#L-771"><span class="linenos">771</span></a>	<span class="k">def</span> <span class="nf">export</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">filename</span><span class="p">):</span>
-</span><span id="L-772"><a href="#L-772"><span class="linenos">772</span></a>		<span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="s1">&#39;w&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
-</span><span id="L-773"><a href="#L-773"><span class="linenos">773</span></a>			<span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;&#39;&#39;</span>
-</span><span id="L-774"><a href="#L-774"><span class="linenos">774</span></a><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s1"> = D47calib(</span>
-</span><span id="L-775"><a href="#L-775"><span class="linenos">775</span></a><span class="s1">	samples = </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">samples</span><span class="si">}</span><span class="s1">,</span>
-</span><span id="L-776"><a href="#L-776"><span class="linenos">776</span></a><span class="s1">	T = </span><span class="si">{</span><span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">T</span><span class="p">)</span><span class="si">}</span><span class="s1">,</span>
-</span><span id="L-777"><a href="#L-777"><span class="linenos">777</span></a><span class="s1">	D47 = </span><span class="si">{</span><span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">D47</span><span class="p">)</span><span class="si">}</span><span class="s1">,</span>
-</span><span id="L-778"><a href="#L-778"><span class="linenos">778</span></a><span class="s1">	sT = </span><span class="si">{</span><span class="p">[</span><span class="nb">list</span><span class="p">(</span><span class="n">l</span><span class="p">)</span><span class="w"> </span><span class="k">for</span><span class="w"> </span><span class="n">l</span><span class="w"> </span><span class="ow">in</span><span class="w"> </span><span class="bp">self</span><span class="o">.</span><span class="n">sT</span><span class="p">]</span><span class="si">}</span><span class="s1">,</span>
-</span><span id="L-779"><a href="#L-779"><span class="linenos">779</span></a><span class="s1">	sD47 = </span><span class="si">{</span><span class="p">[</span><span class="nb">list</span><span class="p">(</span><span class="n">l</span><span class="p">)</span><span class="w"> </span><span class="k">for</span><span class="w"> </span><span class="n">l</span><span class="w"> </span><span class="ow">in</span><span class="w"> </span><span class="bp">self</span><span class="o">.</span><span class="n">sD47</span><span class="p">]</span><span class="si">}</span><span class="s1">,</span>
-</span><span id="L-780"><a href="#L-780"><span class="linenos">780</span></a><span class="s1">	description = </span><span class="si">{</span><span class="nb">repr</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">description</span><span class="p">)</span><span class="si">}</span><span class="s1">,</span>
-</span><span id="L-781"><a href="#L-781"><span class="linenos">781</span></a><span class="s1">	label = </span><span class="si">{</span><span class="nb">repr</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">label</span><span class="p">)</span><span class="si">}</span><span class="s1">,</span>
-</span><span id="L-782"><a href="#L-782"><span class="linenos">782</span></a><span class="s1">	color = </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">color</span><span class="si">}</span><span class="s1">,</span>
-</span><span id="L-783"><a href="#L-783"><span class="linenos">783</span></a><span class="s1">	degrees = </span><span class="si">{</span><span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">degrees</span><span class="p">)</span><span class="si">}</span><span class="s1">,</span>
-</span><span id="L-784"><a href="#L-784"><span class="linenos">784</span></a><span class="s1">	bfp = </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">bfp</span><span class="si">}</span><span class="s1">,</span>
-</span><span id="L-785"><a href="#L-785"><span class="linenos">785</span></a><span class="s1">	bfp_CM = </span><span class="si">{</span><span class="p">[</span><span class="nb">list</span><span class="p">(</span><span class="n">l</span><span class="p">)</span><span class="w"> </span><span class="k">for</span><span class="w"> </span><span class="n">l</span><span class="w"> </span><span class="ow">in</span><span class="w"> </span><span class="bp">self</span><span class="o">.</span><span class="n">bfp_CM</span><span class="p">]</span><span class="si">}</span><span class="s1">,</span>
-</span><span id="L-786"><a href="#L-786"><span class="linenos">786</span></a><span class="s1">	chisq = </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">chisq</span><span class="si">}</span><span class="s1">,</span>
-</span><span id="L-787"><a href="#L-787"><span class="linenos">787</span></a><span class="s1">	Nf = </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">Nf</span><span class="si">}</span><span class="s1">,</span>
-</span><span id="L-788"><a href="#L-788"><span class="linenos">788</span></a><span class="s1">	)</span>
-</span><span id="L-789"><a href="#L-789"><span class="linenos">789</span></a><span class="s1">&#39;&#39;&#39;</span><span class="p">)</span>
-</span><span id="L-790"><a href="#L-790"><span class="linenos">790</span></a>
-</span><span id="L-791"><a href="#L-791"><span class="linenos">791</span></a>
-</span><span id="L-792"><a href="#L-792"><span class="linenos">792</span></a>
-</span><span id="L-793"><a href="#L-793"><span class="linenos">793</span></a><span class="k">def</span> <span class="nf">combine_D47calibs</span><span class="p">(</span><span class="n">calibs</span><span class="p">,</span> <span class="n">degrees</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">2</span><span class="p">],</span> <span class="n">same_T</span> <span class="o">=</span> <span class="p">[]):</span>
-</span><span id="L-794"><a href="#L-794"><span class="linenos">794</span></a><span class="w">	</span><span class="sd">&#39;&#39;&#39;</span>
-</span><span id="L-795"><a href="#L-795"><span class="linenos">795</span></a><span class="sd">	Combine `D47calib` instances.</span>
-</span><span id="L-796"><a href="#L-796"><span class="linenos">796</span></a><span class="sd">	</span>
-</span><span id="L-797"><a href="#L-797"><span class="linenos">797</span></a><span class="sd">	Example of valid `same_T` parameter:</span>
-</span><span id="L-798"><a href="#L-798"><span class="linenos">798</span></a><span class="sd">	`[{&#39;LGB-2&#39;, DHC-2-8&#39;}, {&#39;ETH-1-1100-SAM&#39;, &#39;ETH-1-1100&#39;}]`.</span>
-</span><span id="L-799"><a href="#L-799"><span class="linenos">799</span></a><span class="sd">	&#39;&#39;&#39;</span>
-</span><span id="L-800"><a href="#L-800"><span class="linenos">800</span></a>
-</span><span id="L-801"><a href="#L-801"><span class="linenos">801</span></a>	<span class="n">samples</span> <span class="o">=</span> <span class="p">[</span><span class="n">s</span> <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">calibs</span> <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="n">c</span><span class="o">.</span><span class="n">samples</span><span class="p">]</span>
-</span><span id="L-802"><a href="#L-802"><span class="linenos">802</span></a>	<span class="n">T</span> <span class="o">=</span> <span class="p">[</span><span class="n">t</span> <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">calibs</span> <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="n">c</span><span class="o">.</span><span class="n">T</span><span class="p">]</span>
-</span><span id="L-803"><a href="#L-803"><span class="linenos">803</span></a>	<span class="n">D47</span> <span class="o">=</span> <span class="p">[</span><span class="n">x</span> <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">calibs</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">c</span><span class="o">.</span><span class="n">D47</span><span class="p">]</span>
-</span><span id="L-804"><a href="#L-804"><span class="linenos">804</span></a>	<span class="n">sD47</span> <span class="o">=</span> <span class="n">_block_diag</span><span class="p">(</span><span class="o">*</span><span class="p">[</span><span class="n">c</span><span class="o">.</span><span class="n">sD47</span> <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">calibs</span><span class="p">])</span>
-</span><span id="L-805"><a href="#L-805"><span class="linenos">805</span></a>	<span class="n">sT</span> <span class="o">=</span> <span class="n">_block_diag</span><span class="p">(</span><span class="o">*</span><span class="p">[</span><span class="n">c</span><span class="o">.</span><span class="n">sT</span> <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">calibs</span><span class="p">])</span>
-</span><span id="L-806"><a href="#L-806"><span class="linenos">806</span></a>
-</span><span id="L-807"><a href="#L-807"><span class="linenos">807</span></a>	<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">samples</span><span class="p">)):</span>
-</span><span id="L-808"><a href="#L-808"><span class="linenos">808</span></a>		<span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">samples</span><span class="p">)):</span>
-</span><span id="L-809"><a href="#L-809"><span class="linenos">809</span></a>			<span class="k">if</span> <span class="n">i</span> <span class="o">!=</span> <span class="n">j</span><span class="p">:</span>
-</span><span id="L-810"><a href="#L-810"><span class="linenos">810</span></a>				<span class="k">if</span> <span class="n">samples</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">==</span> <span class="n">samples</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="ow">or</span> <span class="p">{</span><span class="n">samples</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">samples</span><span class="p">[</span><span class="n">j</span><span class="p">]}</span> <span class="ow">in</span> <span class="n">same_T</span><span class="p">:</span>
-</span><span id="L-811"><a href="#L-811"><span class="linenos">811</span></a>					<span class="n">sT</span><span class="p">[</span><span class="n">i</span><span class="p">,</span><span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="n">sT</span><span class="p">[</span><span class="n">i</span><span class="p">,</span><span class="n">i</span><span class="p">]</span> <span class="o">*</span> <span class="n">sT</span><span class="p">[</span><span class="n">j</span><span class="p">,</span><span class="n">j</span><span class="p">])</span><span class="o">**</span><span class="mf">.5</span>
-</span><span id="L-812"><a href="#L-812"><span class="linenos">812</span></a>	
-</span><span id="L-813"><a href="#L-813"><span class="linenos">813</span></a>	<span class="n">calib</span> <span class="o">=</span> <span class="n">D47calib</span><span class="p">(</span>
-</span><span id="L-814"><a href="#L-814"><span class="linenos">814</span></a>		<span class="n">samples</span> <span class="o">=</span> <span class="n">samples</span><span class="p">,</span>
-</span><span id="L-815"><a href="#L-815"><span class="linenos">815</span></a>		<span class="n">T</span> <span class="o">=</span> <span class="n">T</span><span class="p">,</span>
-</span><span id="L-816"><a href="#L-816"><span class="linenos">816</span></a>		<span class="n">D47</span> <span class="o">=</span> <span class="n">D47</span><span class="p">,</span>
-</span><span id="L-817"><a href="#L-817"><span class="linenos">817</span></a>		<span class="n">sT</span> <span class="o">=</span> <span class="n">sT</span><span class="p">,</span>
-</span><span id="L-818"><a href="#L-818"><span class="linenos">818</span></a>		<span class="n">sD47</span> <span class="o">=</span> <span class="n">sD47</span><span class="p">,</span>
-</span><span id="L-819"><a href="#L-819"><span class="linenos">819</span></a>		<span class="n">degrees</span> <span class="o">=</span> <span class="n">degrees</span><span class="p">,</span>
-</span><span id="L-820"><a href="#L-820"><span class="linenos">820</span></a>		<span class="n">regress_now</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
-</span><span id="L-821"><a href="#L-821"><span class="linenos">821</span></a>		<span class="p">)</span>
-</span><span id="L-822"><a href="#L-822"><span class="linenos">822</span></a>
-</span><span id="L-823"><a href="#L-823"><span class="linenos">823</span></a>	<span class="k">return</span> <span class="n">calib</span>
-</span><span id="L-824"><a href="#L-824"><span class="linenos">824</span></a>
-</span><span id="L-825"><a href="#L-825"><span class="linenos">825</span></a><span class="kn">from</span> <span class="nn">._calibs</span> <span class="kn">import</span> <span class="o">*</span>
+</span><span id="L-772"><a href="#L-772"><span class="linenos">772</span></a><span class="w">		</span><span class="sd">&quot;&quot;&quot;</span>
+</span><span id="L-773"><a href="#L-773"><span class="linenos">773</span></a><span class="sd">		Save `D47calib` object as an importable file.</span>
+</span><span id="L-774"><a href="#L-774"><span class="linenos">774</span></a><span class="sd">		</span>
+</span><span id="L-775"><a href="#L-775"><span class="linenos">775</span></a><span class="sd">		### Parameters</span>
+</span><span id="L-776"><a href="#L-776"><span class="linenos">776</span></a><span class="sd">		</span>
+</span><span id="L-777"><a href="#L-777"><span class="linenos">777</span></a><span class="sd">		+ **name**:</span>
+</span><span id="L-778"><a href="#L-778"><span class="linenos">778</span></a><span class="sd">		The name of the variable to export.</span>
+</span><span id="L-779"><a href="#L-779"><span class="linenos">779</span></a><span class="sd">		+ **filename**:</span>
+</span><span id="L-780"><a href="#L-780"><span class="linenos">780</span></a><span class="sd">		The filename to write to.</span>
+</span><span id="L-781"><a href="#L-781"><span class="linenos">781</span></a><span class="sd">		</span>
+</span><span id="L-782"><a href="#L-782"><span class="linenos">782</span></a><span class="sd">		### Example</span>
+</span><span id="L-783"><a href="#L-783"><span class="linenos">783</span></a>
+</span><span id="L-784"><a href="#L-784"><span class="linenos">784</span></a><span class="sd">		````py</span>
+</span><span id="L-785"><a href="#L-785"><span class="linenos">785</span></a><span class="sd">		D47calib.anderson_2021_lsce.export(&#39;foo&#39;, &#39;bar.py&#39;)</span>
+</span><span id="L-786"><a href="#L-786"><span class="linenos">786</span></a><span class="sd">		````</span>
+</span><span id="L-787"><a href="#L-787"><span class="linenos">787</span></a>
+</span><span id="L-788"><a href="#L-788"><span class="linenos">788</span></a><span class="sd">		This should result in a `bar.py` file with the following contents:</span>
+</span><span id="L-789"><a href="#L-789"><span class="linenos">789</span></a><span class="sd">		</span>
+</span><span id="L-790"><a href="#L-790"><span class="linenos">790</span></a><span class="sd">		````py</span>
+</span><span id="L-791"><a href="#L-791"><span class="linenos">791</span></a><span class="sd">		foo = D47calib(</span>
+</span><span id="L-792"><a href="#L-792"><span class="linenos">792</span></a><span class="sd">			samples = [&#39;LGB-2&#39;, &#39;DVH-2&#39;],</span>
+</span><span id="L-793"><a href="#L-793"><span class="linenos">793</span></a><span class="sd">			T = [7.9, 33.7],</span>
+</span><span id="L-794"><a href="#L-794"><span class="linenos">794</span></a><span class="sd">			D47 = [0.6485720997671647, 0.5695972909966959],</span>
+</span><span id="L-795"><a href="#L-795"><span class="linenos">795</span></a><span class="sd">			sT = [[0.04000000000000001, 0.0], [0.0, 0.04000000000000001]],</span>
+</span><span id="L-796"><a href="#L-796"><span class="linenos">796</span></a><span class="sd">			sD47 = [[8.72797097773764e-06, 2.951894073404263e-06], [2.9518940734042614e-06, 7.498611746762038e-06]],</span>
+</span><span id="L-797"><a href="#L-797"><span class="linenos">797</span></a><span class="sd">			description = &#39;Devils Hole &amp; Laghetto Basso from Anderson et al. (2021), processed in I-CDES&#39;,</span>
+</span><span id="L-798"><a href="#L-798"><span class="linenos">798</span></a><span class="sd">			label = &#39;Slow-growing calcites from Anderson et al. (2021)&#39;,</span>
+</span><span id="L-799"><a href="#L-799"><span class="linenos">799</span></a><span class="sd">			color = (0, 0.5, 0),</span>
+</span><span id="L-800"><a href="#L-800"><span class="linenos">800</span></a><span class="sd">			degrees = [0, 2],</span>
+</span><span id="L-801"><a href="#L-801"><span class="linenos">801</span></a><span class="sd">			bfp = {&#39;a0&#39;: 0.1583220210575451, &#39;a2&#39;: 38724.41371782721},</span>
+</span><span id="L-802"><a href="#L-802"><span class="linenos">802</span></a><span class="sd">			bfp_CM = [[0.00035908667755871876, -30.707016431538836], [-30.70701643153884, 2668091.396598919]],</span>
+</span><span id="L-803"><a href="#L-803"><span class="linenos">803</span></a><span class="sd">			chisq = 6.421311854486162e-27,</span>
+</span><span id="L-804"><a href="#L-804"><span class="linenos">804</span></a><span class="sd">			Nf = 0,</span>
+</span><span id="L-805"><a href="#L-805"><span class="linenos">805</span></a><span class="sd">			)</span>
+</span><span id="L-806"><a href="#L-806"><span class="linenos">806</span></a><span class="sd">		````</span>
+</span><span id="L-807"><a href="#L-807"><span class="linenos">807</span></a><span class="sd">		&quot;&quot;&quot;</span>
+</span><span id="L-808"><a href="#L-808"><span class="linenos">808</span></a>		<span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="s1">&#39;w&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+</span><span id="L-809"><a href="#L-809"><span class="linenos">809</span></a>			<span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;&#39;&#39;</span>
+</span><span id="L-810"><a href="#L-810"><span class="linenos">810</span></a><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s1"> = D47calib(</span>
+</span><span id="L-811"><a href="#L-811"><span class="linenos">811</span></a><span class="s1">	samples = </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">samples</span><span class="si">}</span><span class="s1">,</span>
+</span><span id="L-812"><a href="#L-812"><span class="linenos">812</span></a><span class="s1">	T = </span><span class="si">{</span><span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">T</span><span class="p">)</span><span class="si">}</span><span class="s1">,</span>
+</span><span id="L-813"><a href="#L-813"><span class="linenos">813</span></a><span class="s1">	D47 = </span><span class="si">{</span><span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">D47</span><span class="p">)</span><span class="si">}</span><span class="s1">,</span>
+</span><span id="L-814"><a href="#L-814"><span class="linenos">814</span></a><span class="s1">	sT = </span><span class="si">{</span><span class="p">[</span><span class="nb">list</span><span class="p">(</span><span class="n">l</span><span class="p">)</span><span class="w"> </span><span class="k">for</span><span class="w"> </span><span class="n">l</span><span class="w"> </span><span class="ow">in</span><span class="w"> </span><span class="bp">self</span><span class="o">.</span><span class="n">sT</span><span class="p">]</span><span class="si">}</span><span class="s1">,</span>
+</span><span id="L-815"><a href="#L-815"><span class="linenos">815</span></a><span class="s1">	sD47 = </span><span class="si">{</span><span class="p">[</span><span class="nb">list</span><span class="p">(</span><span class="n">l</span><span class="p">)</span><span class="w"> </span><span class="k">for</span><span class="w"> </span><span class="n">l</span><span class="w"> </span><span class="ow">in</span><span class="w"> </span><span class="bp">self</span><span class="o">.</span><span class="n">sD47</span><span class="p">]</span><span class="si">}</span><span class="s1">,</span>
+</span><span id="L-816"><a href="#L-816"><span class="linenos">816</span></a><span class="s1">	description = </span><span class="si">{</span><span class="nb">repr</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">description</span><span class="p">)</span><span class="si">}</span><span class="s1">,</span>
+</span><span id="L-817"><a href="#L-817"><span class="linenos">817</span></a><span class="s1">	label = </span><span class="si">{</span><span class="nb">repr</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">label</span><span class="p">)</span><span class="si">}</span><span class="s1">,</span>
+</span><span id="L-818"><a href="#L-818"><span class="linenos">818</span></a><span class="s1">	color = </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">color</span><span class="si">}</span><span class="s1">,</span>
+</span><span id="L-819"><a href="#L-819"><span class="linenos">819</span></a><span class="s1">	degrees = </span><span class="si">{</span><span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">degrees</span><span class="p">)</span><span class="si">}</span><span class="s1">,</span>
+</span><span id="L-820"><a href="#L-820"><span class="linenos">820</span></a><span class="s1">	bfp = </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">bfp</span><span class="si">}</span><span class="s1">,</span>
+</span><span id="L-821"><a href="#L-821"><span class="linenos">821</span></a><span class="s1">	bfp_CM = </span><span class="si">{</span><span class="p">[</span><span class="nb">list</span><span class="p">(</span><span class="n">l</span><span class="p">)</span><span class="w"> </span><span class="k">for</span><span class="w"> </span><span class="n">l</span><span class="w"> </span><span class="ow">in</span><span class="w"> </span><span class="bp">self</span><span class="o">.</span><span class="n">bfp_CM</span><span class="p">]</span><span class="si">}</span><span class="s1">,</span>
+</span><span id="L-822"><a href="#L-822"><span class="linenos">822</span></a><span class="s1">	chisq = </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">chisq</span><span class="si">}</span><span class="s1">,</span>
+</span><span id="L-823"><a href="#L-823"><span class="linenos">823</span></a><span class="s1">	Nf = </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">Nf</span><span class="si">}</span><span class="s1">,</span>
+</span><span id="L-824"><a href="#L-824"><span class="linenos">824</span></a><span class="s1">	)</span>
+</span><span id="L-825"><a href="#L-825"><span class="linenos">825</span></a><span class="s1">&#39;&#39;&#39;</span><span class="p">)</span>
+</span><span id="L-826"><a href="#L-826"><span class="linenos">826</span></a>
+</span><span id="L-827"><a href="#L-827"><span class="linenos">827</span></a><span class="k">def</span> <span class="nf">combine_D47calibs</span><span class="p">(</span><span class="n">calibs</span><span class="p">,</span> <span class="n">degrees</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">2</span><span class="p">],</span> <span class="n">same_T</span> <span class="o">=</span> <span class="p">[]):</span>
+</span><span id="L-828"><a href="#L-828"><span class="linenos">828</span></a><span class="w">	</span><span class="sd">&#39;&#39;&#39;</span>
+</span><span id="L-829"><a href="#L-829"><span class="linenos">829</span></a><span class="sd">	Combine data from several `D47calib` instances.</span>
+</span><span id="L-830"><a href="#L-830"><span class="linenos">830</span></a><span class="sd">	</span>
+</span><span id="L-831"><a href="#L-831"><span class="linenos">831</span></a><span class="sd">	### Parameters</span>
+</span><span id="L-832"><a href="#L-832"><span class="linenos">832</span></a><span class="sd">	</span>
+</span><span id="L-833"><a href="#L-833"><span class="linenos">833</span></a><span class="sd">	+ **calibs**:</span>
+</span><span id="L-834"><a href="#L-834"><span class="linenos">834</span></a><span class="sd">	A list of `D47calib` instances</span>
+</span><span id="L-835"><a href="#L-835"><span class="linenos">835</span></a><span class="sd">	+ **degrees**:</span>
+</span><span id="L-836"><a href="#L-836"><span class="linenos">836</span></a><span class="sd">	The polynomial degrees of the combined regression.</span>
+</span><span id="L-837"><a href="#L-837"><span class="linenos">837</span></a><span class="sd">	+ **same_T**:</span>
+</span><span id="L-838"><a href="#L-838"><span class="linenos">838</span></a><span class="sd">	Use this `list` to specify when samples from different calibrations are known/postulated</span>
+</span><span id="L-839"><a href="#L-839"><span class="linenos">839</span></a><span class="sd">	to have formed at the same temperature (e.g. `DVH-2` and `DHC2-8` from the `fiebig_2021`</span>
+</span><span id="L-840"><a href="#L-840"><span class="linenos">840</span></a><span class="sd">	and `anderson_2021_lsce` data sets). Each element of `same_T` is a `list` with the names</span>
+</span><span id="L-841"><a href="#L-841"><span class="linenos">841</span></a><span class="sd">	of two or more samples formed at the same temperature.</span>
+</span><span id="L-842"><a href="#L-842"><span class="linenos">842</span></a><span class="sd">	</span>
+</span><span id="L-843"><a href="#L-843"><span class="linenos">843</span></a><span class="sd">	For example, the `combined_2023` calibration is computed with:</span>
+</span><span id="L-844"><a href="#L-844"><span class="linenos">844</span></a><span class="sd">	</span>
+</span><span id="L-845"><a href="#L-845"><span class="linenos">845</span></a><span class="sd">	`same_T = [[&#39;DVH-2&#39;, DHC-2-8&#39;], [&#39;ETH-1-1100-SAM&#39;, &#39;ETH-1-1100&#39;]]`</span>
+</span><span id="L-846"><a href="#L-846"><span class="linenos">846</span></a>
+</span><span id="L-847"><a href="#L-847"><span class="linenos">847</span></a><span class="sd">	Note that when samples from different calibrations have the same name,</span>
+</span><span id="L-848"><a href="#L-848"><span class="linenos">848</span></a><span class="sd">	it is not necessary to explicitly list them in `same_T`.</span>
+</span><span id="L-849"><a href="#L-849"><span class="linenos">849</span></a><span class="sd">	</span>
+</span><span id="L-850"><a href="#L-850"><span class="linenos">850</span></a><span class="sd">	Also note that the regression will fail if samples listed together in `same_T`</span>
+</span><span id="L-851"><a href="#L-851"><span class="linenos">851</span></a><span class="sd">	actually have different `T` values specified in the original calibrations.</span>
+</span><span id="L-852"><a href="#L-852"><span class="linenos">852</span></a>
+</span><span id="L-853"><a href="#L-853"><span class="linenos">853</span></a><span class="sd">	### Example</span>
+</span><span id="L-854"><a href="#L-854"><span class="linenos">854</span></a><span class="sd">	</span>
+</span><span id="L-855"><a href="#L-855"><span class="linenos">855</span></a><span class="sd">	The `devils_laghetto_2023` calibration is computed using the following code:</span>
+</span><span id="L-856"><a href="#L-856"><span class="linenos">856</span></a><span class="sd">	</span>
+</span><span id="L-857"><a href="#L-857"><span class="linenos">857</span></a><span class="sd">	````py</span>
+</span><span id="L-858"><a href="#L-858"><span class="linenos">858</span></a><span class="sd">	K = [fiebig_2021.samples.index(_) for _ in [&#39;LGB-2&#39;, &#39;DVH-2&#39;, &#39;DHC2-8&#39;]]</span>
+</span><span id="L-859"><a href="#L-859"><span class="linenos">859</span></a>
+</span><span id="L-860"><a href="#L-860"><span class="linenos">860</span></a><span class="sd">	fiebig_temp = D47calib(</span>
+</span><span id="L-861"><a href="#L-861"><span class="linenos">861</span></a><span class="sd">		samples = [fiebig_2021.samples[_] for _ in K],</span>
+</span><span id="L-862"><a href="#L-862"><span class="linenos">862</span></a><span class="sd">		T = fiebig_2021.T[K],</span>
+</span><span id="L-863"><a href="#L-863"><span class="linenos">863</span></a><span class="sd">		D47 = fiebig_2021.D47[K],</span>
+</span><span id="L-864"><a href="#L-864"><span class="linenos">864</span></a><span class="sd">		sT = fiebig_2021.sT[K,:][:,K],</span>
+</span><span id="L-865"><a href="#L-865"><span class="linenos">865</span></a><span class="sd">		sD47 = fiebig_2021.sD47[K,:][:,K],</span>
+</span><span id="L-866"><a href="#L-866"><span class="linenos">866</span></a><span class="sd">		regress_now = True,</span>
+</span><span id="L-867"><a href="#L-867"><span class="linenos">867</span></a><span class="sd">		)</span>
+</span><span id="L-868"><a href="#L-868"><span class="linenos">868</span></a>
+</span><span id="L-869"><a href="#L-869"><span class="linenos">869</span></a><span class="sd">	devils_laghetto_2023 = combine_D47calibs(</span>
+</span><span id="L-870"><a href="#L-870"><span class="linenos">870</span></a><span class="sd">		calibs = [</span>
+</span><span id="L-871"><a href="#L-871"><span class="linenos">871</span></a><span class="sd">			anderson_2021_lsce,</span>
+</span><span id="L-872"><a href="#L-872"><span class="linenos">872</span></a><span class="sd">			fiebig_temp,</span>
+</span><span id="L-873"><a href="#L-873"><span class="linenos">873</span></a><span class="sd">			],</span>
+</span><span id="L-874"><a href="#L-874"><span class="linenos">874</span></a><span class="sd">		degrees = [0,2],</span>
+</span><span id="L-875"><a href="#L-875"><span class="linenos">875</span></a><span class="sd">		same_T = [</span>
+</span><span id="L-876"><a href="#L-876"><span class="linenos">876</span></a><span class="sd">			{&#39;DVH-2&#39;, &#39;DHC2-8&#39;},</span>
+</span><span id="L-877"><a href="#L-877"><span class="linenos">877</span></a><span class="sd">			],</span>
+</span><span id="L-878"><a href="#L-878"><span class="linenos">878</span></a><span class="sd">		)</span>
+</span><span id="L-879"><a href="#L-879"><span class="linenos">879</span></a><span class="sd">	````</span>
+</span><span id="L-880"><a href="#L-880"><span class="linenos">880</span></a><span class="sd">	&#39;&#39;&#39;</span>
+</span><span id="L-881"><a href="#L-881"><span class="linenos">881</span></a>
+</span><span id="L-882"><a href="#L-882"><span class="linenos">882</span></a>	<span class="n">samples</span> <span class="o">=</span> <span class="p">[</span><span class="n">s</span> <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">calibs</span> <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="n">c</span><span class="o">.</span><span class="n">samples</span><span class="p">]</span>
+</span><span id="L-883"><a href="#L-883"><span class="linenos">883</span></a>	<span class="n">T</span> <span class="o">=</span> <span class="p">[</span><span class="n">t</span> <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">calibs</span> <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="n">c</span><span class="o">.</span><span class="n">T</span><span class="p">]</span>
+</span><span id="L-884"><a href="#L-884"><span class="linenos">884</span></a>	<span class="n">D47</span> <span class="o">=</span> <span class="p">[</span><span class="n">x</span> <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">calibs</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">c</span><span class="o">.</span><span class="n">D47</span><span class="p">]</span>
+</span><span id="L-885"><a href="#L-885"><span class="linenos">885</span></a>	<span class="n">sD47</span> <span class="o">=</span> <span class="n">_block_diag</span><span class="p">(</span><span class="o">*</span><span class="p">[</span><span class="n">c</span><span class="o">.</span><span class="n">sD47</span> <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">calibs</span><span class="p">])</span>
+</span><span id="L-886"><a href="#L-886"><span class="linenos">886</span></a>	<span class="n">sT</span> <span class="o">=</span> <span class="n">_block_diag</span><span class="p">(</span><span class="o">*</span><span class="p">[</span><span class="n">c</span><span class="o">.</span><span class="n">sT</span> <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">calibs</span><span class="p">])</span>
+</span><span id="L-887"><a href="#L-887"><span class="linenos">887</span></a>
+</span><span id="L-888"><a href="#L-888"><span class="linenos">888</span></a>	<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">samples</span><span class="p">)):</span>
+</span><span id="L-889"><a href="#L-889"><span class="linenos">889</span></a>		<span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">samples</span><span class="p">)):</span>
+</span><span id="L-890"><a href="#L-890"><span class="linenos">890</span></a>			<span class="k">if</span> <span class="n">i</span> <span class="o">!=</span> <span class="n">j</span><span class="p">:</span>
+</span><span id="L-891"><a href="#L-891"><span class="linenos">891</span></a>				<span class="k">if</span> <span class="p">(</span><span class="n">samples</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">==</span> <span class="n">samples</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="ow">or</span>
+</span><span id="L-892"><a href="#L-892"><span class="linenos">892</span></a>					<span class="nb">any</span><span class="p">([</span><span class="n">samples</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="ow">in</span> <span class="n">_</span> <span class="ow">and</span> <span class="n">samples</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="ow">in</span> <span class="n">_</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="n">same_T</span><span class="p">])):</span>
+</span><span id="L-893"><a href="#L-893"><span class="linenos">893</span></a>
+</span><span id="L-894"><a href="#L-894"><span class="linenos">894</span></a>					<span class="n">sT</span><span class="p">[</span><span class="n">i</span><span class="p">,</span><span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="n">sT</span><span class="p">[</span><span class="n">i</span><span class="p">,</span><span class="n">i</span><span class="p">]</span> <span class="o">*</span> <span class="n">sT</span><span class="p">[</span><span class="n">j</span><span class="p">,</span><span class="n">j</span><span class="p">])</span><span class="o">**</span><span class="mf">.5</span>
+</span><span id="L-895"><a href="#L-895"><span class="linenos">895</span></a>	
+</span><span id="L-896"><a href="#L-896"><span class="linenos">896</span></a>	<span class="n">calib</span> <span class="o">=</span> <span class="n">D47calib</span><span class="p">(</span>
+</span><span id="L-897"><a href="#L-897"><span class="linenos">897</span></a>		<span class="n">samples</span> <span class="o">=</span> <span class="n">samples</span><span class="p">,</span>
+</span><span id="L-898"><a href="#L-898"><span class="linenos">898</span></a>		<span class="n">T</span> <span class="o">=</span> <span class="n">T</span><span class="p">,</span>
+</span><span id="L-899"><a href="#L-899"><span class="linenos">899</span></a>		<span class="n">D47</span> <span class="o">=</span> <span class="n">D47</span><span class="p">,</span>
+</span><span id="L-900"><a href="#L-900"><span class="linenos">900</span></a>		<span class="n">sT</span> <span class="o">=</span> <span class="n">sT</span><span class="p">,</span>
+</span><span id="L-901"><a href="#L-901"><span class="linenos">901</span></a>		<span class="n">sD47</span> <span class="o">=</span> <span class="n">sD47</span><span class="p">,</span>
+</span><span id="L-902"><a href="#L-902"><span class="linenos">902</span></a>		<span class="n">degrees</span> <span class="o">=</span> <span class="n">degrees</span><span class="p">,</span>
+</span><span id="L-903"><a href="#L-903"><span class="linenos">903</span></a>		<span class="n">regress_now</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+</span><span id="L-904"><a href="#L-904"><span class="linenos">904</span></a>		<span class="p">)</span>
+</span><span id="L-905"><a href="#L-905"><span class="linenos">905</span></a>
+</span><span id="L-906"><a href="#L-906"><span class="linenos">906</span></a>	<span class="k">return</span> <span class="n">calib</span>
+</span><span id="L-907"><a href="#L-907"><span class="linenos">907</span></a>
+</span><span id="L-908"><a href="#L-908"><span class="linenos">908</span></a><span class="kn">from</span> <span class="nn">._calibs</span> <span class="kn">import</span> <span class="o">*</span>
 </span></pre></div>
 
 
             </section>
-                <section id="D47calib">
-                            <input id="D47calib-view-source" class="view-source-toggle-state" type="checkbox" aria-hidden="true" tabindex="-1">
+		<section id="D47calib">
+			        <input id="D47calib-view-source" class="view-source-toggle-state" type="checkbox" aria-hidden="true" tabindex="-1">
 <div class="attr class">
             
     <span class="def">class</span>
@@ -1722,34 +1805,70 @@ D47calib    </h1>
 </span><span id="D47calib-770"><a href="#D47calib-770"><span class="linenos">770</span></a>				
 </span><span id="D47calib-771"><a href="#D47calib-771"><span class="linenos">771</span></a>
 </span><span id="D47calib-772"><a href="#D47calib-772"><span class="linenos">772</span></a>	<span class="k">def</span> <span class="nf">export</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">filename</span><span class="p">):</span>
-</span><span id="D47calib-773"><a href="#D47calib-773"><span class="linenos">773</span></a>		<span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="s1">&#39;w&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
-</span><span id="D47calib-774"><a href="#D47calib-774"><span class="linenos">774</span></a>			<span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;&#39;&#39;</span>
-</span><span id="D47calib-775"><a href="#D47calib-775"><span class="linenos">775</span></a><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s1"> = D47calib(</span>
-</span><span id="D47calib-776"><a href="#D47calib-776"><span class="linenos">776</span></a><span class="s1">	samples = </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">samples</span><span class="si">}</span><span class="s1">,</span>
-</span><span id="D47calib-777"><a href="#D47calib-777"><span class="linenos">777</span></a><span class="s1">	T = </span><span class="si">{</span><span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">T</span><span class="p">)</span><span class="si">}</span><span class="s1">,</span>
-</span><span id="D47calib-778"><a href="#D47calib-778"><span class="linenos">778</span></a><span class="s1">	D47 = </span><span class="si">{</span><span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">D47</span><span class="p">)</span><span class="si">}</span><span class="s1">,</span>
-</span><span id="D47calib-779"><a href="#D47calib-779"><span class="linenos">779</span></a><span class="s1">	sT = </span><span class="si">{</span><span class="p">[</span><span class="nb">list</span><span class="p">(</span><span class="n">l</span><span class="p">)</span><span class="w"> </span><span class="k">for</span><span class="w"> </span><span class="n">l</span><span class="w"> </span><span class="ow">in</span><span class="w"> </span><span class="bp">self</span><span class="o">.</span><span class="n">sT</span><span class="p">]</span><span class="si">}</span><span class="s1">,</span>
-</span><span id="D47calib-780"><a href="#D47calib-780"><span class="linenos">780</span></a><span class="s1">	sD47 = </span><span class="si">{</span><span class="p">[</span><span class="nb">list</span><span class="p">(</span><span class="n">l</span><span class="p">)</span><span class="w"> </span><span class="k">for</span><span class="w"> </span><span class="n">l</span><span class="w"> </span><span class="ow">in</span><span class="w"> </span><span class="bp">self</span><span class="o">.</span><span class="n">sD47</span><span class="p">]</span><span class="si">}</span><span class="s1">,</span>
-</span><span id="D47calib-781"><a href="#D47calib-781"><span class="linenos">781</span></a><span class="s1">	description = </span><span class="si">{</span><span class="nb">repr</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">description</span><span class="p">)</span><span class="si">}</span><span class="s1">,</span>
-</span><span id="D47calib-782"><a href="#D47calib-782"><span class="linenos">782</span></a><span class="s1">	label = </span><span class="si">{</span><span class="nb">repr</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">label</span><span class="p">)</span><span class="si">}</span><span class="s1">,</span>
-</span><span id="D47calib-783"><a href="#D47calib-783"><span class="linenos">783</span></a><span class="s1">	color = </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">color</span><span class="si">}</span><span class="s1">,</span>
-</span><span id="D47calib-784"><a href="#D47calib-784"><span class="linenos">784</span></a><span class="s1">	degrees = </span><span class="si">{</span><span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">degrees</span><span class="p">)</span><span class="si">}</span><span class="s1">,</span>
-</span><span id="D47calib-785"><a href="#D47calib-785"><span class="linenos">785</span></a><span class="s1">	bfp = </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">bfp</span><span class="si">}</span><span class="s1">,</span>
-</span><span id="D47calib-786"><a href="#D47calib-786"><span class="linenos">786</span></a><span class="s1">	bfp_CM = </span><span class="si">{</span><span class="p">[</span><span class="nb">list</span><span class="p">(</span><span class="n">l</span><span class="p">)</span><span class="w"> </span><span class="k">for</span><span class="w"> </span><span class="n">l</span><span class="w"> </span><span class="ow">in</span><span class="w"> </span><span class="bp">self</span><span class="o">.</span><span class="n">bfp_CM</span><span class="p">]</span><span class="si">}</span><span class="s1">,</span>
-</span><span id="D47calib-787"><a href="#D47calib-787"><span class="linenos">787</span></a><span class="s1">	chisq = </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">chisq</span><span class="si">}</span><span class="s1">,</span>
-</span><span id="D47calib-788"><a href="#D47calib-788"><span class="linenos">788</span></a><span class="s1">	Nf = </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">Nf</span><span class="si">}</span><span class="s1">,</span>
-</span><span id="D47calib-789"><a href="#D47calib-789"><span class="linenos">789</span></a><span class="s1">	)</span>
-</span><span id="D47calib-790"><a href="#D47calib-790"><span class="linenos">790</span></a><span class="s1">&#39;&#39;&#39;</span><span class="p">)</span>
+</span><span id="D47calib-773"><a href="#D47calib-773"><span class="linenos">773</span></a><span class="w">		</span><span class="sd">&quot;&quot;&quot;</span>
+</span><span id="D47calib-774"><a href="#D47calib-774"><span class="linenos">774</span></a><span class="sd">		Save `D47calib` object as an importable file.</span>
+</span><span id="D47calib-775"><a href="#D47calib-775"><span class="linenos">775</span></a><span class="sd">		</span>
+</span><span id="D47calib-776"><a href="#D47calib-776"><span class="linenos">776</span></a><span class="sd">		### Parameters</span>
+</span><span id="D47calib-777"><a href="#D47calib-777"><span class="linenos">777</span></a><span class="sd">		</span>
+</span><span id="D47calib-778"><a href="#D47calib-778"><span class="linenos">778</span></a><span class="sd">		+ **name**:</span>
+</span><span id="D47calib-779"><a href="#D47calib-779"><span class="linenos">779</span></a><span class="sd">		The name of the variable to export.</span>
+</span><span id="D47calib-780"><a href="#D47calib-780"><span class="linenos">780</span></a><span class="sd">		+ **filename**:</span>
+</span><span id="D47calib-781"><a href="#D47calib-781"><span class="linenos">781</span></a><span class="sd">		The filename to write to.</span>
+</span><span id="D47calib-782"><a href="#D47calib-782"><span class="linenos">782</span></a><span class="sd">		</span>
+</span><span id="D47calib-783"><a href="#D47calib-783"><span class="linenos">783</span></a><span class="sd">		### Example</span>
+</span><span id="D47calib-784"><a href="#D47calib-784"><span class="linenos">784</span></a>
+</span><span id="D47calib-785"><a href="#D47calib-785"><span class="linenos">785</span></a><span class="sd">		````py</span>
+</span><span id="D47calib-786"><a href="#D47calib-786"><span class="linenos">786</span></a><span class="sd">		D47calib.anderson_2021_lsce.export(&#39;foo&#39;, &#39;bar.py&#39;)</span>
+</span><span id="D47calib-787"><a href="#D47calib-787"><span class="linenos">787</span></a><span class="sd">		````</span>
+</span><span id="D47calib-788"><a href="#D47calib-788"><span class="linenos">788</span></a>
+</span><span id="D47calib-789"><a href="#D47calib-789"><span class="linenos">789</span></a><span class="sd">		This should result in a `bar.py` file with the following contents:</span>
+</span><span id="D47calib-790"><a href="#D47calib-790"><span class="linenos">790</span></a><span class="sd">		</span>
+</span><span id="D47calib-791"><a href="#D47calib-791"><span class="linenos">791</span></a><span class="sd">		````py</span>
+</span><span id="D47calib-792"><a href="#D47calib-792"><span class="linenos">792</span></a><span class="sd">		foo = D47calib(</span>
+</span><span id="D47calib-793"><a href="#D47calib-793"><span class="linenos">793</span></a><span class="sd">			samples = [&#39;LGB-2&#39;, &#39;DVH-2&#39;],</span>
+</span><span id="D47calib-794"><a href="#D47calib-794"><span class="linenos">794</span></a><span class="sd">			T = [7.9, 33.7],</span>
+</span><span id="D47calib-795"><a href="#D47calib-795"><span class="linenos">795</span></a><span class="sd">			D47 = [0.6485720997671647, 0.5695972909966959],</span>
+</span><span id="D47calib-796"><a href="#D47calib-796"><span class="linenos">796</span></a><span class="sd">			sT = [[0.04000000000000001, 0.0], [0.0, 0.04000000000000001]],</span>
+</span><span id="D47calib-797"><a href="#D47calib-797"><span class="linenos">797</span></a><span class="sd">			sD47 = [[8.72797097773764e-06, 2.951894073404263e-06], [2.9518940734042614e-06, 7.498611746762038e-06]],</span>
+</span><span id="D47calib-798"><a href="#D47calib-798"><span class="linenos">798</span></a><span class="sd">			description = &#39;Devils Hole &amp; Laghetto Basso from Anderson et al. (2021), processed in I-CDES&#39;,</span>
+</span><span id="D47calib-799"><a href="#D47calib-799"><span class="linenos">799</span></a><span class="sd">			label = &#39;Slow-growing calcites from Anderson et al. (2021)&#39;,</span>
+</span><span id="D47calib-800"><a href="#D47calib-800"><span class="linenos">800</span></a><span class="sd">			color = (0, 0.5, 0),</span>
+</span><span id="D47calib-801"><a href="#D47calib-801"><span class="linenos">801</span></a><span class="sd">			degrees = [0, 2],</span>
+</span><span id="D47calib-802"><a href="#D47calib-802"><span class="linenos">802</span></a><span class="sd">			bfp = {&#39;a0&#39;: 0.1583220210575451, &#39;a2&#39;: 38724.41371782721},</span>
+</span><span id="D47calib-803"><a href="#D47calib-803"><span class="linenos">803</span></a><span class="sd">			bfp_CM = [[0.00035908667755871876, -30.707016431538836], [-30.70701643153884, 2668091.396598919]],</span>
+</span><span id="D47calib-804"><a href="#D47calib-804"><span class="linenos">804</span></a><span class="sd">			chisq = 6.421311854486162e-27,</span>
+</span><span id="D47calib-805"><a href="#D47calib-805"><span class="linenos">805</span></a><span class="sd">			Nf = 0,</span>
+</span><span id="D47calib-806"><a href="#D47calib-806"><span class="linenos">806</span></a><span class="sd">			)</span>
+</span><span id="D47calib-807"><a href="#D47calib-807"><span class="linenos">807</span></a><span class="sd">		````</span>
+</span><span id="D47calib-808"><a href="#D47calib-808"><span class="linenos">808</span></a><span class="sd">		&quot;&quot;&quot;</span>
+</span><span id="D47calib-809"><a href="#D47calib-809"><span class="linenos">809</span></a>		<span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="s1">&#39;w&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+</span><span id="D47calib-810"><a href="#D47calib-810"><span class="linenos">810</span></a>			<span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;&#39;&#39;</span>
+</span><span id="D47calib-811"><a href="#D47calib-811"><span class="linenos">811</span></a><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s1"> = D47calib(</span>
+</span><span id="D47calib-812"><a href="#D47calib-812"><span class="linenos">812</span></a><span class="s1">	samples = </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">samples</span><span class="si">}</span><span class="s1">,</span>
+</span><span id="D47calib-813"><a href="#D47calib-813"><span class="linenos">813</span></a><span class="s1">	T = </span><span class="si">{</span><span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">T</span><span class="p">)</span><span class="si">}</span><span class="s1">,</span>
+</span><span id="D47calib-814"><a href="#D47calib-814"><span class="linenos">814</span></a><span class="s1">	D47 = </span><span class="si">{</span><span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">D47</span><span class="p">)</span><span class="si">}</span><span class="s1">,</span>
+</span><span id="D47calib-815"><a href="#D47calib-815"><span class="linenos">815</span></a><span class="s1">	sT = </span><span class="si">{</span><span class="p">[</span><span class="nb">list</span><span class="p">(</span><span class="n">l</span><span class="p">)</span><span class="w"> </span><span class="k">for</span><span class="w"> </span><span class="n">l</span><span class="w"> </span><span class="ow">in</span><span class="w"> </span><span class="bp">self</span><span class="o">.</span><span class="n">sT</span><span class="p">]</span><span class="si">}</span><span class="s1">,</span>
+</span><span id="D47calib-816"><a href="#D47calib-816"><span class="linenos">816</span></a><span class="s1">	sD47 = </span><span class="si">{</span><span class="p">[</span><span class="nb">list</span><span class="p">(</span><span class="n">l</span><span class="p">)</span><span class="w"> </span><span class="k">for</span><span class="w"> </span><span class="n">l</span><span class="w"> </span><span class="ow">in</span><span class="w"> </span><span class="bp">self</span><span class="o">.</span><span class="n">sD47</span><span class="p">]</span><span class="si">}</span><span class="s1">,</span>
+</span><span id="D47calib-817"><a href="#D47calib-817"><span class="linenos">817</span></a><span class="s1">	description = </span><span class="si">{</span><span class="nb">repr</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">description</span><span class="p">)</span><span class="si">}</span><span class="s1">,</span>
+</span><span id="D47calib-818"><a href="#D47calib-818"><span class="linenos">818</span></a><span class="s1">	label = </span><span class="si">{</span><span class="nb">repr</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">label</span><span class="p">)</span><span class="si">}</span><span class="s1">,</span>
+</span><span id="D47calib-819"><a href="#D47calib-819"><span class="linenos">819</span></a><span class="s1">	color = </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">color</span><span class="si">}</span><span class="s1">,</span>
+</span><span id="D47calib-820"><a href="#D47calib-820"><span class="linenos">820</span></a><span class="s1">	degrees = </span><span class="si">{</span><span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">degrees</span><span class="p">)</span><span class="si">}</span><span class="s1">,</span>
+</span><span id="D47calib-821"><a href="#D47calib-821"><span class="linenos">821</span></a><span class="s1">	bfp = </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">bfp</span><span class="si">}</span><span class="s1">,</span>
+</span><span id="D47calib-822"><a href="#D47calib-822"><span class="linenos">822</span></a><span class="s1">	bfp_CM = </span><span class="si">{</span><span class="p">[</span><span class="nb">list</span><span class="p">(</span><span class="n">l</span><span class="p">)</span><span class="w"> </span><span class="k">for</span><span class="w"> </span><span class="n">l</span><span class="w"> </span><span class="ow">in</span><span class="w"> </span><span class="bp">self</span><span class="o">.</span><span class="n">bfp_CM</span><span class="p">]</span><span class="si">}</span><span class="s1">,</span>
+</span><span id="D47calib-823"><a href="#D47calib-823"><span class="linenos">823</span></a><span class="s1">	chisq = </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">chisq</span><span class="si">}</span><span class="s1">,</span>
+</span><span id="D47calib-824"><a href="#D47calib-824"><span class="linenos">824</span></a><span class="s1">	Nf = </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">Nf</span><span class="si">}</span><span class="s1">,</span>
+</span><span id="D47calib-825"><a href="#D47calib-825"><span class="linenos">825</span></a><span class="s1">	)</span>
+</span><span id="D47calib-826"><a href="#D47calib-826"><span class="linenos">826</span></a><span class="s1">&#39;&#39;&#39;</span><span class="p">)</span>
 </span></pre></div>
 
 
-            <div class="docstring"><p>Δ<sub>47</sub> calibration class based on OGLS regression
+    		<div class="docstring"><p>Δ<sub>47</sub> calibration class based on OGLS regression
 of Δ<sub>47</sub> as a polynomial function of inverse T.</p>
 </div>
 
 
-                            <div id="D47calib.__init__" class="classattr">
-                                        <input id="D47calib.__init__-view-source" class="view-source-toggle-state" type="checkbox" aria-hidden="true" tabindex="-1">
+					<div id="D47calib.__init__" class="classattr">
+						        <input id="D47calib.__init__-view-source" class="view-source-toggle-state" type="checkbox" aria-hidden="true" tabindex="-1">
 <div class="attr function">
             
         <span class="name">D47calib</span><span class="signature pdoc-code multiline">(<span class="param">	<span class="n">samples</span>,</span><span class="param">	<span class="n">T</span>,</span><span class="param">	<span class="n">D47</span>,</span><span class="param">	<span class="n">sT</span><span class="o">=</span><span class="kc">None</span>,</span><span class="param">	<span class="n">sD47</span><span class="o">=</span><span class="kc">None</span>,</span><span class="param">	<span class="n">degrees</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">]</span>,</span><span class="param">	<span class="n">xpower</span><span class="o">=</span><span class="mi">2</span>,</span><span class="param">	<span class="n">color</span><span class="o">=</span><span class="p">(</span><span class="mf">0.5</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">)</span>,</span><span class="param">	<span class="n">label</span><span class="o">=</span><span class="s1">&#39;&#39;</span>,</span><span class="param">	<span class="n">description</span><span class="o">=</span><span class="s1">&#39;&#39;</span>,</span><span class="param">	<span class="n">regress_now</span><span class="o">=</span><span class="kc">False</span>,</span><span class="param">	<span class="o">**</span><span class="n">kwargs</span></span>)</span>
@@ -1870,7 +1989,7 @@ of Δ<sub>47</sub> as a polynomial function of inverse T.</p>
 </span></pre></div>
 
 
-            <div class="docstring"><h3 id="parameters">Parameters</h3>
+    		<div class="docstring"><h3 id="parameters">Parameters</h3>
 
 <ul>
 <li><strong>samples</strong>: a list of N sample names.</li>
@@ -1948,9 +2067,9 @@ Note that <code><a href="#D47calib.bff">bff</a></code> takes <code>x = 1/(T+273.
 </div>
 
 
-                            </div>
-                            <div id="D47calib.invT_xaxis" class="classattr">
-                                        <input id="D47calib.invT_xaxis-view-source" class="view-source-toggle-state" type="checkbox" aria-hidden="true" tabindex="-1">
+					</div>
+					<div id="D47calib.invT_xaxis" class="classattr">
+						        <input id="D47calib.invT_xaxis-view-source" class="view-source-toggle-state" type="checkbox" aria-hidden="true" tabindex="-1">
 <div class="attr function">
             
         <span class="def">def</span>
@@ -2023,7 +2142,7 @@ Note that <code><a href="#D47calib.bff">bff</a></code> takes <code>x = 1/(T+273.
 </span></pre></div>
 
 
-            <div class="docstring"><p>Create and return an <code>Axes</code> object with X values equal to 1/T<sup>2</sup>,
+    		<div class="docstring"><p>Create and return an <code>Axes</code> object with X values equal to 1/T<sup>2</sup>,
 but labeled in degrees Celsius.</p>
 
 <h3 id="parameters">Parameters</h3>
@@ -2078,9 +2197,9 @@ by first redefining the <code>xpower</code> attribute:</p>
 </div>
 
 
-                            </div>
-                            <div id="D47calib.plot_data" class="classattr">
-                                        <input id="D47calib.plot_data-view-source" class="view-source-toggle-state" type="checkbox" aria-hidden="true" tabindex="-1">
+					</div>
+					<div id="D47calib.plot_data" class="classattr">
+						        <input id="D47calib.plot_data-view-source" class="view-source-toggle-state" type="checkbox" aria-hidden="true" tabindex="-1">
 <div class="attr function">
             
         <span class="def">def</span>
@@ -2135,7 +2254,7 @@ by first redefining the <code>xpower</code> attribute:</p>
 </span></pre></div>
 
 
-            <div class="docstring"><p>Plot Δ<sub>47</sub> value of each sample as a function of 1/T<sup>2</sup>.</p>
+    		<div class="docstring"><p>Plot Δ<sub>47</sub> value of each sample as a function of 1/T<sup>2</sup>.</p>
 
 <h3 id="parameters">Parameters</h3>
 
@@ -2179,9 +2298,9 @@ keyword arguments passed to the underlying <code>matplotlib.pyplot.plot()</code>
 </div>
 
 
-                            </div>
-                            <div id="D47calib.plot_error_bars" class="classattr">
-                                        <input id="D47calib.plot_error_bars-view-source" class="view-source-toggle-state" type="checkbox" aria-hidden="true" tabindex="-1">
+					</div>
+					<div id="D47calib.plot_error_bars" class="classattr">
+						        <input id="D47calib.plot_error_bars-view-source" class="view-source-toggle-state" type="checkbox" aria-hidden="true" tabindex="-1">
 <div class="attr function">
             
         <span class="def">def</span>
@@ -2230,7 +2349,7 @@ keyword arguments passed to the underlying <code>matplotlib.pyplot.plot()</code>
 </span></pre></div>
 
 
-            <div class="docstring"><p>Plot Δ<sub>47</sub> error bars (±1.96 SE) of each sample as a function of 1/T<sup>2</sup>.</p>
+    		<div class="docstring"><p>Plot Δ<sub>47</sub> error bars (±1.96 SE) of each sample as a function of 1/T<sup>2</sup>.</p>
 
 <h3 id="parameters">Parameters</h3>
 
@@ -2268,9 +2387,9 @@ keyword arguments passed to the underlying <code>matplotlib.pyplot.errrobar()</c
 </div>
 
 
-                            </div>
-                            <div id="D47calib.plot_error_ellipses" class="classattr">
-                                        <input id="D47calib.plot_error_ellipses-view-source" class="view-source-toggle-state" type="checkbox" aria-hidden="true" tabindex="-1">
+					</div>
+					<div id="D47calib.plot_error_ellipses" class="classattr">
+						        <input id="D47calib.plot_error_ellipses-view-source" class="view-source-toggle-state" type="checkbox" aria-hidden="true" tabindex="-1">
 <div class="attr function">
             
         <span class="def">def</span>
@@ -2319,7 +2438,7 @@ keyword arguments passed to the underlying <code>matplotlib.pyplot.errrobar()</c
 </span></pre></div>
 
 
-            <div class="docstring"><p>Plot Δ<sub>47</sub> error ellipses (95 % confidence) of each sample as a function of 1/T<sup>2</sup>.</p>
+    		<div class="docstring"><p>Plot Δ<sub>47</sub> error ellipses (95 % confidence) of each sample as a function of 1/T<sup>2</sup>.</p>
 
 <h3 id="parameters">Parameters</h3>
 
@@ -2357,9 +2476,9 @@ keyword arguments passed to the underlying <code>matplotlib.patches.Ellipse()</c
 </div>
 
 
-                            </div>
-                            <div id="D47calib.plot_bff" class="classattr">
-                                        <input id="D47calib.plot_bff-view-source" class="view-source-toggle-state" type="checkbox" aria-hidden="true" tabindex="-1">
+					</div>
+					<div id="D47calib.plot_bff" class="classattr">
+						        <input id="D47calib.plot_bff-view-source" class="view-source-toggle-state" type="checkbox" aria-hidden="true" tabindex="-1">
 <div class="attr function">
             
         <span class="def">def</span>
@@ -2415,7 +2534,7 @@ keyword arguments passed to the underlying <code>matplotlib.patches.Ellipse()</c
 </span></pre></div>
 
 
-            <div class="docstring"><p>Plot best-fit regression of Δ<sub>47</sub> as a function of 1/T<sup>2</sup>.</p>
+    		<div class="docstring"><p>Plot best-fit regression of Δ<sub>47</sub> as a function of 1/T<sup>2</sup>.</p>
 
 <h3 id="parameters">Parameters</h3>
 
@@ -2460,9 +2579,9 @@ keyword arguments passed to the underlying <code>matplotlib.pyplot.plot()</code>
 </div>
 
 
-                            </div>
-                            <div id="D47calib.plot_bff_ci" class="classattr">
-                                        <input id="D47calib.plot_bff_ci-view-source" class="view-source-toggle-state" type="checkbox" aria-hidden="true" tabindex="-1">
+					</div>
+					<div id="D47calib.plot_bff_ci" class="classattr">
+						        <input id="D47calib.plot_bff_ci-view-source" class="view-source-toggle-state" type="checkbox" aria-hidden="true" tabindex="-1">
 <div class="attr function">
             
         <span class="def">def</span>
@@ -2513,7 +2632,7 @@ keyword arguments passed to the underlying <code>matplotlib.pyplot.plot()</code>
 </span></pre></div>
 
 
-            <div class="docstring"><p>Plot 95 % confidence region for best-fit regression of Δ<sub>47</sub> as a function of 1/T<sup>2</sup>.</p>
+    		<div class="docstring"><p>Plot 95 % confidence region for best-fit regression of Δ<sub>47</sub> as a function of 1/T<sup>2</sup>.</p>
 
 <h3 id="parameters">Parameters</h3>
 
@@ -2553,9 +2672,9 @@ keyword arguments passed to the underlying <code>matplotlib.pyplot.fill_between(
 </div>
 
 
-                            </div>
-                            <div id="D47calib.T47" class="classattr">
-                                        <input id="D47calib.T47-view-source" class="view-source-toggle-state" type="checkbox" aria-hidden="true" tabindex="-1">
+					</div>
+					<div id="D47calib.T47" class="classattr">
+						        <input id="D47calib.T47-view-source" class="view-source-toggle-state" type="checkbox" aria-hidden="true" tabindex="-1">
 <div class="attr function">
             
         <span class="def">def</span>
@@ -2754,7 +2873,7 @@ keyword arguments passed to the underlying <code>matplotlib.pyplot.fill_between(
 </span></pre></div>
 
 
-            <div class="docstring"><p>When <code>D47</code> is input, computes corresponding T value(s).
+    		<div class="docstring"><p>When <code>D47</code> is input, computes corresponding T value(s).
 <code>D47</code> input may be specified as a scalar, or as a 1-D array.
 <code>T</code> output will then have the same type and size as <code>D47</code>.</p>
 
@@ -2831,9 +2950,9 @@ for returned <code>T</code> or <code>D47</code> values, otherwise return standar
 </div>
 
 
-                            </div>
-                            <div id="D47calib.plot_T47_errors" class="classattr">
-                                        <input id="D47calib.plot_T47_errors-view-source" class="view-source-toggle-state" type="checkbox" aria-hidden="true" tabindex="-1">
+					</div>
+					<div id="D47calib.plot_T47_errors" class="classattr">
+						        <input id="D47calib.plot_T47_errors-view-source" class="view-source-toggle-state" type="checkbox" aria-hidden="true" tabindex="-1">
 <div class="attr function">
             
         <span class="def">def</span>
@@ -2944,7 +3063,7 @@ for returned <code>T</code> or <code>D47</code> values, otherwise return standar
 </span></pre></div>
 
 
-            <div class="docstring"><p>Plot SE of T reconstructed using the calibration as a function of T for various
+    		<div class="docstring"><p>Plot SE of T reconstructed using the calibration as a function of T for various
 combinations of analytical precision and number of analytical replicates.</p>
 
 <p><strong>Arguments</strong>           </p>
@@ -2993,9 +3112,9 @@ A list of colors to distinguish the plotted lines.</li>
 </div>
 
 
-                            </div>
-                            <div id="D47calib.export_data" class="classattr">
-                                        <input id="D47calib.export_data-view-source" class="view-source-toggle-state" type="checkbox" aria-hidden="true" tabindex="-1">
+					</div>
+					<div id="D47calib.export_data" class="classattr">
+						        <input id="D47calib.export_data-view-source" class="view-source-toggle-state" type="checkbox" aria-hidden="true" tabindex="-1">
 <div class="attr function">
             
         <span class="def">def</span>
@@ -3085,7 +3204,7 @@ A list of colors to distinguish the plotted lines.</li>
 </span></pre></div>
 
 
-            <div class="docstring"><p>Write calibration data to a csv file.</p>
+    		<div class="docstring"><p>Write calibration data to a csv file.</p>
 
 <h3 id="parameters">Parameters</h3>
 
@@ -3123,7 +3242,7 @@ The separator between CSV fields.</li>
 
 <p>This should result in something like this (<a href="example_export_data.csv">link</a>):</p>
 
-<p><style>td, th {font-size: 75%; line-height: 75%;}</style></p>
+<p><style>td, th {font-size: 80%; line-height: 80%;}</style></p>
 
 <table>
 <thead>
@@ -3254,9 +3373,9 @@ The separator between CSV fields.</li>
 </div>
 
 
-                            </div>
-                            <div id="D47calib.export" class="classattr">
-                                        <input id="D47calib.export-view-source" class="view-source-toggle-state" type="checkbox" aria-hidden="true" tabindex="-1">
+					</div>
+					<div id="D47calib.export" class="classattr">
+						        <input id="D47calib.export-view-source" class="view-source-toggle-state" type="checkbox" aria-hidden="true" tabindex="-1">
 <div class="attr function">
             
         <span class="def">def</span>
@@ -3267,51 +3386,108 @@ The separator between CSV fields.</li>
     </div>
     <a class="headerlink" href="#D47calib.export"></a>
             <div class="pdoc-code codehilite"><pre><span></span><span id="D47calib.export-772"><a href="#D47calib.export-772"><span class="linenos">772</span></a>	<span class="k">def</span> <span class="nf">export</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">filename</span><span class="p">):</span>
-</span><span id="D47calib.export-773"><a href="#D47calib.export-773"><span class="linenos">773</span></a>		<span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="s1">&#39;w&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
-</span><span id="D47calib.export-774"><a href="#D47calib.export-774"><span class="linenos">774</span></a>			<span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;&#39;&#39;</span>
-</span><span id="D47calib.export-775"><a href="#D47calib.export-775"><span class="linenos">775</span></a><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s1"> = D47calib(</span>
-</span><span id="D47calib.export-776"><a href="#D47calib.export-776"><span class="linenos">776</span></a><span class="s1">	samples = </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">samples</span><span class="si">}</span><span class="s1">,</span>
-</span><span id="D47calib.export-777"><a href="#D47calib.export-777"><span class="linenos">777</span></a><span class="s1">	T = </span><span class="si">{</span><span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">T</span><span class="p">)</span><span class="si">}</span><span class="s1">,</span>
-</span><span id="D47calib.export-778"><a href="#D47calib.export-778"><span class="linenos">778</span></a><span class="s1">	D47 = </span><span class="si">{</span><span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">D47</span><span class="p">)</span><span class="si">}</span><span class="s1">,</span>
-</span><span id="D47calib.export-779"><a href="#D47calib.export-779"><span class="linenos">779</span></a><span class="s1">	sT = </span><span class="si">{</span><span class="p">[</span><span class="nb">list</span><span class="p">(</span><span class="n">l</span><span class="p">)</span><span class="w"> </span><span class="k">for</span><span class="w"> </span><span class="n">l</span><span class="w"> </span><span class="ow">in</span><span class="w"> </span><span class="bp">self</span><span class="o">.</span><span class="n">sT</span><span class="p">]</span><span class="si">}</span><span class="s1">,</span>
-</span><span id="D47calib.export-780"><a href="#D47calib.export-780"><span class="linenos">780</span></a><span class="s1">	sD47 = </span><span class="si">{</span><span class="p">[</span><span class="nb">list</span><span class="p">(</span><span class="n">l</span><span class="p">)</span><span class="w"> </span><span class="k">for</span><span class="w"> </span><span class="n">l</span><span class="w"> </span><span class="ow">in</span><span class="w"> </span><span class="bp">self</span><span class="o">.</span><span class="n">sD47</span><span class="p">]</span><span class="si">}</span><span class="s1">,</span>
-</span><span id="D47calib.export-781"><a href="#D47calib.export-781"><span class="linenos">781</span></a><span class="s1">	description = </span><span class="si">{</span><span class="nb">repr</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">description</span><span class="p">)</span><span class="si">}</span><span class="s1">,</span>
-</span><span id="D47calib.export-782"><a href="#D47calib.export-782"><span class="linenos">782</span></a><span class="s1">	label = </span><span class="si">{</span><span class="nb">repr</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">label</span><span class="p">)</span><span class="si">}</span><span class="s1">,</span>
-</span><span id="D47calib.export-783"><a href="#D47calib.export-783"><span class="linenos">783</span></a><span class="s1">	color = </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">color</span><span class="si">}</span><span class="s1">,</span>
-</span><span id="D47calib.export-784"><a href="#D47calib.export-784"><span class="linenos">784</span></a><span class="s1">	degrees = </span><span class="si">{</span><span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">degrees</span><span class="p">)</span><span class="si">}</span><span class="s1">,</span>
-</span><span id="D47calib.export-785"><a href="#D47calib.export-785"><span class="linenos">785</span></a><span class="s1">	bfp = </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">bfp</span><span class="si">}</span><span class="s1">,</span>
-</span><span id="D47calib.export-786"><a href="#D47calib.export-786"><span class="linenos">786</span></a><span class="s1">	bfp_CM = </span><span class="si">{</span><span class="p">[</span><span class="nb">list</span><span class="p">(</span><span class="n">l</span><span class="p">)</span><span class="w"> </span><span class="k">for</span><span class="w"> </span><span class="n">l</span><span class="w"> </span><span class="ow">in</span><span class="w"> </span><span class="bp">self</span><span class="o">.</span><span class="n">bfp_CM</span><span class="p">]</span><span class="si">}</span><span class="s1">,</span>
-</span><span id="D47calib.export-787"><a href="#D47calib.export-787"><span class="linenos">787</span></a><span class="s1">	chisq = </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">chisq</span><span class="si">}</span><span class="s1">,</span>
-</span><span id="D47calib.export-788"><a href="#D47calib.export-788"><span class="linenos">788</span></a><span class="s1">	Nf = </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">Nf</span><span class="si">}</span><span class="s1">,</span>
-</span><span id="D47calib.export-789"><a href="#D47calib.export-789"><span class="linenos">789</span></a><span class="s1">	)</span>
-</span><span id="D47calib.export-790"><a href="#D47calib.export-790"><span class="linenos">790</span></a><span class="s1">&#39;&#39;&#39;</span><span class="p">)</span>
+</span><span id="D47calib.export-773"><a href="#D47calib.export-773"><span class="linenos">773</span></a><span class="w">		</span><span class="sd">&quot;&quot;&quot;</span>
+</span><span id="D47calib.export-774"><a href="#D47calib.export-774"><span class="linenos">774</span></a><span class="sd">		Save `D47calib` object as an importable file.</span>
+</span><span id="D47calib.export-775"><a href="#D47calib.export-775"><span class="linenos">775</span></a><span class="sd">		</span>
+</span><span id="D47calib.export-776"><a href="#D47calib.export-776"><span class="linenos">776</span></a><span class="sd">		### Parameters</span>
+</span><span id="D47calib.export-777"><a href="#D47calib.export-777"><span class="linenos">777</span></a><span class="sd">		</span>
+</span><span id="D47calib.export-778"><a href="#D47calib.export-778"><span class="linenos">778</span></a><span class="sd">		+ **name**:</span>
+</span><span id="D47calib.export-779"><a href="#D47calib.export-779"><span class="linenos">779</span></a><span class="sd">		The name of the variable to export.</span>
+</span><span id="D47calib.export-780"><a href="#D47calib.export-780"><span class="linenos">780</span></a><span class="sd">		+ **filename**:</span>
+</span><span id="D47calib.export-781"><a href="#D47calib.export-781"><span class="linenos">781</span></a><span class="sd">		The filename to write to.</span>
+</span><span id="D47calib.export-782"><a href="#D47calib.export-782"><span class="linenos">782</span></a><span class="sd">		</span>
+</span><span id="D47calib.export-783"><a href="#D47calib.export-783"><span class="linenos">783</span></a><span class="sd">		### Example</span>
+</span><span id="D47calib.export-784"><a href="#D47calib.export-784"><span class="linenos">784</span></a>
+</span><span id="D47calib.export-785"><a href="#D47calib.export-785"><span class="linenos">785</span></a><span class="sd">		````py</span>
+</span><span id="D47calib.export-786"><a href="#D47calib.export-786"><span class="linenos">786</span></a><span class="sd">		D47calib.anderson_2021_lsce.export(&#39;foo&#39;, &#39;bar.py&#39;)</span>
+</span><span id="D47calib.export-787"><a href="#D47calib.export-787"><span class="linenos">787</span></a><span class="sd">		````</span>
+</span><span id="D47calib.export-788"><a href="#D47calib.export-788"><span class="linenos">788</span></a>
+</span><span id="D47calib.export-789"><a href="#D47calib.export-789"><span class="linenos">789</span></a><span class="sd">		This should result in a `bar.py` file with the following contents:</span>
+</span><span id="D47calib.export-790"><a href="#D47calib.export-790"><span class="linenos">790</span></a><span class="sd">		</span>
+</span><span id="D47calib.export-791"><a href="#D47calib.export-791"><span class="linenos">791</span></a><span class="sd">		````py</span>
+</span><span id="D47calib.export-792"><a href="#D47calib.export-792"><span class="linenos">792</span></a><span class="sd">		foo = D47calib(</span>
+</span><span id="D47calib.export-793"><a href="#D47calib.export-793"><span class="linenos">793</span></a><span class="sd">			samples = [&#39;LGB-2&#39;, &#39;DVH-2&#39;],</span>
+</span><span id="D47calib.export-794"><a href="#D47calib.export-794"><span class="linenos">794</span></a><span class="sd">			T = [7.9, 33.7],</span>
+</span><span id="D47calib.export-795"><a href="#D47calib.export-795"><span class="linenos">795</span></a><span class="sd">			D47 = [0.6485720997671647, 0.5695972909966959],</span>
+</span><span id="D47calib.export-796"><a href="#D47calib.export-796"><span class="linenos">796</span></a><span class="sd">			sT = [[0.04000000000000001, 0.0], [0.0, 0.04000000000000001]],</span>
+</span><span id="D47calib.export-797"><a href="#D47calib.export-797"><span class="linenos">797</span></a><span class="sd">			sD47 = [[8.72797097773764e-06, 2.951894073404263e-06], [2.9518940734042614e-06, 7.498611746762038e-06]],</span>
+</span><span id="D47calib.export-798"><a href="#D47calib.export-798"><span class="linenos">798</span></a><span class="sd">			description = &#39;Devils Hole &amp; Laghetto Basso from Anderson et al. (2021), processed in I-CDES&#39;,</span>
+</span><span id="D47calib.export-799"><a href="#D47calib.export-799"><span class="linenos">799</span></a><span class="sd">			label = &#39;Slow-growing calcites from Anderson et al. (2021)&#39;,</span>
+</span><span id="D47calib.export-800"><a href="#D47calib.export-800"><span class="linenos">800</span></a><span class="sd">			color = (0, 0.5, 0),</span>
+</span><span id="D47calib.export-801"><a href="#D47calib.export-801"><span class="linenos">801</span></a><span class="sd">			degrees = [0, 2],</span>
+</span><span id="D47calib.export-802"><a href="#D47calib.export-802"><span class="linenos">802</span></a><span class="sd">			bfp = {&#39;a0&#39;: 0.1583220210575451, &#39;a2&#39;: 38724.41371782721},</span>
+</span><span id="D47calib.export-803"><a href="#D47calib.export-803"><span class="linenos">803</span></a><span class="sd">			bfp_CM = [[0.00035908667755871876, -30.707016431538836], [-30.70701643153884, 2668091.396598919]],</span>
+</span><span id="D47calib.export-804"><a href="#D47calib.export-804"><span class="linenos">804</span></a><span class="sd">			chisq = 6.421311854486162e-27,</span>
+</span><span id="D47calib.export-805"><a href="#D47calib.export-805"><span class="linenos">805</span></a><span class="sd">			Nf = 0,</span>
+</span><span id="D47calib.export-806"><a href="#D47calib.export-806"><span class="linenos">806</span></a><span class="sd">			)</span>
+</span><span id="D47calib.export-807"><a href="#D47calib.export-807"><span class="linenos">807</span></a><span class="sd">		````</span>
+</span><span id="D47calib.export-808"><a href="#D47calib.export-808"><span class="linenos">808</span></a><span class="sd">		&quot;&quot;&quot;</span>
+</span><span id="D47calib.export-809"><a href="#D47calib.export-809"><span class="linenos">809</span></a>		<span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="s1">&#39;w&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+</span><span id="D47calib.export-810"><a href="#D47calib.export-810"><span class="linenos">810</span></a>			<span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;&#39;&#39;</span>
+</span><span id="D47calib.export-811"><a href="#D47calib.export-811"><span class="linenos">811</span></a><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s1"> = D47calib(</span>
+</span><span id="D47calib.export-812"><a href="#D47calib.export-812"><span class="linenos">812</span></a><span class="s1">	samples = </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">samples</span><span class="si">}</span><span class="s1">,</span>
+</span><span id="D47calib.export-813"><a href="#D47calib.export-813"><span class="linenos">813</span></a><span class="s1">	T = </span><span class="si">{</span><span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">T</span><span class="p">)</span><span class="si">}</span><span class="s1">,</span>
+</span><span id="D47calib.export-814"><a href="#D47calib.export-814"><span class="linenos">814</span></a><span class="s1">	D47 = </span><span class="si">{</span><span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">D47</span><span class="p">)</span><span class="si">}</span><span class="s1">,</span>
+</span><span id="D47calib.export-815"><a href="#D47calib.export-815"><span class="linenos">815</span></a><span class="s1">	sT = </span><span class="si">{</span><span class="p">[</span><span class="nb">list</span><span class="p">(</span><span class="n">l</span><span class="p">)</span><span class="w"> </span><span class="k">for</span><span class="w"> </span><span class="n">l</span><span class="w"> </span><span class="ow">in</span><span class="w"> </span><span class="bp">self</span><span class="o">.</span><span class="n">sT</span><span class="p">]</span><span class="si">}</span><span class="s1">,</span>
+</span><span id="D47calib.export-816"><a href="#D47calib.export-816"><span class="linenos">816</span></a><span class="s1">	sD47 = </span><span class="si">{</span><span class="p">[</span><span class="nb">list</span><span class="p">(</span><span class="n">l</span><span class="p">)</span><span class="w"> </span><span class="k">for</span><span class="w"> </span><span class="n">l</span><span class="w"> </span><span class="ow">in</span><span class="w"> </span><span class="bp">self</span><span class="o">.</span><span class="n">sD47</span><span class="p">]</span><span class="si">}</span><span class="s1">,</span>
+</span><span id="D47calib.export-817"><a href="#D47calib.export-817"><span class="linenos">817</span></a><span class="s1">	description = </span><span class="si">{</span><span class="nb">repr</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">description</span><span class="p">)</span><span class="si">}</span><span class="s1">,</span>
+</span><span id="D47calib.export-818"><a href="#D47calib.export-818"><span class="linenos">818</span></a><span class="s1">	label = </span><span class="si">{</span><span class="nb">repr</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">label</span><span class="p">)</span><span class="si">}</span><span class="s1">,</span>
+</span><span id="D47calib.export-819"><a href="#D47calib.export-819"><span class="linenos">819</span></a><span class="s1">	color = </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">color</span><span class="si">}</span><span class="s1">,</span>
+</span><span id="D47calib.export-820"><a href="#D47calib.export-820"><span class="linenos">820</span></a><span class="s1">	degrees = </span><span class="si">{</span><span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">degrees</span><span class="p">)</span><span class="si">}</span><span class="s1">,</span>
+</span><span id="D47calib.export-821"><a href="#D47calib.export-821"><span class="linenos">821</span></a><span class="s1">	bfp = </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">bfp</span><span class="si">}</span><span class="s1">,</span>
+</span><span id="D47calib.export-822"><a href="#D47calib.export-822"><span class="linenos">822</span></a><span class="s1">	bfp_CM = </span><span class="si">{</span><span class="p">[</span><span class="nb">list</span><span class="p">(</span><span class="n">l</span><span class="p">)</span><span class="w"> </span><span class="k">for</span><span class="w"> </span><span class="n">l</span><span class="w"> </span><span class="ow">in</span><span class="w"> </span><span class="bp">self</span><span class="o">.</span><span class="n">bfp_CM</span><span class="p">]</span><span class="si">}</span><span class="s1">,</span>
+</span><span id="D47calib.export-823"><a href="#D47calib.export-823"><span class="linenos">823</span></a><span class="s1">	chisq = </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">chisq</span><span class="si">}</span><span class="s1">,</span>
+</span><span id="D47calib.export-824"><a href="#D47calib.export-824"><span class="linenos">824</span></a><span class="s1">	Nf = </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">Nf</span><span class="si">}</span><span class="s1">,</span>
+</span><span id="D47calib.export-825"><a href="#D47calib.export-825"><span class="linenos">825</span></a><span class="s1">	)</span>
+</span><span id="D47calib.export-826"><a href="#D47calib.export-826"><span class="linenos">826</span></a><span class="s1">&#39;&#39;&#39;</span><span class="p">)</span>
 </span></pre></div>
 
 
-    
+    		<div class="docstring"><p>Save <code><a href="#D47calib">D47calib</a></code> object as an importable file.</p>
 
-                            </div>
-                            <div class="inherited">
-                                <h5>Inherited Members</h5>
-                                <dl>
-                                    <div><dt>ogls.InverseTPolynomial</dt>
-                                <dd id="D47calib.set_xpower" class="function">set_xpower</dd>
-                <dd id="D47calib.xlinspace" class="function">xlinspace</dd>
+<h3 id="parameters">Parameters</h3>
 
-            </div>
-            <div><dt>ogls.OGLS_Regression</dt>
-                                <dd id="D47calib.cost_fun" class="function">cost_fun</dd>
-                <dd id="D47calib.regress" class="function">regress</dd>
-                <dd id="D47calib.bff" class="function">bff</dd>
-                <dd id="D47calib.bff_covar" class="function">bff_covar</dd>
-                <dd id="D47calib.bff_se" class="function">bff_se</dd>
+<ul>
+<li><strong>name</strong>:
+The name of the variable to export.</li>
+<li><strong>filename</strong>:
+The filename to write to.</li>
+</ul>
 
-            </div>
-                                </dl>
-                            </div>
-                </section>
-                <section id="combine_D47calibs">
-                            <input id="combine_D47calibs-view-source" class="view-source-toggle-state" type="checkbox" aria-hidden="true" tabindex="-1">
+<h3 id="example">Example</h3>
+
+<div class="pdoc-code codehilite">
+<pre><span></span><code><span class="n">D47calib</span><span class="o">.</span><span class="n">anderson_2021_lsce</span><span class="o">.</span><span class="n">export</span><span class="p">(</span><span class="s1">&#39;foo&#39;</span><span class="p">,</span> <span class="s1">&#39;bar.py&#39;</span><span class="p">)</span>
+</code></pre>
+</div>
+
+<p>This should result in a <code>bar.py</code> file with the following contents:</p>
+
+<div class="pdoc-code codehilite">
+<pre><span></span><code><span class="n">foo</span> <span class="o">=</span> <span class="n">D47calib</span><span class="p">(</span>
+        <span class="n">samples</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;LGB-2&#39;</span><span class="p">,</span> <span class="s1">&#39;DVH-2&#39;</span><span class="p">],</span>
+        <span class="n">T</span> <span class="o">=</span> <span class="p">[</span><span class="mf">7.9</span><span class="p">,</span> <span class="mf">33.7</span><span class="p">],</span>
+        <span class="n">D47</span> <span class="o">=</span> <span class="p">[</span><span class="mf">0.6485720997671647</span><span class="p">,</span> <span class="mf">0.5695972909966959</span><span class="p">],</span>
+        <span class="n">sT</span> <span class="o">=</span> <span class="p">[[</span><span class="mf">0.04000000000000001</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">],</span> <span class="p">[</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.04000000000000001</span><span class="p">]],</span>
+        <span class="n">sD47</span> <span class="o">=</span> <span class="p">[[</span><span class="mf">8.72797097773764e-06</span><span class="p">,</span> <span class="mf">2.951894073404263e-06</span><span class="p">],</span> <span class="p">[</span><span class="mf">2.9518940734042614e-06</span><span class="p">,</span> <span class="mf">7.498611746762038e-06</span><span class="p">]],</span>
+        <span class="n">description</span> <span class="o">=</span> <span class="s1">&#39;Devils Hole &amp; Laghetto Basso from Anderson et al. (2021), processed in I-CDES&#39;</span><span class="p">,</span>
+        <span class="n">label</span> <span class="o">=</span> <span class="s1">&#39;Slow-growing calcites from Anderson et al. (2021)&#39;</span><span class="p">,</span>
+        <span class="n">color</span> <span class="o">=</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span>
+        <span class="n">degrees</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">],</span>
+        <span class="n">bfp</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;a0&#39;</span><span class="p">:</span> <span class="mf">0.1583220210575451</span><span class="p">,</span> <span class="s1">&#39;a2&#39;</span><span class="p">:</span> <span class="mf">38724.41371782721</span><span class="p">},</span>
+        <span class="n">bfp_CM</span> <span class="o">=</span> <span class="p">[[</span><span class="mf">0.00035908667755871876</span><span class="p">,</span> <span class="o">-</span><span class="mf">30.707016431538836</span><span class="p">],</span> <span class="p">[</span><span class="o">-</span><span class="mf">30.70701643153884</span><span class="p">,</span> <span class="mf">2668091.396598919</span><span class="p">]],</span>
+        <span class="n">chisq</span> <span class="o">=</span> <span class="mf">6.421311854486162e-27</span><span class="p">,</span>
+        <span class="n">Nf</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span>
+        <span class="p">)</span>
+</code></pre>
+</div>
+</div>
+
+
+					</div>
+		</section>
+		<section id="combine_D47calibs">
+			        <input id="combine_D47calibs-view-source" class="view-source-toggle-state" type="checkbox" aria-hidden="true" tabindex="-1">
 <div class="attr function">
             
         <span class="def">def</span>
@@ -3321,48 +3497,147 @@ The separator between CSV fields.</li>
 
     </div>
     <a class="headerlink" href="#combine_D47calibs"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="combine_D47calibs-794"><a href="#combine_D47calibs-794"><span class="linenos">794</span></a><span class="k">def</span> <span class="nf">combine_D47calibs</span><span class="p">(</span><span class="n">calibs</span><span class="p">,</span> <span class="n">degrees</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">2</span><span class="p">],</span> <span class="n">same_T</span> <span class="o">=</span> <span class="p">[]):</span>
-</span><span id="combine_D47calibs-795"><a href="#combine_D47calibs-795"><span class="linenos">795</span></a><span class="w">	</span><span class="sd">&#39;&#39;&#39;</span>
-</span><span id="combine_D47calibs-796"><a href="#combine_D47calibs-796"><span class="linenos">796</span></a><span class="sd">	Combine `D47calib` instances.</span>
-</span><span id="combine_D47calibs-797"><a href="#combine_D47calibs-797"><span class="linenos">797</span></a><span class="sd">	</span>
-</span><span id="combine_D47calibs-798"><a href="#combine_D47calibs-798"><span class="linenos">798</span></a><span class="sd">	Example of valid `same_T` parameter:</span>
-</span><span id="combine_D47calibs-799"><a href="#combine_D47calibs-799"><span class="linenos">799</span></a><span class="sd">	`[{&#39;LGB-2&#39;, DHC-2-8&#39;}, {&#39;ETH-1-1100-SAM&#39;, &#39;ETH-1-1100&#39;}]`.</span>
-</span><span id="combine_D47calibs-800"><a href="#combine_D47calibs-800"><span class="linenos">800</span></a><span class="sd">	&#39;&#39;&#39;</span>
-</span><span id="combine_D47calibs-801"><a href="#combine_D47calibs-801"><span class="linenos">801</span></a>
-</span><span id="combine_D47calibs-802"><a href="#combine_D47calibs-802"><span class="linenos">802</span></a>	<span class="n">samples</span> <span class="o">=</span> <span class="p">[</span><span class="n">s</span> <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">calibs</span> <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="n">c</span><span class="o">.</span><span class="n">samples</span><span class="p">]</span>
-</span><span id="combine_D47calibs-803"><a href="#combine_D47calibs-803"><span class="linenos">803</span></a>	<span class="n">T</span> <span class="o">=</span> <span class="p">[</span><span class="n">t</span> <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">calibs</span> <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="n">c</span><span class="o">.</span><span class="n">T</span><span class="p">]</span>
-</span><span id="combine_D47calibs-804"><a href="#combine_D47calibs-804"><span class="linenos">804</span></a>	<span class="n">D47</span> <span class="o">=</span> <span class="p">[</span><span class="n">x</span> <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">calibs</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">c</span><span class="o">.</span><span class="n">D47</span><span class="p">]</span>
-</span><span id="combine_D47calibs-805"><a href="#combine_D47calibs-805"><span class="linenos">805</span></a>	<span class="n">sD47</span> <span class="o">=</span> <span class="n">_block_diag</span><span class="p">(</span><span class="o">*</span><span class="p">[</span><span class="n">c</span><span class="o">.</span><span class="n">sD47</span> <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">calibs</span><span class="p">])</span>
-</span><span id="combine_D47calibs-806"><a href="#combine_D47calibs-806"><span class="linenos">806</span></a>	<span class="n">sT</span> <span class="o">=</span> <span class="n">_block_diag</span><span class="p">(</span><span class="o">*</span><span class="p">[</span><span class="n">c</span><span class="o">.</span><span class="n">sT</span> <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">calibs</span><span class="p">])</span>
-</span><span id="combine_D47calibs-807"><a href="#combine_D47calibs-807"><span class="linenos">807</span></a>
-</span><span id="combine_D47calibs-808"><a href="#combine_D47calibs-808"><span class="linenos">808</span></a>	<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">samples</span><span class="p">)):</span>
-</span><span id="combine_D47calibs-809"><a href="#combine_D47calibs-809"><span class="linenos">809</span></a>		<span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">samples</span><span class="p">)):</span>
-</span><span id="combine_D47calibs-810"><a href="#combine_D47calibs-810"><span class="linenos">810</span></a>			<span class="k">if</span> <span class="n">i</span> <span class="o">!=</span> <span class="n">j</span><span class="p">:</span>
-</span><span id="combine_D47calibs-811"><a href="#combine_D47calibs-811"><span class="linenos">811</span></a>				<span class="k">if</span> <span class="n">samples</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">==</span> <span class="n">samples</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="ow">or</span> <span class="p">{</span><span class="n">samples</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">samples</span><span class="p">[</span><span class="n">j</span><span class="p">]}</span> <span class="ow">in</span> <span class="n">same_T</span><span class="p">:</span>
-</span><span id="combine_D47calibs-812"><a href="#combine_D47calibs-812"><span class="linenos">812</span></a>					<span class="n">sT</span><span class="p">[</span><span class="n">i</span><span class="p">,</span><span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="n">sT</span><span class="p">[</span><span class="n">i</span><span class="p">,</span><span class="n">i</span><span class="p">]</span> <span class="o">*</span> <span class="n">sT</span><span class="p">[</span><span class="n">j</span><span class="p">,</span><span class="n">j</span><span class="p">])</span><span class="o">**</span><span class="mf">.5</span>
-</span><span id="combine_D47calibs-813"><a href="#combine_D47calibs-813"><span class="linenos">813</span></a>	
-</span><span id="combine_D47calibs-814"><a href="#combine_D47calibs-814"><span class="linenos">814</span></a>	<span class="n">calib</span> <span class="o">=</span> <span class="n">D47calib</span><span class="p">(</span>
-</span><span id="combine_D47calibs-815"><a href="#combine_D47calibs-815"><span class="linenos">815</span></a>		<span class="n">samples</span> <span class="o">=</span> <span class="n">samples</span><span class="p">,</span>
-</span><span id="combine_D47calibs-816"><a href="#combine_D47calibs-816"><span class="linenos">816</span></a>		<span class="n">T</span> <span class="o">=</span> <span class="n">T</span><span class="p">,</span>
-</span><span id="combine_D47calibs-817"><a href="#combine_D47calibs-817"><span class="linenos">817</span></a>		<span class="n">D47</span> <span class="o">=</span> <span class="n">D47</span><span class="p">,</span>
-</span><span id="combine_D47calibs-818"><a href="#combine_D47calibs-818"><span class="linenos">818</span></a>		<span class="n">sT</span> <span class="o">=</span> <span class="n">sT</span><span class="p">,</span>
-</span><span id="combine_D47calibs-819"><a href="#combine_D47calibs-819"><span class="linenos">819</span></a>		<span class="n">sD47</span> <span class="o">=</span> <span class="n">sD47</span><span class="p">,</span>
-</span><span id="combine_D47calibs-820"><a href="#combine_D47calibs-820"><span class="linenos">820</span></a>		<span class="n">degrees</span> <span class="o">=</span> <span class="n">degrees</span><span class="p">,</span>
-</span><span id="combine_D47calibs-821"><a href="#combine_D47calibs-821"><span class="linenos">821</span></a>		<span class="n">regress_now</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
-</span><span id="combine_D47calibs-822"><a href="#combine_D47calibs-822"><span class="linenos">822</span></a>		<span class="p">)</span>
-</span><span id="combine_D47calibs-823"><a href="#combine_D47calibs-823"><span class="linenos">823</span></a>
-</span><span id="combine_D47calibs-824"><a href="#combine_D47calibs-824"><span class="linenos">824</span></a>	<span class="k">return</span> <span class="n">calib</span>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="combine_D47calibs-828"><a href="#combine_D47calibs-828"><span class="linenos">828</span></a><span class="k">def</span> <span class="nf">combine_D47calibs</span><span class="p">(</span><span class="n">calibs</span><span class="p">,</span> <span class="n">degrees</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">2</span><span class="p">],</span> <span class="n">same_T</span> <span class="o">=</span> <span class="p">[]):</span>
+</span><span id="combine_D47calibs-829"><a href="#combine_D47calibs-829"><span class="linenos">829</span></a><span class="w">	</span><span class="sd">&#39;&#39;&#39;</span>
+</span><span id="combine_D47calibs-830"><a href="#combine_D47calibs-830"><span class="linenos">830</span></a><span class="sd">	Combine data from several `D47calib` instances.</span>
+</span><span id="combine_D47calibs-831"><a href="#combine_D47calibs-831"><span class="linenos">831</span></a><span class="sd">	</span>
+</span><span id="combine_D47calibs-832"><a href="#combine_D47calibs-832"><span class="linenos">832</span></a><span class="sd">	### Parameters</span>
+</span><span id="combine_D47calibs-833"><a href="#combine_D47calibs-833"><span class="linenos">833</span></a><span class="sd">	</span>
+</span><span id="combine_D47calibs-834"><a href="#combine_D47calibs-834"><span class="linenos">834</span></a><span class="sd">	+ **calibs**:</span>
+</span><span id="combine_D47calibs-835"><a href="#combine_D47calibs-835"><span class="linenos">835</span></a><span class="sd">	A list of `D47calib` instances</span>
+</span><span id="combine_D47calibs-836"><a href="#combine_D47calibs-836"><span class="linenos">836</span></a><span class="sd">	+ **degrees**:</span>
+</span><span id="combine_D47calibs-837"><a href="#combine_D47calibs-837"><span class="linenos">837</span></a><span class="sd">	The polynomial degrees of the combined regression.</span>
+</span><span id="combine_D47calibs-838"><a href="#combine_D47calibs-838"><span class="linenos">838</span></a><span class="sd">	+ **same_T**:</span>
+</span><span id="combine_D47calibs-839"><a href="#combine_D47calibs-839"><span class="linenos">839</span></a><span class="sd">	Use this `list` to specify when samples from different calibrations are known/postulated</span>
+</span><span id="combine_D47calibs-840"><a href="#combine_D47calibs-840"><span class="linenos">840</span></a><span class="sd">	to have formed at the same temperature (e.g. `DVH-2` and `DHC2-8` from the `fiebig_2021`</span>
+</span><span id="combine_D47calibs-841"><a href="#combine_D47calibs-841"><span class="linenos">841</span></a><span class="sd">	and `anderson_2021_lsce` data sets). Each element of `same_T` is a `list` with the names</span>
+</span><span id="combine_D47calibs-842"><a href="#combine_D47calibs-842"><span class="linenos">842</span></a><span class="sd">	of two or more samples formed at the same temperature.</span>
+</span><span id="combine_D47calibs-843"><a href="#combine_D47calibs-843"><span class="linenos">843</span></a><span class="sd">	</span>
+</span><span id="combine_D47calibs-844"><a href="#combine_D47calibs-844"><span class="linenos">844</span></a><span class="sd">	For example, the `combined_2023` calibration is computed with:</span>
+</span><span id="combine_D47calibs-845"><a href="#combine_D47calibs-845"><span class="linenos">845</span></a><span class="sd">	</span>
+</span><span id="combine_D47calibs-846"><a href="#combine_D47calibs-846"><span class="linenos">846</span></a><span class="sd">	`same_T = [[&#39;DVH-2&#39;, DHC-2-8&#39;], [&#39;ETH-1-1100-SAM&#39;, &#39;ETH-1-1100&#39;]]`</span>
+</span><span id="combine_D47calibs-847"><a href="#combine_D47calibs-847"><span class="linenos">847</span></a>
+</span><span id="combine_D47calibs-848"><a href="#combine_D47calibs-848"><span class="linenos">848</span></a><span class="sd">	Note that when samples from different calibrations have the same name,</span>
+</span><span id="combine_D47calibs-849"><a href="#combine_D47calibs-849"><span class="linenos">849</span></a><span class="sd">	it is not necessary to explicitly list them in `same_T`.</span>
+</span><span id="combine_D47calibs-850"><a href="#combine_D47calibs-850"><span class="linenos">850</span></a><span class="sd">	</span>
+</span><span id="combine_D47calibs-851"><a href="#combine_D47calibs-851"><span class="linenos">851</span></a><span class="sd">	Also note that the regression will fail if samples listed together in `same_T`</span>
+</span><span id="combine_D47calibs-852"><a href="#combine_D47calibs-852"><span class="linenos">852</span></a><span class="sd">	actually have different `T` values specified in the original calibrations.</span>
+</span><span id="combine_D47calibs-853"><a href="#combine_D47calibs-853"><span class="linenos">853</span></a>
+</span><span id="combine_D47calibs-854"><a href="#combine_D47calibs-854"><span class="linenos">854</span></a><span class="sd">	### Example</span>
+</span><span id="combine_D47calibs-855"><a href="#combine_D47calibs-855"><span class="linenos">855</span></a><span class="sd">	</span>
+</span><span id="combine_D47calibs-856"><a href="#combine_D47calibs-856"><span class="linenos">856</span></a><span class="sd">	The `devils_laghetto_2023` calibration is computed using the following code:</span>
+</span><span id="combine_D47calibs-857"><a href="#combine_D47calibs-857"><span class="linenos">857</span></a><span class="sd">	</span>
+</span><span id="combine_D47calibs-858"><a href="#combine_D47calibs-858"><span class="linenos">858</span></a><span class="sd">	````py</span>
+</span><span id="combine_D47calibs-859"><a href="#combine_D47calibs-859"><span class="linenos">859</span></a><span class="sd">	K = [fiebig_2021.samples.index(_) for _ in [&#39;LGB-2&#39;, &#39;DVH-2&#39;, &#39;DHC2-8&#39;]]</span>
+</span><span id="combine_D47calibs-860"><a href="#combine_D47calibs-860"><span class="linenos">860</span></a>
+</span><span id="combine_D47calibs-861"><a href="#combine_D47calibs-861"><span class="linenos">861</span></a><span class="sd">	fiebig_temp = D47calib(</span>
+</span><span id="combine_D47calibs-862"><a href="#combine_D47calibs-862"><span class="linenos">862</span></a><span class="sd">		samples = [fiebig_2021.samples[_] for _ in K],</span>
+</span><span id="combine_D47calibs-863"><a href="#combine_D47calibs-863"><span class="linenos">863</span></a><span class="sd">		T = fiebig_2021.T[K],</span>
+</span><span id="combine_D47calibs-864"><a href="#combine_D47calibs-864"><span class="linenos">864</span></a><span class="sd">		D47 = fiebig_2021.D47[K],</span>
+</span><span id="combine_D47calibs-865"><a href="#combine_D47calibs-865"><span class="linenos">865</span></a><span class="sd">		sT = fiebig_2021.sT[K,:][:,K],</span>
+</span><span id="combine_D47calibs-866"><a href="#combine_D47calibs-866"><span class="linenos">866</span></a><span class="sd">		sD47 = fiebig_2021.sD47[K,:][:,K],</span>
+</span><span id="combine_D47calibs-867"><a href="#combine_D47calibs-867"><span class="linenos">867</span></a><span class="sd">		regress_now = True,</span>
+</span><span id="combine_D47calibs-868"><a href="#combine_D47calibs-868"><span class="linenos">868</span></a><span class="sd">		)</span>
+</span><span id="combine_D47calibs-869"><a href="#combine_D47calibs-869"><span class="linenos">869</span></a>
+</span><span id="combine_D47calibs-870"><a href="#combine_D47calibs-870"><span class="linenos">870</span></a><span class="sd">	devils_laghetto_2023 = combine_D47calibs(</span>
+</span><span id="combine_D47calibs-871"><a href="#combine_D47calibs-871"><span class="linenos">871</span></a><span class="sd">		calibs = [</span>
+</span><span id="combine_D47calibs-872"><a href="#combine_D47calibs-872"><span class="linenos">872</span></a><span class="sd">			anderson_2021_lsce,</span>
+</span><span id="combine_D47calibs-873"><a href="#combine_D47calibs-873"><span class="linenos">873</span></a><span class="sd">			fiebig_temp,</span>
+</span><span id="combine_D47calibs-874"><a href="#combine_D47calibs-874"><span class="linenos">874</span></a><span class="sd">			],</span>
+</span><span id="combine_D47calibs-875"><a href="#combine_D47calibs-875"><span class="linenos">875</span></a><span class="sd">		degrees = [0,2],</span>
+</span><span id="combine_D47calibs-876"><a href="#combine_D47calibs-876"><span class="linenos">876</span></a><span class="sd">		same_T = [</span>
+</span><span id="combine_D47calibs-877"><a href="#combine_D47calibs-877"><span class="linenos">877</span></a><span class="sd">			{&#39;DVH-2&#39;, &#39;DHC2-8&#39;},</span>
+</span><span id="combine_D47calibs-878"><a href="#combine_D47calibs-878"><span class="linenos">878</span></a><span class="sd">			],</span>
+</span><span id="combine_D47calibs-879"><a href="#combine_D47calibs-879"><span class="linenos">879</span></a><span class="sd">		)</span>
+</span><span id="combine_D47calibs-880"><a href="#combine_D47calibs-880"><span class="linenos">880</span></a><span class="sd">	````</span>
+</span><span id="combine_D47calibs-881"><a href="#combine_D47calibs-881"><span class="linenos">881</span></a><span class="sd">	&#39;&#39;&#39;</span>
+</span><span id="combine_D47calibs-882"><a href="#combine_D47calibs-882"><span class="linenos">882</span></a>
+</span><span id="combine_D47calibs-883"><a href="#combine_D47calibs-883"><span class="linenos">883</span></a>	<span class="n">samples</span> <span class="o">=</span> <span class="p">[</span><span class="n">s</span> <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">calibs</span> <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="n">c</span><span class="o">.</span><span class="n">samples</span><span class="p">]</span>
+</span><span id="combine_D47calibs-884"><a href="#combine_D47calibs-884"><span class="linenos">884</span></a>	<span class="n">T</span> <span class="o">=</span> <span class="p">[</span><span class="n">t</span> <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">calibs</span> <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="n">c</span><span class="o">.</span><span class="n">T</span><span class="p">]</span>
+</span><span id="combine_D47calibs-885"><a href="#combine_D47calibs-885"><span class="linenos">885</span></a>	<span class="n">D47</span> <span class="o">=</span> <span class="p">[</span><span class="n">x</span> <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">calibs</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">c</span><span class="o">.</span><span class="n">D47</span><span class="p">]</span>
+</span><span id="combine_D47calibs-886"><a href="#combine_D47calibs-886"><span class="linenos">886</span></a>	<span class="n">sD47</span> <span class="o">=</span> <span class="n">_block_diag</span><span class="p">(</span><span class="o">*</span><span class="p">[</span><span class="n">c</span><span class="o">.</span><span class="n">sD47</span> <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">calibs</span><span class="p">])</span>
+</span><span id="combine_D47calibs-887"><a href="#combine_D47calibs-887"><span class="linenos">887</span></a>	<span class="n">sT</span> <span class="o">=</span> <span class="n">_block_diag</span><span class="p">(</span><span class="o">*</span><span class="p">[</span><span class="n">c</span><span class="o">.</span><span class="n">sT</span> <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">calibs</span><span class="p">])</span>
+</span><span id="combine_D47calibs-888"><a href="#combine_D47calibs-888"><span class="linenos">888</span></a>
+</span><span id="combine_D47calibs-889"><a href="#combine_D47calibs-889"><span class="linenos">889</span></a>	<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">samples</span><span class="p">)):</span>
+</span><span id="combine_D47calibs-890"><a href="#combine_D47calibs-890"><span class="linenos">890</span></a>		<span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">samples</span><span class="p">)):</span>
+</span><span id="combine_D47calibs-891"><a href="#combine_D47calibs-891"><span class="linenos">891</span></a>			<span class="k">if</span> <span class="n">i</span> <span class="o">!=</span> <span class="n">j</span><span class="p">:</span>
+</span><span id="combine_D47calibs-892"><a href="#combine_D47calibs-892"><span class="linenos">892</span></a>				<span class="k">if</span> <span class="p">(</span><span class="n">samples</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">==</span> <span class="n">samples</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="ow">or</span>
+</span><span id="combine_D47calibs-893"><a href="#combine_D47calibs-893"><span class="linenos">893</span></a>					<span class="nb">any</span><span class="p">([</span><span class="n">samples</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="ow">in</span> <span class="n">_</span> <span class="ow">and</span> <span class="n">samples</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="ow">in</span> <span class="n">_</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="n">same_T</span><span class="p">])):</span>
+</span><span id="combine_D47calibs-894"><a href="#combine_D47calibs-894"><span class="linenos">894</span></a>
+</span><span id="combine_D47calibs-895"><a href="#combine_D47calibs-895"><span class="linenos">895</span></a>					<span class="n">sT</span><span class="p">[</span><span class="n">i</span><span class="p">,</span><span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="n">sT</span><span class="p">[</span><span class="n">i</span><span class="p">,</span><span class="n">i</span><span class="p">]</span> <span class="o">*</span> <span class="n">sT</span><span class="p">[</span><span class="n">j</span><span class="p">,</span><span class="n">j</span><span class="p">])</span><span class="o">**</span><span class="mf">.5</span>
+</span><span id="combine_D47calibs-896"><a href="#combine_D47calibs-896"><span class="linenos">896</span></a>	
+</span><span id="combine_D47calibs-897"><a href="#combine_D47calibs-897"><span class="linenos">897</span></a>	<span class="n">calib</span> <span class="o">=</span> <span class="n">D47calib</span><span class="p">(</span>
+</span><span id="combine_D47calibs-898"><a href="#combine_D47calibs-898"><span class="linenos">898</span></a>		<span class="n">samples</span> <span class="o">=</span> <span class="n">samples</span><span class="p">,</span>
+</span><span id="combine_D47calibs-899"><a href="#combine_D47calibs-899"><span class="linenos">899</span></a>		<span class="n">T</span> <span class="o">=</span> <span class="n">T</span><span class="p">,</span>
+</span><span id="combine_D47calibs-900"><a href="#combine_D47calibs-900"><span class="linenos">900</span></a>		<span class="n">D47</span> <span class="o">=</span> <span class="n">D47</span><span class="p">,</span>
+</span><span id="combine_D47calibs-901"><a href="#combine_D47calibs-901"><span class="linenos">901</span></a>		<span class="n">sT</span> <span class="o">=</span> <span class="n">sT</span><span class="p">,</span>
+</span><span id="combine_D47calibs-902"><a href="#combine_D47calibs-902"><span class="linenos">902</span></a>		<span class="n">sD47</span> <span class="o">=</span> <span class="n">sD47</span><span class="p">,</span>
+</span><span id="combine_D47calibs-903"><a href="#combine_D47calibs-903"><span class="linenos">903</span></a>		<span class="n">degrees</span> <span class="o">=</span> <span class="n">degrees</span><span class="p">,</span>
+</span><span id="combine_D47calibs-904"><a href="#combine_D47calibs-904"><span class="linenos">904</span></a>		<span class="n">regress_now</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+</span><span id="combine_D47calibs-905"><a href="#combine_D47calibs-905"><span class="linenos">905</span></a>		<span class="p">)</span>
+</span><span id="combine_D47calibs-906"><a href="#combine_D47calibs-906"><span class="linenos">906</span></a>
+</span><span id="combine_D47calibs-907"><a href="#combine_D47calibs-907"><span class="linenos">907</span></a>	<span class="k">return</span> <span class="n">calib</span>
 </span></pre></div>
 
 
-            <div class="docstring"><p>Combine <code><a href="#D47calib">D47calib</a></code> instances.</p>
+    		<div class="docstring"><p>Combine data from several <code><a href="#D47calib">D47calib</a></code> instances.</p>
 
-<p>Example of valid <code>same_T</code> parameter:
-<code>[{'LGB-2', DHC-2-8'}, {'ETH-1-1100-SAM', 'ETH-1-1100'}]</code>.</p>
+<h3 id="parameters">Parameters</h3>
+
+<ul>
+<li><strong>calibs</strong>:
+A list of <code><a href="#D47calib">D47calib</a></code> instances</li>
+<li><strong>degrees</strong>:
+The polynomial degrees of the combined regression.</li>
+<li><strong>same_T</strong>:
+Use this <code>list</code> to specify when samples from different calibrations are known/postulated
+to have formed at the same temperature (e.g. <code>DVH-2</code> and <code>DHC2-8</code> from the <code>fiebig_2021</code>
+and <code>anderson_2021_lsce</code> data sets). Each element of <code>same_T</code> is a <code>list</code> with the names
+of two or more samples formed at the same temperature.</li>
+</ul>
+
+<p>For example, the <code>combined_2023</code> calibration is computed with:</p>
+
+<p><code>same_T = [['DVH-2', DHC-2-8'], ['ETH-1-1100-SAM', 'ETH-1-1100']]</code></p>
+
+<p>Note that when samples from different calibrations have the same name,
+it is not necessary to explicitly list them in <code>same_T</code>.</p>
+
+<p>Also note that the regression will fail if samples listed together in <code>same_T</code>
+actually have different <code>T</code> values specified in the original calibrations.</p>
+
+<h3 id="example">Example</h3>
+
+<p>The <code>devils_laghetto_2023</code> calibration is computed using the following code:</p>
+
+<div class="pdoc-code codehilite">
+<pre><span></span><code><span class="n">K</span> <span class="o">=</span> <span class="p">[</span><span class="n">fiebig_2021</span><span class="o">.</span><span class="n">samples</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="n">_</span><span class="p">)</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;LGB-2&#39;</span><span class="p">,</span> <span class="s1">&#39;DVH-2&#39;</span><span class="p">,</span> <span class="s1">&#39;DHC2-8&#39;</span><span class="p">]]</span>
+
+<span class="n">fiebig_temp</span> <span class="o">=</span> <span class="n">D47calib</span><span class="p">(</span>
+        <span class="n">samples</span> <span class="o">=</span> <span class="p">[</span><span class="n">fiebig_2021</span><span class="o">.</span><span class="n">samples</span><span class="p">[</span><span class="n">_</span><span class="p">]</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="n">K</span><span class="p">],</span>
+        <span class="n">T</span> <span class="o">=</span> <span class="n">fiebig_2021</span><span class="o">.</span><span class="n">T</span><span class="p">[</span><span class="n">K</span><span class="p">],</span>
+        <span class="n">D47</span> <span class="o">=</span> <span class="n">fiebig_2021</span><span class="o">.</span><span class="n">D47</span><span class="p">[</span><span class="n">K</span><span class="p">],</span>
+        <span class="n">sT</span> <span class="o">=</span> <span class="n">fiebig_2021</span><span class="o">.</span><span class="n">sT</span><span class="p">[</span><span class="n">K</span><span class="p">,:][:,</span><span class="n">K</span><span class="p">],</span>
+        <span class="n">sD47</span> <span class="o">=</span> <span class="n">fiebig_2021</span><span class="o">.</span><span class="n">sD47</span><span class="p">[</span><span class="n">K</span><span class="p">,:][:,</span><span class="n">K</span><span class="p">],</span>
+        <span class="n">regress_now</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+        <span class="p">)</span>
+
+<span class="n">devils_laghetto_2023</span> <span class="o">=</span> <span class="n">combine_D47calibs</span><span class="p">(</span>
+        <span class="n">calibs</span> <span class="o">=</span> <span class="p">[</span>
+                <span class="n">anderson_2021_lsce</span><span class="p">,</span>
+                <span class="n">fiebig_temp</span><span class="p">,</span>
+                <span class="p">],</span>
+        <span class="n">degrees</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">2</span><span class="p">],</span>
+        <span class="n">same_T</span> <span class="o">=</span> <span class="p">[</span>
+                <span class="p">{</span><span class="s1">&#39;DVH-2&#39;</span><span class="p">,</span> <span class="s1">&#39;DHC2-8&#39;</span><span class="p">},</span>
+                <span class="p">],</span>
+        <span class="p">)</span>
+</code></pre>
+</div>
 </div>
 
 
-                </section>
+		</section>
     </main>
 </body>
 </html>

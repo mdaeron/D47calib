@@ -769,6 +769,42 @@ class D47calib(_ogls.InverseTPolynomial):
 				
 
 	def export(self, name, filename):
+		"""
+		Save `D47calib` object as an importable file.
+		
+		### Parameters
+		
+		+ **name**:
+		The name of the variable to export.
+		+ **filename**:
+		The filename to write to.
+		
+		### Example
+
+		````py
+		D47calib.anderson_2021_lsce.export('foo', 'bar.py')
+		````
+
+		This should result in a `bar.py` file with the following contents:
+		
+		````py
+		foo = D47calib(
+			samples = ['LGB-2', 'DVH-2'],
+			T = [7.9, 33.7],
+			D47 = [0.6485720997671647, 0.5695972909966959],
+			sT = [[0.04000000000000001, 0.0], [0.0, 0.04000000000000001]],
+			sD47 = [[8.72797097773764e-06, 2.951894073404263e-06], [2.9518940734042614e-06, 7.498611746762038e-06]],
+			description = 'Devils Hole & Laghetto Basso from Anderson et al. (2021), processed in I-CDES',
+			label = 'Slow-growing calcites from Anderson et al. (2021)',
+			color = (0, 0.5, 0),
+			degrees = [0, 2],
+			bfp = {'a0': 0.1583220210575451, 'a2': 38724.41371782721},
+			bfp_CM = [[0.00035908667755871876, -30.707016431538836], [-30.70701643153884, 2668091.396598919]],
+			chisq = 6.421311854486162e-27,
+			Nf = 0,
+			)
+		````
+		"""
 		with open(filename, 'w') as f:
 			f.write(f'''
 {name} = D47calib(
@@ -788,14 +824,59 @@ class D47calib(_ogls.InverseTPolynomial):
 	)
 ''')
 
-
-
 def combine_D47calibs(calibs, degrees = [0,2], same_T = []):
 	'''
-	Combine `D47calib` instances.
+	Combine data from several `D47calib` instances.
 	
-	Example of valid `same_T` parameter:
-	`[{'LGB-2', DHC-2-8'}, {'ETH-1-1100-SAM', 'ETH-1-1100'}]`.
+	### Parameters
+	
+	+ **calibs**:
+	A list of `D47calib` instances
+	+ **degrees**:
+	The polynomial degrees of the combined regression.
+	+ **same_T**:
+	Use this `list` to specify when samples from different calibrations are known/postulated
+	to have formed at the same temperature (e.g. `DVH-2` and `DHC2-8` from the `fiebig_2021`
+	and `anderson_2021_lsce` data sets). Each element of `same_T` is a `list` with the names
+	of two or more samples formed at the same temperature.
+	
+	For example, the `combined_2023` calibration is computed with:
+	
+	`same_T = [['DVH-2', DHC-2-8'], ['ETH-1-1100-SAM', 'ETH-1-1100']]`
+
+	Note that when samples from different calibrations have the same name,
+	it is not necessary to explicitly list them in `same_T`.
+	
+	Also note that the regression will fail if samples listed together in `same_T`
+	actually have different `T` values specified in the original calibrations.
+
+	### Example
+	
+	The `devils_laghetto_2023` calibration is computed using the following code:
+	
+	````py
+	K = [fiebig_2021.samples.index(_) for _ in ['LGB-2', 'DVH-2', 'DHC2-8']]
+
+	fiebig_temp = D47calib(
+		samples = [fiebig_2021.samples[_] for _ in K],
+		T = fiebig_2021.T[K],
+		D47 = fiebig_2021.D47[K],
+		sT = fiebig_2021.sT[K,:][:,K],
+		sD47 = fiebig_2021.sD47[K,:][:,K],
+		regress_now = True,
+		)
+
+	devils_laghetto_2023 = combine_D47calibs(
+		calibs = [
+			anderson_2021_lsce,
+			fiebig_temp,
+			],
+		degrees = [0,2],
+		same_T = [
+			{'DVH-2', 'DHC2-8'},
+			],
+		)
+	````
 	'''
 
 	samples = [s for c in calibs for s in c.samples]
@@ -807,7 +888,9 @@ def combine_D47calibs(calibs, degrees = [0,2], same_T = []):
 	for i in range(len(samples)):
 		for j in range(len(samples)):
 			if i != j:
-				if samples[i] == samples[j] or {samples[i], samples[j]} in same_T:
+				if (samples[i] == samples[j] or
+					any([samples[i] in _ and samples[j] in _ for _ in same_T])):
+
 					sT[i,j] = (sT[i,i] * sT[j,j])**.5
 	
 	calib = D47calib(

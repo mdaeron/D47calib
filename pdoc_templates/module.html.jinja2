@@ -1,6 +1,21 @@
 {% extends "default/module.html.jinja2" %}
 {% macro docstring(var) %}
-    {% if var.docstring %}
-        <div class="docstring">{{ var.docstring | to_markdown | myfilter | to_html | linkify(namespace=var.qualname) }}</div>
-    {% endif %}
+	{% if var.docstring %}
+		<div class="docstring">{{ var.docstring | to_markdown | myfilter | to_html | linkify(namespace=var.qualname) }}</div>
+	{% endif %}
 {% endmacro %}
+
+{% block module_contents %}
+	{% for m in module.flattened_own_members if is_public(m) | trim %}
+		<section id="{{ m.qualname or m.name }}">
+			{{ member(m) }}
+			{% if m.kind == "class" %}
+				{% for m in m.own_members if m.kind != "class" and is_public(m) | trim %}
+					<div id="{{ m.qualname }}" class="classattr">
+						{{ member(m) }}
+					</div>
+				{% endfor %}
+			{% endif %}
+		</section>
+	{% endfor %}
+{% endblock %}

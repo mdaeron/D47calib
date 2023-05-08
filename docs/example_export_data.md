@@ -1,4 +1,4 @@
-<style>td, th {font-size: 75%; line-height: 75%;}</style>
+<style>td, th {font-size: 80%; line-height: 80%;}</style>
 
 |ID|Sample|T|SE_T|D47|SE_D47|D47correl_1|D47correl_2|D47correl_3|D47correl_4|D47correl_5|D47correl_6|D47correl_7|
 |----|----|----|----|----|----|----|----|----|----|----|----|----|
