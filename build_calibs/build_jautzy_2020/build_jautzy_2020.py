@@ -39,12 +39,13 @@ for sample in jautzy_calib_samples:
 		jautzy_calib_data += [{
 			'Sample': sample,
 			'T': meta['T'],
+			'sT': meta['sT'],
 			'D47': data.samples[sample]['D47'],
 			'sD47': data.samples[sample]['SE_D47'],
 			}]
 
 jautzy_CM_D47 = [[data.sample_D4x_covar(sample1, sample2) for sample1 in jautzy_calib_samples] for sample2 in jautzy_calib_samples]
-jautzy_CM_T = eye(len(jautzy_metadata)) * DEFAULT_SIGMA_T**2
+jautzy_CM_T = diag([s['sT']**2 for s in jautzy_calib_data])
 # for l in jautzy_CM_T:
 # 	print(' '.join([f'{e**.5:04.2f}' if e else '----' for e in l]))
 

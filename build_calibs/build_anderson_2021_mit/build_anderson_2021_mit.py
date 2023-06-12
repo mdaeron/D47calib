@@ -48,6 +48,11 @@ for sample in anderson_calib_samples:
 
 anderson_CM_D47 = [[anderson_data.sample_D4x_covar(sample1, sample2) for sample1 in anderson_calib_samples] for sample2 in anderson_calib_samples]
 anderson_CM_T = eye(len(anderson_metadata)) * ANDERSON_DEFAULT_SIGMA_T**2
+
+for k,s in enumerate(anderson_calib_samples):
+	if '-1100-SAM' in s:
+		anderson_CM_T[k,k] = 10**2
+
 # for l in anderson_CM_T:
 # 	print(' '.join([f'{e**.5:04.2f}' if e else '----' for e in l]))
 

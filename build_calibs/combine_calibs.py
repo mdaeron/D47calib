@@ -81,9 +81,16 @@ C = combine_D47calibs(
 	same_T = [
 		{'ETH-1-1100-SAM', 'ETH-1-1100'},
 		{'ETH-2-1100-SAM', 'ETH-2-1100'},
+		{'CA726', 'CM-351'},
 		{'DVH-2', 'DHC2-8'},
+		{'CA-120', 'CA120'},
+		{'CA-170', 'CA170'},
+		{'CA-200', 'CA200'},
+		{'CA-250A', 'CA250_06'},
+		{'CA-250B', 'CA250_09'},
 		],
 	)
+
 
 C.color = (0,0,0)
 C.description = 'Combined I-CDES calibration'
