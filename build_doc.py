@@ -5,7 +5,28 @@ Apply an arbitrary filter to each docstring
 from io import StringIO
 from contextlib import redirect_stdout
 from pathlib import Path
+import shutil
 import pdoc
+
+
+
+for code_input, code_output in [
+	('code_examples/D47calib_init/example.py', 'code_examples/D47calib_init/output.txt'),
+	('code_examples/D47calib_invT_xaxis/example_1.py', ''),
+	('code_examples/D47calib_invT_xaxis/example_2.py', ''),
+	]:
+
+	with open(code_input) as fid:
+		code = fid.read()
+
+	f = StringIO()
+	with redirect_stdout(f):
+		exec(code)
+
+	if code_output:
+		with open(code_output, 'w') as fid:
+			fid.write(f.getvalue())
+
 
 substitutions = [
 	('δ13C_VPDB', 'δ<sup>13</sup>C<sub>VPDB</sub>'),
@@ -53,14 +74,24 @@ from D47calib import *
 # print(T, sT)
 
 
+shutil.move(
+	'./example_invT_xaxis_1.png',
+	'docs/example_invT_xaxis_1.png',
+	)
+shutil.move(
+	'./example_invT_xaxis_2.png',
+	'docs/example_invT_xaxis_2.png',
+	)
+
+
 calib = combined_2023
 
-fig = ppl.figure(figsize = (5,3))
-ppl.subplots_adjust(bottom = .25, left = .15)
-ax = calib.invT_xaxis()
-ax.set_xlim((0, 270**-2))
-ppl.savefig('docs/example_invT_xaxis_2.png', dpi = 100)
-ppl.close(fig)
+# fig = ppl.figure(figsize = (5,3))
+# ppl.subplots_adjust(bottom = .25, left = .15)
+# ax = calib.invT_xaxis()
+# ax.set_xlim((0, 270**-2))
+# ppl.savefig('docs/example_invT_xaxis_2.png', dpi = 100)
+# ppl.close(fig)
 
 calib.xpower = 4
 fig = ppl.figure(figsize = (5,3))
@@ -161,19 +192,6 @@ with open('docs/example_export_data.md', 'w') as fid:
 
 
 
-for code_input, code_output in [
-	('code_examples/D47calib_init/example.py', 'code_examples/D47calib_init/output.txt'),
-	]:
-
-	with open(code_input) as fid:
-		code = fid.read()
-
-	f = StringIO()
-	with redirect_stdout(f):
-		exec(code)
-
-	with open(code_output, 'w') as fid:
-		fid.write(f.getvalue())
 
 
 

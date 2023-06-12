@@ -152,34 +152,23 @@ class D47calib(_ogls.InverseTPolynomial):
 		### Examples
 
 		````py
-		from matplotlib import pyplot as ppl
-		from D47calib import combined_2023 as calib
-
-		fig = ppl.figure(figsize = (5,3))
-		ppl.subplots_adjust(bottom = .25, left = .15)
-		ax = calib.invT_xaxis()
-		ax.set_xlim((0, 270**-2))
-		ppl.savefig('example_invT_xaxis_2.png', dpi = 100)
-		`````
+		.. include:: ../../code_examples/D47calib_invT_xaxis/example_1.py
+		````
+		
 		This should result in something like this:
 
-		<img align="center" src="example_invT_xaxis_2.png">
+		<img align="center" src="example_invT_xaxis_1.png">
 
 		It is also possible to define the X axis using a different power of 1/T
 		by first redefining the `xpower` attribute:
 		
 		````py
-		calib.xpower = 4
-		fig = ppl.figure(figsize = (5,3))
-		ppl.subplots_adjust(bottom = .25, left = .15)
-		ax = calib.invT_xaxis(Ti = [1000, 100, 50, 25, 0])
-		ax.set_xlim((0, 270**-4))
-		ppl.savefig('example_invT_xaxis_4.png', dpi = 100)
+		.. include:: ../../code_examples/D47calib_invT_xaxis/example_2.py
 		````
-
+		
 		This should result in something like this:
 
-		<img align="center" src="example_invT_xaxis_4.png">
+		<img align="center" src="example_invT_xaxis_2.png">
 		"""
 		if xlabel is None:
 			xlabel = f'$1\\,/\\,T^{self.xpower}$' if self.xpower > 1 else '1/T'
