@@ -2,6 +2,8 @@
 Apply an arbitrary filter to each docstring
 '''
 
+from io import StringIO
+from contextlib import redirect_stdout
 from pathlib import Path
 import pdoc
 
@@ -35,10 +37,6 @@ substitutions = [
 	('CO2', 'CO<sub>2</sub>'),
 	('T47', 'T<sub>47</sub>'),
 	]
-
-
-
-
 
 from matplotlib import pyplot as ppl
 from D47calib import *
@@ -159,6 +157,27 @@ for k in range(len(lines)):
 	lines[k] = '|' + lines[k].strip().replace(',', '|') + '|'
 with open('docs/example_export_data.md', 'w') as fid:
 	fid.write('<style>td, th {font-size: 80%; line-height: 80%;}</style>\n\n' + '\n'.join(lines) + '\n\n')
+
+
+
+
+for code_input, code_output in [
+	('code_examples/D47calib_init/example.py', 'code_examples/D47calib_init/output.txt'),
+	]:
+
+	with open(code_input) as fid:
+		code = fid.read()
+
+	f = StringIO()
+	with redirect_stdout(f):
+		exec(code)
+
+	with open(code_output, 'w') as fid:
+		fid.write(f.getvalue())
+
+
+
+
 		
 
 def myfilter(docstr):
@@ -180,3 +199,4 @@ pdoc.render.configure(template_directory = 'pdoc_templates', search = False)
 
 with open('docs/index.html', 'w') as fid:
 	fid.write(pdoc.pdoc('D47calib'))
+

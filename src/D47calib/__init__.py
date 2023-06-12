@@ -53,7 +53,6 @@ class D47calib(_ogls.InverseTPolynomial):
 		+ **degrees**: degrees of the polynomial regression, e.g., `[0, 2]` or `[0, 1, 2, 3, 4]`.
 		+ **label**: a short description of the calibration.
 		+ **description**: a longer description, including relevant references/DOIs.
-		+ **regress_now**: if `True`, perform the regression immediately upon instantiation.
 		This is not necessary when `bfp` and `CM_bfp` are specified at instantiation time.
 		+ **kwargs**: keyword arguments passed to the underlying `ogls.InverseTPolynomial()` call.
 		
@@ -90,19 +89,15 @@ class D47calib(_ogls.InverseTPolynomial):
 		A very simple example:
 		
 		````py
-		from D47calib import D47calib
-
-		mycalib = D47calib(
-			samples     = ['FOO', 'BAR'],
-			T           = [0.   , 25.  ],
-			D47         = [0.7  , 0.6  ],
-			sT          = 1.,
-			sD47        = 0.01,
-			regress_now = True,
-			)
-		
-		T, sT = mycalib.T47(D47 = 0.650) # yields T = 11.7, sT = 1.9
+		.. include:: ../../code_examples/D47calib_init/example.py
 		````
+		
+		Should yield:
+
+		````
+		.. include:: ../../code_examples/D47calib_init/output.txt
+		````
+		
 		"""
 
 		self.samples = samples[:]
