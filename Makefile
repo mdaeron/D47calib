@@ -1,8 +1,21 @@
-all: calibs combine doc
+all: clean calibs combine doc
 	@echo "All done!"
 
-combine: savecalibs
+clean:
+	@echo "Tabula rasa..."
+	@rm -f ./build_calibs/breitenbach*.py
+	@rm -f ./build_calibs/peral*.py
+	@rm -f ./build_calibs/jautzy*.py
+	@rm -f ./build_calibs/anderson*.py
+	@rm -f ./build_calibs/fiebig*.py
+	@rm -f ./build_calibs/huyghe*.py
+	@rm -f ./build_calibs/devils*.py
+	@rm -f ./build_calibs/combined*.py
+	@rm -f ./build_calibs/combined*.csv
+
+combine:
 	@echo "Building Devils Laghetto (2023)..."
+	@cd ./build_calibs; python save_to_calibs.py
 	@cd ./build_calibs/build_devils_laghetto_2023; python build_devils_laghetto_2023.py
 	@cd ./build_calibs; python save_to_calibs.py
 	@echo "Combining calibrations..."
@@ -22,10 +35,6 @@ calibs:
 	@cd ./build_calibs/build_fiebig_2021; python build_fiebig_2021.py
 	@echo "Processing Huyghe et al. (2022)..."
 	@cd ./build_calibs/build_huyghe_2022; python build_huyghe_2022.py
-
-savecalibs:
-	@echo "Saving calibrations..."
-	@cd ./build_calibs; python save_to_calibs.py
 
 doc:
 	@echo "Building documentation..."

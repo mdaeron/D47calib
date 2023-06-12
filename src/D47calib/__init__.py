@@ -28,13 +28,14 @@ class D47calib(_ogls.InverseTPolynomial):
 
 	def __init__(self,
 		samples, T, D47,
-		sT = None, sD47 = None,
-		degrees = [0,2], xpower = 2,
-		color = (.5,.5,.5),
+		sT = None,
+		sD47 = None,
+		degrees = [0,2],
+		xpower = 2,
 		label = '',
 		description = '',
-		regress_now = False,
-		**kwargs):
+		**kwargs,
+		):
 		"""
 		### Parameters
 		
@@ -50,7 +51,6 @@ class D47calib(_ogls.InverseTPolynomial):
 		  + a 1-D array-like of size N: `sD47` is treated as the standard errors of `D47`;
 		  + a 2-D array-like of size (N, N): `sD47` is treated as the (co)variance matrix of `D47`.
 		+ **degrees**: degrees of the polynomial regression, e.g., `[0, 2]` or `[0, 1, 2, 3, 4]`.
-		+ **color**: a matplotlib-compliant color specification used in plots.
 		+ **label**: a short description of the calibration.
 		+ **description**: a longer description, including relevant references/DOIs.
 		+ **regress_now**: if `True`, perform the regression immediately upon instantiation.
@@ -106,7 +106,6 @@ class D47calib(_ogls.InverseTPolynomial):
 		"""
 
 		self.samples = samples[:]
-		self.color = color
 		self.label = label
 		self.description = description
 		self.D47 = _np.asarray(D47, dtype = 'float')
@@ -123,7 +122,7 @@ class D47calib(_ogls.InverseTPolynomial):
 
 		_ogls.InverseTPolynomial.__init__(self, T=T, Y=D47, sT=sT, sY=sD47, degrees = degrees, xpower = xpower, **kwargs)
 		
-		if regress_now:
+		if self.bfp is None:
 			self.regress()
 		
 		self._bff_deriv = lambda x: _np.array([k * self.bfp[f'a{k}'] * x**(k-1) for k in degrees if k > 0]).sum(axis = 0)
@@ -235,8 +234,8 @@ class D47calib(_ogls.InverseTPolynomial):
 
 		<img align="center" src="example_plot_data.png">
 		"""
-		if 'mec' not in kwargs:
-			kwargs['mec'] = self.color
+# 		if 'mec' not in kwargs:
+# 			kwargs['mec'] = self.color
 		if label is not False:
 			kwargs['label'] = self.label if label is True else label
 		return _ogls.InverseTPolynomial.plot_data(self, **kwargs)
@@ -275,8 +274,8 @@ class D47calib(_ogls.InverseTPolynomial):
 
 		<img align="center" src="example_plot_error_bars.png">
 		"""
-		if 'ecolor' not in kwargs:
-			kwargs['ecolor'] = self.color
+# 		if 'ecolor' not in kwargs:
+# 			kwargs['ecolor'] = self.color
 		return _ogls.InverseTPolynomial.plot_error_bars(self, **kwargs)
 
 
@@ -313,8 +312,8 @@ class D47calib(_ogls.InverseTPolynomial):
 
 		<img align="center" src="example_plot_error_ellipses.png">
 		"""
-		if 'ec' not in kwargs:
-			kwargs['ec'] = self.color
+# 		if 'ec' not in kwargs:
+# 			kwargs['ec'] = self.color
 		return _ogls.InverseTPolynomial.plot_error_ellipses(self, **kwargs)
 
 
@@ -356,8 +355,8 @@ class D47calib(_ogls.InverseTPolynomial):
 
 		<img align="center" src="example_plot_bff.png">
 		"""
-		if 'color' not in kwargs:
-			kwargs['color'] = self.color
+# 		if 'color' not in kwargs:
+# 			kwargs['color'] = self.color
 		if label is not False:
 			kwargs['label'] = self.label if label is True else label
 		return _ogls.InverseTPolynomial.plot_bff(self, **kwargs)
@@ -398,8 +397,8 @@ class D47calib(_ogls.InverseTPolynomial):
 
 		<img align="center" src="example_plot_bff_ci.png">
 		"""
-		if 'color' not in kwargs:
-			kwargs['color'] = self.color
+# 		if 'color' not in kwargs:
+# 			kwargs['color'] = self.color
 		return _ogls.InverseTPolynomial.plot_bff_ci(self, **kwargs)
 
 	def T47(self,
@@ -813,14 +812,16 @@ class D47calib(_ogls.InverseTPolynomial):
 	D47 = {list(self.D47)},
 	sT = {[list(l) for l in self.sT]},
 	sD47 = {[list(l) for l in self.sD47]},
+	degrees = {self.degrees},
 	description = {repr(self.description)},
 	label = {repr(self.label)},
-	color = {self.color},
-	degrees = {list(self.degrees)},
 	bfp = {self.bfp},
 	bfp_CM = {[list(l) for l in self.bfp_CM]},
 	chisq = {self.chisq},
-	Nf = {self.Nf},
+	cholesky_residuals = {list(self.cholesky_residuals)},
+	aic = {self.aic},
+	bic = {self.bic},
+	ks_pvalue = {self.ks_pvalue},
 	)
 ''')
 
@@ -863,7 +864,6 @@ def combine_D47calibs(calibs, degrees = [0,2], same_T = []):
 		D47 = fiebig_2021.D47[K],
 		sT = fiebig_2021.sT[K,:][:,K],
 		sD47 = fiebig_2021.sD47[K,:][:,K],
-		regress_now = True,
 		)
 
 	devils_laghetto_2023 = combine_D47calibs(
@@ -900,7 +900,6 @@ def combine_D47calibs(calibs, degrees = [0,2], same_T = []):
 		sT = sT,
 		sD47 = sD47,
 		degrees = degrees,
-		regress_now = True,
 		)
 
 	return calib

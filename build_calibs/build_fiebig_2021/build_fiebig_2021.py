@@ -428,9 +428,7 @@ def icdes_process(_rawdata_):
 		sT = sT,
 		description = 'Fiebig et al. (2021) in I-CDES with additional constraints from 100 °C and 25 °C equilibrated CO2',
 		label = 'Fiebig et al. (2021)',
-		color = (0,0,0),
 		degrees = [0,1,2],
-		regress_now = True,
 		)
 
 	C.export('fiebig_2021', '../fiebig_2021.py')

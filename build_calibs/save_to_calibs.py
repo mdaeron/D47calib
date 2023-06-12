@@ -13,5 +13,8 @@ with open('../src/D47calib/_calibs.py', 'w') as fid:
 		'devils_laghetto_2023.py',
 		]:
 	
-		with open(file) as gid:
-			fid.write(gid.read())
+		try:
+			with open(file) as gid:
+				fid.write(gid.read())
+		except FileNotFoundError:
+			pass

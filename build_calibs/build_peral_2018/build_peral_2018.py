@@ -121,11 +121,9 @@ C = D47calib(
 	T = T,
 	sD47 = CM_new,
 	sT = CM_T,
-	color = (0, 0.5, 1),
 	description = 'Peral et al. (2018, 10.1016/j.gca.2018.07.016) planktic foraminifer calibration, as reprocessed by Daëron & Gray (in review)',
 	label = 'Peral et al. (2018)',
 	degrees = [0,2],
-	regress_now = True,
 	)
 
 C.export('peral_2018', '../peral_2018.py')

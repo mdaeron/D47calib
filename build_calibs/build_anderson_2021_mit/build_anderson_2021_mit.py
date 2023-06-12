@@ -62,11 +62,9 @@ C = D47calib(
 	T = [s['T'] for s in anderson_calib_data],
 	sD47 = anderson_CM_D47,
 	sT = anderson_CM_T,
-	color = (1,0,1),
 	description = 'Anderson et al. (2021) calibration, processed in I-CDES',
 	label = 'Anderson et al. (2021)',
 	degrees = [0,2],
-	regress_now = True,
 	)
 
 C.export('anderson_2021_mit', '../anderson_2021_mit.py')

@@ -318,9 +318,7 @@ def icdes_process(_rawdata_):
 		sT = sT,
 		description = 'Breitenbach et al. (2018) cave pearls in I-CDES',
 		label = 'Breitenbach et al. (2018) cave pearls',
-		color = (.5,.5,1),
 		degrees = [0,2],
-		regress_now = True,
 		)
 
 	C.export('breitenbach_2018', '../breitenbach_2018.py')

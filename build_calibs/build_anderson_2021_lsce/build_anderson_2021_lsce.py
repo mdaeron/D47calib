@@ -39,11 +39,9 @@ C = D47calib(
 	T = [s['T'] for s in calib_data],
 	sD47 = CM_D47,
 	sT = [s['sT'] for s in calib_data],
-	color = (0,.5,0),
 	description = 'Devils Hole & Laghetto Basso from Anderson et al. (2021), processed in I-CDES',
 	label = 'Slow-growing calcites from Anderson et al. (2021)',
 	degrees = [0,2],
-	regress_now = True,
 	)
 
 C.export('anderson_2021_lsce', '../anderson_2021_lsce.py')

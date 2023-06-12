@@ -69,11 +69,9 @@ C = D47calib(
 	T = T,
 	sD47 = sD47,
 	sT = sT,
-	color = (0,0,.5),
 	description = 'Huyghe et al. (2022) marine bivalves in I-CDES',
 	label = 'Huyghe et al. (2022) marine bivalves',
 	degrees = [0,2],
-	regress_now = True,
 	)
 
 C.export('huyghe_2022', '../huyghe_2022.py')

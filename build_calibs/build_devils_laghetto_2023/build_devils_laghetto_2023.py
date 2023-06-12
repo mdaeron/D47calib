@@ -8,7 +8,6 @@ fiebig_temp = D47calib(
 	D47 = fiebig_2021.D47[K],
 	sT = fiebig_2021.sT[K,:][:,K],
 	sD47 = fiebig_2021.sD47[K,:][:,K],
-	regress_now = True,
 	)
 
 C = combine_D47calibs(
@@ -22,7 +21,6 @@ C = combine_D47calibs(
 		],
 	)
 
-C.color = (.75,0,.75)
 C.description = 'Devils Hole & Laghetto Basso from Anderson et al. (2021) &  Fiebig et al. (2021)'
 C.label = 'Devils Hole & Laghetto Basso from Anderson et al. (2021) &  Fiebig et al. (2021)'
 

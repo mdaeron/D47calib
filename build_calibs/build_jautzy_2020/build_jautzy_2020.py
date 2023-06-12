@@ -55,11 +55,9 @@ C = D47calib(
 	T = [s['T'] for s in jautzy_calib_data],
 	sD47 = jautzy_CM_D47,
 	sT = jautzy_CM_T,
-	color = (1,.5,0),
 	description = 'Jautzy et al. (2020) synthetics, reprocessed in I-CDES',
 	label = 'Jautzy et al. (2020)',
 	degrees = [0,1,2],
-	regress_now = True,
 	)
 
 C.export('jautzy_2020', f'../jautzy_2020.py')
