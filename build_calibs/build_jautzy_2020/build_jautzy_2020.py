@@ -25,6 +25,7 @@ for s in data.sessions:
 data.standardize()
 data.plot_sessions(dir = 'sessions')
 data.plot_residuals(filename = 'D47residuals.pdf')
+data.plot_distribution_of_analyses()
 data.summary(dir = 'tables', verbose = False)
 data.table_of_sessions(dir = 'tables', verbose = False)
 data.table_of_samples(dir = 'tables', verbose = False)
