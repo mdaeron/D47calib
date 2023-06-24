@@ -24,7 +24,7 @@ sessionlimits = [
 	['2019-12b', '2019-12-27', '2020-01-03'],
 	]
 
-with open('input/jautzy_2020_aspublished.csv') as fid:
+with open('jautzy_2020_aspublished.csv') as fid:
 	data = list(DictReader(fid))
 
 samplerank = {s:k for k,s in enumerate(sorted({r['Sample'] for r in data}))}
@@ -37,7 +37,7 @@ for r in data:
 	if newsession:
 		r['NewSession'] = newsession[0]
 
-with open('input/jautzy_2020_rawdata.csv', 'w') as fid:
+with open('jautzy_2020_rawdata.csv', 'w') as fid:
 	fid.write('Sample,UID,Session,d45,d46,d47,d48,d49')
 	for r in data:
 		if 'NewSession' in r:
