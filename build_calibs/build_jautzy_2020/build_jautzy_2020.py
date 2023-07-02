@@ -23,6 +23,7 @@ for s in data.sessions:
 	data.sessions[s]['wg_drift'] = True
 
 data.standardize()
+data.summary()
 data.plot_sessions(dir = 'sessions')
 data.plot_residuals(filename = 'D47residuals.pdf')
 data.plot_distribution_of_analyses()

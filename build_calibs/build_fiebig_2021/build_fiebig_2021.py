@@ -389,6 +389,7 @@ def icdes_process(_rawdata_):
 		for s in data.sessions
 		})
 
+	data.summary()
 	data.plot_sessions(dir = 'sessions')
 	data.plot_residuals(filename = 'D47residuals.pdf')
 	data.summary(dir = 'tables', verbose = False)

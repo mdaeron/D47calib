@@ -233,6 +233,7 @@ def rawdata_import():
 					exit()
 			r['TimeTag'] = (2000+int(y), int(m), int(d), 0, 0, 0)
 		r['TimeTag'] = (date(*r['TimeTag'][:3]) - date(2015, 1, 1)).days - 228
+		
 		if r['TimeTag'] < 33:
 			r['Session'] = 'Session_A'
 		elif r['TimeTag'] < 150:
@@ -248,7 +249,7 @@ def rawdata_import():
 
 	rawdata = sorted(rawdata, key = lambda r: r['TimeTag'])
 
-	ignore_days = [211, 212, 283, 294, 296, 298, 295]
+	ignore_days = [211, 212, 283, 294, 295, 296, 298][:]
 	rawdata = [r for r in rawdata if r['TimeTag'] not in ignore_days]
 
 # 	ignore_sessions = [
@@ -292,6 +293,8 @@ def icdes_process(_rawdata_):
 
 # 	data.split_samples(grouping = 'by_session')
 	data.standardize()
+	data.summary()
+
 	data.table_of_sessions(verbose = False, dir = dir, filename = 'sessions.csv')
 	data.table_of_samples(dir = dir, filename = 'samples.csv')
 
@@ -327,5 +330,33 @@ def icdes_process(_rawdata_):
 if __name__ == '__main__':
 
 	rawdata = rawdata_import()
+	
+# 	samplerank = {s:k for k,s in enumerate(sorted({r['Sample'] for r in rawdata}))}
+# 	sessions = sorted({r['Session'] for r in rawdata})
+# 	for session in sessions:
+# 		print(
+# 			session,
+# 			min([r['TimeTag'] for r in rawdata if r['Session'] == session]),
+# 			max([r['TimeTag'] for r in rawdata if r['Session'] == session]),
+# 			)
+# 	sessioncolor = {s:'r' if k%2 else 'b' for k,s in enumerate(sessions)}
+# 
+# 	fig = figure()
+# 	ax = subplot(111)
+# 	ax.xaxis.axis_date()
+# 
+# 	for k,r in enumerate(rawdata):
+# 		plot(r['TimeTag']+k/1000, samplerank[r['Sample']], 'x', mec = sessioncolor[r['Session']], mew = 0.5)
+# 
+# 	for s in samplerank:
+# 		text(r['TimeTag'], samplerank[s], '  '+s, va = 'center')
+# 
+# # 	for name, x, y in sessionlimits:
+# # 		axvspan(datetime.fromisoformat(x),datetime.fromisoformat(y), color = 'k', alpha = .15)
+# 
+# # 	yticks([])
+# 
+# 	show()
+	
 	icdes_process(rawdata)
 
