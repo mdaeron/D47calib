@@ -11,7 +11,11 @@ classifiers = ["License :: OSI Approved :: MIT License"]
 dynamic = ["version", "description"]
 dependencies = [
 	"ogls",
+	"click",
 ]
 
 [project.urls]
 Home = "https://github.com/mdaeron/D47calib"
+
+[project.scripts]
+D47calib = "D47calib:cli"

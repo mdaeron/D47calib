@@ -13,6 +13,7 @@ __date__      = '2023-04-30'
 __version__   = '0.1.0'
 
 
+import click
 import ogls as _ogls
 import numpy as _np
 from scipy.linalg import block_diag as _block_diag
@@ -889,3 +890,10 @@ def combine_D47calibs(calibs, degrees = [0,2], same_T = []):
 	return calib
 
 from ._calibs import *
+
+@click.command()
+@click.option('-t', default = None, help='Temperature input')
+@click.option('-st', default = None, help='SE of temperature input')
+def cli(t, st):
+	calib = combined_2023
+	print('\t'.join([str(_) for _ in calib.T47(T = float(t), sT = st)]))
