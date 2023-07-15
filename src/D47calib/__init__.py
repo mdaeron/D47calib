@@ -892,8 +892,21 @@ def combine_D47calibs(calibs, degrees = [0,2], same_T = []):
 from ._calibs import *
 
 @click.command()
-@click.option('-t', default = None, help='Temperature input')
-@click.option('-st', default = None, help='SE of temperature input')
-def cli(t, st):
+@click.option('-T'          , 'T'   , default = None  , type = float, help='Temperature input'           )
+@click.option('-sT'         , 'sT'  , default = None  , type = float, help='SE of temperature input'     )
+@click.option('-D47'        , 'D47' , default = None  , type = float, help='D47 input'                   )
+@click.option('-sD47'       , 'sD47', default = None  , type = float, help='SE of D47 input'             )
+@click.option('--error_from',         default = 'both', type = click.Choice(['both', 'calib', 'sT', 'sD47']) , help='which component of error is computed')
+@click.option('--precision' ,         default = 4     , type = int  , help='precision (digits) of output')
+def cli(D47, sD47, T, sT, error_from, precision):
 	calib = combined_2023
-	print('\t'.join([str(_) for _ in calib.T47(T = float(t), sT = st)]))
+	print('\t'.join([
+		f'{_:.{precision}f}'
+		for _ in calib.T47(
+			D47 = D47,
+			sD47 = sD47,
+			T = T,
+			sT = sT,
+			error_from = error_from,
+			)
+		]))
