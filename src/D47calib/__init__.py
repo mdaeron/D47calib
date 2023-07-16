@@ -14,12 +14,14 @@ __version__   = '0.1.0'
 
 
 import typer
+from typing_extensions import Annotated
 import ogls as _ogls
 import numpy as _np
 from scipy.linalg import block_diag as _block_diag
 from scipy.interpolate import interp1d as _interp1d
 from matplotlib import pyplot as _ppl
 
+typer.rich_utils.STYLE_HELPTEXT = ''
 
 class D47calib(_ogls.InverseTPolynomial):
 	"""
@@ -899,22 +901,73 @@ def combine_D47calibs(calibs, degrees = [0,2], same_T = []):
 from ._calibs import *
 
 try:
+	app = typer.Typer(rich_markup_mode = 'rich')
+	
+	@app.command()
 	def _cli(
 		input,
-		calib = 'combined_2023',
-		input_delimiter = '\t',
-		output_delimiter = '\t',
-		T_precision = 2,
-		D47_precision = 4,
+		output: Annotated[str, typer.Option('--output', '-f', help = 'Write output to this file (print out if no output file)')] = 'none',
+		calib: Annotated[str, typer.Option('--calib', '-c', help = 'D47 calibration')] = 'combined_2023',
+		delim_in: Annotated[str, typer.Option('--delimiter-in', '-i', help = 'Delimiter used in the input')] = '<tab>',
+		delim_out: Annotated[str, typer.Option('--delimiter-out', '-o', help = 'Delimiter used in the output')] = '<tab>',
+		T_precision: Annotated[int, typer.Option('--T-precision', '-p', help = 'Precision for D47 output')] = 2,
+		D47_precision: Annotated[int, typer.Option('--D47-precision', '-q', help = 'Precision for T output')] = 4,
 		):
+		"""
+Reads data from an input file, converts between T and D47 values, and print out the results.
+
+The input file is a CSV, or any similar file with data sorted into lines and columns.
+The line separator must be a <newline>. The column separator, noted <sep> hereafter,
+is <tab> by default, or may be any other single character such as "," or ";".
+
+The first line of the input file must be one of the following:		
+
+- Option 1: 'T'
+- Option 2: 'T<sep>sT'
+- Option 3: 'D47'
+- Option 4: 'D47<sep>sD47'
+
+The rest of the input must be any number of lines with float values corresponding to
+the fields in the first line, separated by <sep>.
+
+[bold]Example input file:[/bold]
+
+D47	sD47
+0.6324	0.0101
+0.6281	0.0087
+0.6385	0.0095
+
+The corresponding D47, sD47 (options 1-2) or T, sT (options 3-4) values are computed
+and printed out. Standard errors from calibration uncertainties are always printed out.
+For options 2 and 4, which specify standard errors for the input values (sT and sD47,
+respectively), the standard errors resulting from these input uncertainties (sD47 and
+sT, respectively) are also computed, as well as the overall standard errors (accounting
+for both calibration and input uncertainties).
+
+[bold]Output corresponding to the example above:[/bold]
+
+D47	sD47	T	sT_from_calib	sT_from_sD47	sT_from_both
+0.6324	0.0101	12.89	0.36	2.95	2.97
+0.6281	0.0087	14.15	0.35	2.58	2.60
+0.6385	0.0095	11.12	0.36	2.72	2.75
+
+Results may also be saved to a file, e.g.:
+
+D47calib -f foo.csv -o , bar.csv
+		"""
+
 		from numpy import loadtxt
 
 		calib = globals()[calib]
+		if delim_in == '<tab>':
+			delim_in = '\t'
+		if delim_out == '<tab>':
+			delim_out = '\t'
 
 		with open(input) as f:
-			fields = f.readlines()[0].strip().split(input_delimiter)
+			fields = f.readlines()[0].strip().split(delim_in)
 
-		data = loadtxt(input, delimiter = input_delimiter, skiprows = 1)
+		data = loadtxt(input, delimiter = delim_in, skiprows = 1)
 		if len(data.shape) == 1:
 			kwargs = {fields[0]: data[:]}
 		elif len(data.shape) == 2:
@@ -943,13 +996,19 @@ try:
 				kwargs['sT_from_sD47'] = output_error_from_sD47[1]
 				kwargs['sT_from_both'] = output_error_from_both[1]
 
-		print(output_delimiter.join(kwargs))
+		txt = delim_out.join(kwargs)
 		for k in range(len(kwargs['T'])):
-			print(output_delimiter.join([f'{kwargs[f][k]:.{T_precision if "T" in f[:2] else D47_precision}f}' for f in kwargs]))
+			txt += '\n' + delim_out.join([f'{kwargs[f][k]:.{T_precision if "T" in f[:2] else D47_precision}f}' for f in kwargs])
 		
+		if output == 'none':
+			print(txt)
+		else:
+			with open(output, 'w') as f:
+				f.write(txt)
+		
+	def cli():
+		app()
 
 except NameError:
 	pass
 
-def cli():
-	typer.run(_cli)
