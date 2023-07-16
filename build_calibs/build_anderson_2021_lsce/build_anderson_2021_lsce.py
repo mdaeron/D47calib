@@ -40,6 +40,7 @@ C = D47calib(
 	sD47 = CM_D47,
 	sT = [s['sT'] for s in calib_data],
 	description = 'Devils Hole & Laghetto Basso from Anderson et al. (2021), processed in I-CDES',
+	name = 'anderson_2021_lsce',
 	label = 'Slow-growing calcites from Anderson et al. (2021)',
 	degrees = [0,2],
 	)

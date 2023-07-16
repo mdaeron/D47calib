@@ -7,6 +7,7 @@ anderson_2021_lsce = D47calib(
 	sD47 = [[8.72797097773764e-06, 2.951894073404263e-06], [2.9518940734042614e-06, 7.498611746762038e-06]],
 	degrees = [0, 2],
 	description = 'Devils Hole & Laghetto Basso from Anderson et al. (2021), processed in I-CDES',
+	name = 'anderson_2021_lsce',
 	label = 'Slow-growing calcites from Anderson et al. (2021)',
 	bfp = {'a0': 0.1583220210575451, 'a2': 38724.41371782721},
 	bfp_CM = [[0.00035908667755871876, -30.707016431538836], [-30.70701643153884, 2668091.396598919]],

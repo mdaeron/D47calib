@@ -94,6 +94,7 @@ C = combine_D47calibs(
 
 C.color = (0,0,0)
 C.description = 'Combined I-CDES calibration'
+C.name = 'combined_2023'
 C.label = 'Combined I-CDES calibration'
 
 C.export('combined_2023', 'combined_2023.py')

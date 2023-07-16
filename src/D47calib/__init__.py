@@ -13,7 +13,7 @@ __date__      = '2023-04-30'
 __version__   = '0.1.0'
 
 
-import click
+import typer
 import ogls as _ogls
 import numpy as _np
 from scipy.linalg import block_diag as _block_diag
@@ -33,6 +33,7 @@ class D47calib(_ogls.InverseTPolynomial):
 		sD47 = None,
 		degrees = [0,2],
 		xpower = 2,
+		name = '',
 		label = '',
 		description = '',
 		**kwargs,
@@ -52,7 +53,8 @@ class D47calib(_ogls.InverseTPolynomial):
 		  + a 1-D array-like of size N: `sD47` is treated as the standard errors of `D47`;
 		  + a 2-D array-like of size (N, N): `sD47` is treated as the (co)variance matrix of `D47`.
 		+ **degrees**: degrees of the polynomial regression, e.g., `[0, 2]` or `[0, 1, 2, 3, 4]`.
-		+ **label**: a short description of the calibration.
+		+ **name**: a human-readable, short name assigned to the calibration.
+		+ **label**: a short description of the calibration, e.g., to be used in legends.
 		+ **description**: a longer description, including relevant references/DOIs.
 		This is not necessary when `bfp` and `CM_bfp` are specified at instantiation time.
 		+ **kwargs**: keyword arguments passed to the underlying `ogls.InverseTPolynomial()` call.
@@ -102,6 +104,7 @@ class D47calib(_ogls.InverseTPolynomial):
 		"""
 
 		self.samples = samples[:]
+		self.name = name
 		self.label = label
 		self.description = description
 		self.D47 = _np.asarray(D47, dtype = 'float')
@@ -130,6 +133,9 @@ class D47calib(_ogls.InverseTPolynomial):
 		self._T_from_D47 = lambda D47: self._inv_bff(D47)**-1 - 273.15
 		self._D47_from_T_deriv = lambda T: -(T+273.15)**-2 * self._bff_deriv((T+273.15)**-1)
 		self._T_from_D47_deriv = lambda D47: self._D47_from_T_deriv(self._T_from_D47(D47))**-1
+	
+	def __repr__(self):
+		return f'<D47calib: {self.name}>'
 		
 	def invT_xaxis(self,
 		xlabel = None,
@@ -799,6 +805,7 @@ class D47calib(_ogls.InverseTPolynomial):
 	sD47 = {[list(l) for l in self.sD47]},
 	degrees = {self.degrees},
 	description = {repr(self.description)},
+	name = {repr(self.name)},
 	label = {repr(self.label)},
 	bfp = {self.bfp},
 	bfp_CM = {[list(l) for l in self.bfp_CM]},
@@ -891,22 +898,58 @@ def combine_D47calibs(calibs, degrees = [0,2], same_T = []):
 
 from ._calibs import *
 
-@click.command()
-@click.option('-T'          , 'T'   , default = None  , type = float, help='Temperature input'           )
-@click.option('-sT'         , 'sT'  , default = None  , type = float, help='SE of temperature input'     )
-@click.option('-D47'        , 'D47' , default = None  , type = float, help='D47 input'                   )
-@click.option('-sD47'       , 'sD47', default = None  , type = float, help='SE of D47 input'             )
-@click.option('--error_from',         default = 'both', type = click.Choice(['both', 'calib', 'sT', 'sD47']) , help='which component of error is computed')
-@click.option('--precision' ,         default = 4     , type = int  , help='precision (digits) of output')
-def cli(D47, sD47, T, sT, error_from, precision):
-	calib = combined_2023
-	print('\t'.join([
-		f'{_:.{precision}f}'
-		for _ in calib.T47(
-			D47 = D47,
-			sD47 = sD47,
-			T = T,
-			sT = sT,
-			error_from = error_from,
-			)
-		]))
+try:
+	def _cli(
+		input,
+		calib = 'combined_2023',
+		input_delimiter = '\t',
+		output_delimiter = '\t',
+		T_precision = 2,
+		D47_precision = 4,
+		):
+		from numpy import loadtxt
+
+		calib = globals()[calib]
+
+		with open(input) as f:
+			fields = f.readlines()[0].strip().split(input_delimiter)
+
+		data = loadtxt(input, delimiter = input_delimiter, skiprows = 1)
+		if len(data.shape) == 1:
+			kwargs = {fields[0]: data[:]}
+		elif len(data.shape) == 2:
+			kwargs = {
+				fields[k]: data[:,k]
+				for k in range(len(fields))
+				}
+		
+		output_error_from_both = calib.T47(**kwargs, error_from = 'both')
+		output_error_from_calib = calib.T47(**kwargs, error_from = 'calib')
+		if 'sT' in kwargs:
+			output_error_from_sT = calib.T47(**kwargs, error_from = 'sT')		
+		if 'sD47' in kwargs:
+			output_error_from_sD47 = calib.T47(**kwargs, error_from = 'sD47')		
+		
+		if 'T' in kwargs:
+			kwargs['D47'] = output_error_from_both[0]
+			kwargs['sD47_from_calib'] = output_error_from_calib[1]
+			if 'sT' in kwargs:
+				kwargs['sD47_from_sT'] = output_error_from_sT[1]
+				kwargs['sD47_from_both'] = output_error_from_both[1]
+		elif 'D47' in kwargs:
+			kwargs['T'] = output_error_from_both[0]
+			kwargs['sT_from_calib'] = output_error_from_calib[1]
+			if 'sD47' in kwargs:
+				kwargs['sT_from_sD47'] = output_error_from_sD47[1]
+				kwargs['sT_from_both'] = output_error_from_both[1]
+
+		print(output_delimiter.join(kwargs))
+		for k in range(len(kwargs['T'])):
+			print(output_delimiter.join([f'{kwargs[f][k]:.{T_precision if "T" in f[:2] else D47_precision}f}' for f in kwargs]))
+		
+
+except NameError:
+	pass
+
+def cli():
+	typer.run(_cli)
