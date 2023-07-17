@@ -968,7 +968,7 @@ D47calib -f foo.csv -o , bar.csv
 
 		calib = globals()[calib]
 
-		if delim_in == '<whitespace>':
+		if delim_in == ' ':
 			delim_in = None
 
 		with open(input) as f:
