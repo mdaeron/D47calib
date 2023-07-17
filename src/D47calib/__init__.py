@@ -900,18 +900,24 @@ def combine_D47calibs(calibs, degrees = [0,2], same_T = []):
 
 from ._calibs import *
 
+def _covar2correl(C):
+	SE = _np.diag(C)**.5
+	return SE, _np.diag(SE**-1) @ C @ _np.diag(SE**-1)
+
 try:
 	app = typer.Typer(rich_markup_mode = 'rich')
 	
 	@app.command()
 	def _cli(
 		input,
-		output: Annotated[str, typer.Option('--output', '-f', help = 'Write output to this file (print out if no output file)')] = 'none',
+		outfile: Annotated[str, typer.Option('--output', '-f', help = 'Write output to this file (print out if no output file)')] = 'none',
 		calib: Annotated[str, typer.Option('--calib', '-c', help = 'D47 calibration')] = 'combined_2023',
-		delim_in: Annotated[str, typer.Option('--delimiter-in', '-i', help = 'Delimiter used in the input')] = '<tab>',
-		delim_out: Annotated[str, typer.Option('--delimiter-out', '-o', help = 'Delimiter used in the output')] = '<tab>',
-		T_precision: Annotated[int, typer.Option('--T-precision', '-p', help = 'Precision for D47 output')] = 2,
-		D47_precision: Annotated[int, typer.Option('--D47-precision', '-q', help = 'Precision for T output')] = 4,
+		delim_in: Annotated[str, typer.Option('--delimiter-in', '-i', help = "Delimiter used in the input.")] = ',',
+		delim_out: Annotated[str, typer.Option('--delimiter-out', '-o', help = "Delimiter used in the output. Use '>' or '<' for elastic white space with right- or left-justified cells.")] = ',',
+		T_precision: Annotated[int, typer.Option('--T-precision', '-p', help = 'Precision for T output')] = 2,
+		D47_precision: Annotated[int, typer.Option('--D47-precision', '-q', help = 'Precision for D47 output')] = 4,
+		correl_precision: Annotated[int, typer.Option('--correl-precision', '-r', help = 'Precision for covariance/correlation output')] = 4,
+		return_covar: Annotated[bool, typer.Option('--return-covar', '-v', help = 'Output covariance matrix instead of correlation matrix')] = False,
 		):
 		"""
 Reads data from an input file, converts between T and D47 values, and print out the results.
@@ -922,20 +928,24 @@ is <tab> by default, or may be any other single character such as "," or ";".
 
 The first line of the input file must be one of the following:		
 
-- Option 1: 'T'
-- Option 2: 'T<sep>sT'
-- Option 3: 'D47'
-- Option 4: 'D47<sep>sD47'
+- [b]Option 1:[/b] T
+- [b]Option 2:[/b] T<sep>T_SE
+- [b]Option 3:[/b] T<sep>T_SE<sep>T_correl
+- [b]Option 4:[/b] T<sep>T_covar
+- [b]Option 5:[/b] D47
+- [b]Option 6:[/b] D47<sep>D47_SE
+- [b]Option 7:[/b] D47<sep>D47_SE<sep>D47_correl
+- [b]Option 8:[/b] D47<sep>D47_covar
 
 The rest of the input must be any number of lines with float values corresponding to
 the fields in the first line, separated by <sep>.
 
 [bold]Example input file:[/bold]
 
-D47	sD47
-0.6324	0.0101
-0.6281	0.0087
-0.6385	0.0095
+[italic]D47     D47_SE  D47_correl[/italic]
+[italic]0.6324  0.0101  1.00  0.25  0.25[/italic]
+[italic]0.6281  0.0087  0.25  1.00  0.25[/italic]
+[italic]0.6385  0.0095  0.25  0.25  1.00[/italic]
 
 The corresponding D47, sD47 (options 1-2) or T, sT (options 3-4) values are computed
 and printed out. Standard errors from calibration uncertainties are always printed out.
@@ -946,64 +956,157 @@ for both calibration and input uncertainties).
 
 [bold]Output corresponding to the example above:[/bold]
 
-D47	sD47	T	sT_from_calib	sT_from_sD47	sT_from_both
-0.6324	0.0101	12.89	0.36	2.95	2.97
-0.6281	0.0087	14.15	0.35	2.58	2.60
-0.6385	0.0095	11.12	0.36	2.72	2.75
+[italic]D47	sD47	T	sT_from_calib	sT_from_sD47	sT_from_both[/italic]
+[italic]0.6324	0.0101	12.89	0.36	2.95	2.97[/italic]
+[italic]0.6281	0.0087	14.15	0.35	2.58	2.60[/italic]
+[italic]0.6385	0.0095	11.12	0.36	2.72	2.75[/italic]
 
 Results may also be saved to a file, e.g.:
 
 D47calib -f foo.csv -o , bar.csv
 		"""
 
-		from numpy import loadtxt
-
 		calib = globals()[calib]
-		if delim_in == '<tab>':
-			delim_in = '\t'
-		if delim_out == '<tab>':
-			delim_out = '\t'
+
+		if delim_in == '<whitespace>':
+			delim_in = None
 
 		with open(input) as f:
-			fields = f.readlines()[0].strip().split(delim_in)
+			data = [[c.strip() for c in l.strip().split(delim_in)] for l in f.readlines()]
+		
+		fields = data[0]
+		
+		if fields not in [
+			['T'],
+			['T', 'T_SE'],
+			['T', 'T_covar'],
+			['T', 'T_SE', 'T_correl'],
+			['D47'],
+			['D47', 'D47_SE'],
+			['D47', 'D47_covar'],
+			['D47', 'D47_SE', 'D47_correl'],
+			]:
+			raise KeyError("There is a problem with the combination of field names provided as input.")
+		
+		data = _np.array(data[1:], dtype = float)
+		N = data.shape[0]
+		
+		kwargs = {fields[0]: data[:,0]}
+		if len(fields) == 2:
+			if fields[1].endswith('_SE'):
+				SE = data[:,1]
+				covar = _np.diag(SE**2)
+			elif fields[1].endswith('_covar'):
+				covar = data[:,1:1+N]
+		elif len(fields) == 3:
+			SE, correl = data[:,1], data[:,2:2+N]
+			covar = _np.diag(SE) @ correl @ _np.diag(SE)
 
-		data = loadtxt(input, delimiter = delim_in, skiprows = 1)
-		if len(data.shape) == 1:
-			kwargs = {fields[0]: data[:]}
-		elif len(data.shape) == 2:
-			kwargs = {
-				fields[k]: data[:,k]
-				for k in range(len(fields))
-				}
-		
-		output_error_from_both = calib.T47(**kwargs, error_from = 'both')
-		output_error_from_calib = calib.T47(**kwargs, error_from = 'calib')
-		if 'sT' in kwargs:
-			output_error_from_sT = calib.T47(**kwargs, error_from = 'sT')		
-		if 'sD47' in kwargs:
-			output_error_from_sD47 = calib.T47(**kwargs, error_from = 'sD47')		
-		
-		if 'T' in kwargs:
-			kwargs['D47'] = output_error_from_both[0]
-			kwargs['sD47_from_calib'] = output_error_from_calib[1]
-			if 'sT' in kwargs:
-				kwargs['sD47_from_sT'] = output_error_from_sT[1]
-				kwargs['sD47_from_both'] = output_error_from_both[1]
-		elif 'D47' in kwargs:
-			kwargs['T'] = output_error_from_both[0]
-			kwargs['sT_from_calib'] = output_error_from_calib[1]
-			if 'sD47' in kwargs:
-				kwargs['sT_from_sD47'] = output_error_from_sD47[1]
-				kwargs['sT_from_both'] = output_error_from_both[1]
+		if 'covar' in locals():
+			kwargs[f's{fields[0]}'] = covar
 
-		txt = delim_out.join(kwargs)
-		for k in range(len(kwargs['T'])):
-			txt += '\n' + delim_out.join([f'{kwargs[f][k]:.{T_precision if "T" in f[:2] else D47_precision}f}' for f in kwargs])
+		output, output_covar_from_calib = calib.T47(**kwargs, error_from = 'calib', return_covar = True)
+		if 'covar' in locals():
+			output, output_covar_from_both = calib.T47(**kwargs, error_from = 'both', return_covar = True)
+			output, output_covar_from_input = calib.T47(**kwargs, error_from = 'sT' if fields[0] == 'T' else 'sD47', return_covar = True)
+
+		invar = fields[0]
+		outvar = 'D47' if invar == 'T' else 'T'
+
+		if return_covar:
+			if 'covar' in locals():
+				data_out = [['' for k in range(1+3*N)] for j in range(N)]
+			else:
+				data_out = [['' for k in range(1+N)] for j in range(N)]
+
+			pre = T_precision if outvar == 'T' else D47_precision
+			
+
+			for j in range(N):
+				data_out[j][0] = f'{output[j]:.{pre}f}'
+				for k in range(N):
+					data_out[j][k+1] = f'{output_covar_from_calib[j,k]:.{correl_precision}e}'
+				if 'covar' in locals():
+					for k in range(N):
+						data_out[j][k+1+N] = f'{output_covar_from_input[j,k]:.{correl_precision}e}'
+						data_out[j][k+1+2*N] = f'{output_covar_from_both[j,k]:.{correl_precision}e}'
+		else:
+			if 'covar' in locals():
+				data_out = [['' for k in range(1+3+3*N)] for j in range(N)]
+			else:
+				data_out = [['' for k in range(1+1+N)] for j in range(N)]
+
+			pre = T_precision if outvar == 'T' else D47_precision
+
+			for j in range(N):
+				data_out[j][0] = f'{output[j]:.{pre}f}'
+
+				se, correl = _covar2correl(output_covar_from_calib)
+				data_out[j][1] = f'{se[j]:.{pre}f}'
+				for k in range(N):
+					data_out[j][k+2] = f'{correl[j,k]:.{correl_precision}e}'
+				if 'covar' in locals():
+					se, correl = _covar2correl(output_covar_from_input)
+					data_out[j][N+2] = f'{se[j]:.{pre}f}'
+					for k in range(N):
+						data_out[j][k+3+N] = f'{correl[j,k]:.{correl_precision}e}'
+					se, correl = _covar2correl(output_covar_from_both)
+					data_out[j][2*N+3] = f'{se[j]:.{pre}f}'
+					for k in range(N):
+						data_out[j][k+4+2*N] = f'{correl[j,k]:.{correl_precision}e}'
+			
+		if fields[-1].endswith('_correl') or fields[-1].endswith('_covar'):
+			fields += ['']*(N-1)
+			
+		fields.append(outvar)
+		if return_covar:
+			fields.append(outvar + '_covar_from_calib')
+			fields += ['']*(N-1)
+			if 'covar' in locals():
+				fields.append(outvar + '_covar_from_s' + ('T' if fields[0] == 'T' else 'D47'))
+				fields += ['']*(N-1)
+				fields.append(outvar + '_covar_from_both')
+				fields += ['']*(N-1)
+		else:
+			fields.append(outvar + '_SE_from_calib')
+			fields.append(outvar + '_correl_from_calib')
+			fields += ['']*(N-1)
+			if 'covar' in locals():
+				fields.append(outvar + '_SE_from_s' + ('T' if fields[0] == 'T' else 'D47'))
+				fields.append(outvar + '_correl_from_s' + ('T' if fields[0] == 'T' else 'D47'))
+				fields += ['']*(N-1)
+				fields.append(outvar + '_SE_from_both')
+				fields.append(outvar + '_correl_from_both')
+				fields += ['']*(N-1)
 		
-		if output == 'none':
+		
+		txt = ','.join(fields)
+		for x,y in zip(data, data_out):
+			pre = T_precision if invar == 'T' else D47_precision
+			txt += '\n' + ','.join([f'{c:.{pre}f}' for c in x])
+			txt += ',' + ','.join(y)
+		
+		if delim_out in '<>':
+			txt = [l.split(',') for l in txt.split('\n')]
+			lengths = [max([len(txt[j][k]) for j in range(len(txt))]) for k in range(len(txt[0]))]
+		
+			newtxt = ''
+			for l in txt:
+				for k in range(len(l)):
+					if k > 0:
+						newtxt += '  '
+					newtxt += f'{l[k]:{delim_out}{lengths[k]}s}'
+				newtxt += '\n'
+
+			txt = newtxt[:-1]
+
+		else:
+			txt = txt.replace(',', delim_out)
+
+		if outfile == 'none':
 			print(txt)
 		else:
-			with open(output, 'w') as f:
+			with open(outfile, 'w') as f:
 				f.write(txt)
 		
 	def cli():
