@@ -1,0 +1,3 @@
+# Command-line utility
+
+`D47calib` also provides a command-line utility for converting between Δ47 and temperature values, computing uncertainties for each computed value (and how these uncertainties are correlated with each other) from different sources (from calibration errors alone, from measurement errors alone, and from both). The computed uncertainties are provided as standard errors, correlation matrix and/or covariance matrix. Input and output files may be comma-separated, tab-separated, or printed out as visually aligned data columns.

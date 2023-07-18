@@ -1097,10 +1097,9 @@ D47calib -f foo.csv -o , bar.csv
 		
 		txt = ','.join(fields)
 					
-		
 		for x,y in zip(data, data_out):
 			pre = T_precision if invar == 'T' else D47_precision
-			txt += '\n' + ','.join([f'{c:.{pre}f}' for c in x])
+			txt += '\n' + ','.join([f'{c:.{pre if fields[k] == invar or "_SE" in fields[k] else correl_precision}f}' for k,c in enumerate(x)])
 			txt += ',' + ','.join(y)
 		
 		if ignore_correl:
