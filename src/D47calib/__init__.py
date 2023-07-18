@@ -911,14 +911,15 @@ try:
 	@app.command()
 	def _cli(
 		input,
-		outfile: Annotated[str, typer.Option('--output', '-f', help = 'Write output to this file (print out if no output file)')] = 'none',
-		calib: Annotated[str, typer.Option('--calib', '-c', help = 'D47 calibration')] = 'combined_2023',
+		outfile: Annotated[str, typer.Option('--output-file', '-o', help = 'Write output to this file instead of printing to stdout')] = 'none',
+		calib: Annotated[str, typer.Option('--calib', '-c', help = 'D47 calibration function to use')] = 'combined_2023',
 		delim_in: Annotated[str, typer.Option('--delimiter-in', '-i', help = "Delimiter used in the input.")] = ',',
-		delim_out: Annotated[str, typer.Option('--delimiter-out', '-o', help = "Delimiter used in the output. Use '>' or '<' for elastic white space with right- or left-justified cells.")] = "',' when writing to output file, otherwise '>'",
+		delim_out: Annotated[str, typer.Option('--delimiter-out', '-j', help = "Delimiter used in the output. Use '>' or '<' for elastic white space with right- or left-justified cells.")] = "',' when writing to output file, '>' when printing to stdout",
 		T_precision: Annotated[int, typer.Option('--T-precision', '-p', help = 'Precision for T output')] = 2,
 		D47_precision: Annotated[int, typer.Option('--D47-precision', '-q', help = 'Precision for D47 output')] = 4,
 		correl_precision: Annotated[int, typer.Option('--correl-precision', '-r', help = 'Precision for covariance/correlation output')] = 4,
 		return_covar: Annotated[bool, typer.Option('--return-covar', '-v', help = 'Output covariance matrix instead of correlation matrix')] = False,
+		ignore_correl: Annotated[bool, typer.Option('--ignore-correl', '-g', help = 'Only consider and report standard errors without correlations')] = False,
 		):
 		"""
 Reads data from an input file, converts between T and D47 values, and print out the results.
@@ -968,10 +969,13 @@ D47calib -f foo.csv -o , bar.csv
 		"""
 
 		calib = globals()[calib]
+		
+		if ignore_correl:
+			return_covar = False
 
 		if delim_in == ' ':
 			delim_in = None
-		if delim_out == "',' when writing to output file, otherwise '>'":
+		if delim_out == "',' when writing to output file, '>' when printing to stdout":
 			if outfile == 'none':
 				delim_out = '>'
 			else:
@@ -1004,6 +1008,7 @@ D47calib -f foo.csv -o , bar.csv
 				covar = _np.diag(SE**2)
 			elif fields[1].endswith('_covar'):
 				covar = data[:,1:1+N]
+				SE = _np.diag(covar)**.5
 		elif len(fields) == 3:
 			SE, correl = data[:,1], data[:,2:2+N]
 			covar = _np.diag(SE) @ correl @ _np.diag(SE)
@@ -1061,6 +1066,10 @@ D47calib -f foo.csv -o , bar.csv
 					for k in range(N):
 						data_out[j][k+4+2*N] = f'{correl[j,k]:.{correl_precision}e}'
 			
+		if ignore_correl and fields[-1].endswith('_covar'):
+			fields.insert(1, f'{fields[0]}_SE')
+			data = _np.insert(data, 1, SE, 1)
+			
 		if fields[-1].endswith('_correl') or fields[-1].endswith('_covar'):
 			fields += ['']*(N-1)
 			
@@ -1087,10 +1096,18 @@ D47calib -f foo.csv -o , bar.csv
 		
 		
 		txt = ','.join(fields)
+					
+		
 		for x,y in zip(data, data_out):
 			pre = T_precision if invar == 'T' else D47_precision
 			txt += '\n' + ','.join([f'{c:.{pre}f}' for c in x])
 			txt += ',' + ','.join(y)
+		
+		if ignore_correl:
+			txt = [l.split(',') for l in txt.split('\n')]
+			keep = [k for k,f in enumerate(txt[0]) if f in ['T', 'D47'] or '_SE' in f]
+			txt = [[l[k] for k in keep] for l in txt]
+			txt = '\n'.join([','.join(l) for l in txt])
 		
 		if delim_out in '<>':
 			txt = [l.split(',') for l in txt.split('\n')]
