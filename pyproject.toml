@@ -18,4 +18,4 @@ dependencies = [
 Home = "https://github.com/mdaeron/D47calib"
 
 [project.scripts]
-D47calib = "D47calib:cli"
+D47calib = "D47calib:__cli"

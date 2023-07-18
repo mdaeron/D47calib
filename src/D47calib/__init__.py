@@ -2,6 +2,7 @@
 Generate, combine, display and apply Δ47 calibrations
 
 .. include:: ../../docpages/calibs.md
+.. include:: ../../docpages/cli.md
 """
 
 __author__    = 'Mathieu Daëron'
@@ -913,7 +914,7 @@ try:
 		outfile: Annotated[str, typer.Option('--output', '-f', help = 'Write output to this file (print out if no output file)')] = 'none',
 		calib: Annotated[str, typer.Option('--calib', '-c', help = 'D47 calibration')] = 'combined_2023',
 		delim_in: Annotated[str, typer.Option('--delimiter-in', '-i', help = "Delimiter used in the input.")] = ',',
-		delim_out: Annotated[str, typer.Option('--delimiter-out', '-o', help = "Delimiter used in the output. Use '>' or '<' for elastic white space with right- or left-justified cells.")] = ',',
+		delim_out: Annotated[str, typer.Option('--delimiter-out', '-o', help = "Delimiter used in the output. Use '>' or '<' for elastic white space with right- or left-justified cells.")] = "',' when writing to output file, otherwise '>'",
 		T_precision: Annotated[int, typer.Option('--T-precision', '-p', help = 'Precision for T output')] = 2,
 		D47_precision: Annotated[int, typer.Option('--D47-precision', '-q', help = 'Precision for D47 output')] = 4,
 		correl_precision: Annotated[int, typer.Option('--correl-precision', '-r', help = 'Precision for covariance/correlation output')] = 4,
@@ -970,6 +971,11 @@ D47calib -f foo.csv -o , bar.csv
 
 		if delim_in == ' ':
 			delim_in = None
+		if delim_out == "',' when writing to output file, otherwise '>'":
+			if outfile == 'none':
+				delim_out = '>'
+			else:
+				delim_out = ','
 
 		with open(input) as f:
 			data = [[c.strip() for c in l.strip().split(delim_in)] for l in f.readlines()]
@@ -1109,7 +1115,7 @@ D47calib -f foo.csv -o , bar.csv
 			with open(outfile, 'w') as f:
 				f.write(txt)
 		
-	def cli():
+	def __cli():
 		app()
 
 except NameError:
