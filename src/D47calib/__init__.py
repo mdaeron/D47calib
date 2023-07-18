@@ -917,16 +917,17 @@ try:
 		delim_out: Annotated[str, typer.Option('--delimiter-out', '-j', help = "Delimiter used in the output. Use '>' or '<' for elastic white space with right- or left-justified cells.")] = "',' when writing to output file, '>' when printing to stdout",
 		T_precision: Annotated[int, typer.Option('--T-precision', '-p', help = 'Precision for T output')] = 2,
 		D47_precision: Annotated[int, typer.Option('--D47-precision', '-q', help = 'Precision for D47 output')] = 4,
-		correl_precision: Annotated[int, typer.Option('--correl-precision', '-r', help = 'Precision for covariance/correlation output')] = 4,
+		correl_precision: Annotated[int, typer.Option('--correl-precision', '-r', help = 'Precision for covariance output')] = 3,
+		covar_precision: Annotated[int, typer.Option('--correl-precision', '-s', help = 'Precision for correlation output')] = 3,
 		return_covar: Annotated[bool, typer.Option('--return-covar', '-v', help = 'Output covariance matrix instead of correlation matrix')] = False,
 		ignore_correl: Annotated[bool, typer.Option('--ignore-correl', '-g', help = 'Only consider and report standard errors without correlations')] = False,
 		):
 		"""
+[b]Purpose:[/b]
+
 Reads data from an input file, converts between T and D47 values, and print out the results.
 
-The input file is a CSV, or any similar file with data sorted into lines and columns.
-The line separator must be a <newline>. The column separator, noted <sep> hereafter,
-is <tab> by default, or may be any other single character such as "," or ";".
+The input file is a CSV, or any similar file with data sorted into lines and columns. The line separator must be a <newline>. The column separator, noted <sep> hereafter, is "," by default, or may be any other single character such as ";" or <tab>.
 
 The first line of the input file must be one of the following:		
 
@@ -939,8 +940,7 @@ The first line of the input file must be one of the following:
 - [b]Option 7:[/b] D47<sep>D47_SE<sep>D47_correl
 - [b]Option 8:[/b] D47<sep>D47_covar
 
-The rest of the input must be any number of lines with float values corresponding to
-the fields in the first line, separated by <sep>.
+The rest of the input must be any number of lines with float values corresponding to the fields in the first line, separated by <sep>.
 
 [bold]Example input file:[/bold]
 
@@ -949,43 +949,52 @@ the fields in the first line, separated by <sep>.
 [italic]0.6281  0.0087  0.25  1.00  0.25[/italic]
 [italic]0.6385  0.0095  0.25  0.25  1.00[/italic]
 
-The corresponding D47, sD47 (options 1-2) or T, sT (options 3-4) values are computed
-and printed out. Standard errors from calibration uncertainties are always printed out.
-For options 2 and 4, which specify standard errors for the input values (sT and sD47,
-respectively), the standard errors resulting from these input uncertainties (sD47 and
-sT, respectively) are also computed, as well as the overall standard errors (accounting
-for both calibration and input uncertainties).
+The corresponding D47 (options 1-4) or T (options 4-8) values are computed, along with standard errors and error correlations from calibration uncertainties.
 
-[bold]Output corresponding to the example above:[/bold]
+For options 2-4 and 5-8, which specify standard errors or covariances for the input values, the standard errors and error correlations resulting from these input uncertainties are also computed, as well as the combined standard errors accounting for both calibration and input uncertainties.
 
-[italic]D47	sD47	T	sT_from_calib	sT_from_sD47	sT_from_both[/italic]
-[italic]0.6324	0.0101	12.89	0.36	2.95	2.97[/italic]
-[italic]0.6281	0.0087	14.15	0.35	2.58	2.60[/italic]
-[italic]0.6385	0.0095	11.12	0.36	2.72	2.75[/italic]
+The example above will thus result in an output with the following fields:
 
-Results may also be saved to a file, e.g.:
+[italic]- D47[/italic]
+[italic]- D47_SE[/italic]
+[italic]- D47_correl[/italic]
+[italic]- T[/italic]
+[italic]- T_SE_from_calib[/italic]
+[italic]- T_correl_from_calib[/italic]
+[italic]- T_SE_from_input[/italic]
+[italic]- T_correl_from_input[/italic]
+[italic]- T_SE_from_both[/italic]
+[italic]- T_correl_from_both[/italic]
 
-D47calib -f foo.csv -o , bar.csv
-		"""
+Results may also be saved to a file using [bold]--output-file <filename>[/bold] or [bold]-o <filename>[/bold].
+"""
 
+		### CALIBRATION
 		calib = globals()[calib]
 		
+		### INCOMPATIBILITY BETWEEN --ignore-correl AND --return-covar
 		if ignore_correl:
 			return_covar = False
 
+		### USE WHITESPACE AS INPUT DELIMITER
 		if delim_in == ' ':
 			delim_in = None
+
+		### SMART SELECTION OF OUTPUT DELIMITER
 		if delim_out == "',' when writing to output file, '>' when printing to stdout":
 			if outfile == 'none':
 				delim_out = '>'
 			else:
 				delim_out = ','
 
+		### READ INPUT STRINGS
 		with open(input) as f:
 			data = [[c.strip() for c in l.strip().split(delim_in)] for l in f.readlines()]
 		
+		### READ INPUT FIELDS
 		fields = data[0]
 		
+		### CHECK FOR UNSUPPORTED FIELD COMBINATIONS
 		if fields not in [
 			['T'],
 			['T', 'T_SE'],
@@ -998,138 +1007,175 @@ D47calib -f foo.csv -o , bar.csv
 			]:
 			raise KeyError("There is a problem with the combination of field names provided as input.")
 		
-		data = _np.array(data[1:], dtype = float)
-		N = data.shape[0]
-		
-		kwargs = {fields[0]: data[:,0]}
+		### BOOK-KEEPING
+		infield = fields[0]
+		X_precision = {'T': T_precision, 'D47': D47_precision}[infield]
+		outfield = {'T': 'D47', 'D47': 'T'}[infield]
+		Y_precision = {'T': T_precision, 'D47': D47_precision}[outfield]
+		N = len(data)-1
+
+		### READ INPUT DATA, ALSO SAVING ITS ORIGINAL STRINGS
+		X_str = [l[0] for l in data[1:]]
+		X = _np.array(X_str, dtype = float)
+
+		if len(fields) == 1:
+			X_SE = X*0
+			X_correl = _np.eye(N)
+			X_covar = _np.zeros((N, N))
+			X_SE_str = [f'{c:.{X_precision}f}' for c in X_SE]
+			X_correl_str = [[f'{c:.{correl_precision}f}' for c in l] for l in X_correl]
+			X_covar_str = [[f'{c:.{covar_precision}e}' for c in l] for l in X_covar]
 		if len(fields) == 2:
 			if fields[1].endswith('_SE'):
-				SE = data[:,1]
-				covar = _np.diag(SE**2)
+				X_SE_str = [l[1] for l in data[1:]]
+				X_SE = _np.array(X_SE_str, dtype = float)
+				X_covar = _np.diag(X_SE**2)
+				X_covar_str = [[f'{c:.{covar_precision}e}' for c in l] for l in X_covar]
 			elif fields[1].endswith('_covar'):
-				covar = data[:,1:1+N]
-				SE = _np.diag(covar)**.5
+				X_covar_str = [l[1:N+1] for l in data[1:]]
+				X_covar = _np.array(X_covar_str, dtype = float)
+				X_SE = _np.diag(X_covar)**.5
+				X_SE_str = [f'{c:.{X_precision}f}' for c in X_SE]
+			X_correl = _np.diag(X_SE**-1) @ X_covar @ _np.diag(X_SE**-1)
+			X_correl_str = [[f'{c:.{correl_precision}f}' for c in l] for l in X_correl]
 		elif len(fields) == 3:
-			SE, correl = data[:,1], data[:,2:2+N]
-			covar = _np.diag(SE) @ correl @ _np.diag(SE)
+			X_SE_str = [l[1] for l in data[1:]]
+			X_SE = _np.array(X_SE_str, dtype = float)
+			X_correl_str = [l[2:N+2] for l in data[1:]]
+			X_correl = _np.array(X_correl_str, dtype = float)
+			X_covar = _np.diag(X_SE) @ X_correl @ _np.diag(X_SE)
+			X_covar_str = [[f'{c:.{covar_precision}e}' for c in l] for l in X_covar]
 
-		if 'covar' in locals():
-			kwargs[f's{fields[0]}'] = covar
+		### COMPUTE OUTPUT VALUES AND COVAR
+		kwargs = {infield: X, f's{infield}': X_covar}
+		Y, Y_covar_from_calib = calib.T47(**kwargs, error_from = 'calib', return_covar = True)
+		Y, Y_covar_from_input = calib.T47(**kwargs, error_from = f's{infield}', return_covar = True)
+		Y, Y_covar_from_both = calib.T47(**kwargs, error_from = 'both', return_covar = True)
 
-		output, output_covar_from_calib = calib.T47(**kwargs, error_from = 'calib', return_covar = True)
-		if 'covar' in locals():
-			output, output_covar_from_both = calib.T47(**kwargs, error_from = 'both', return_covar = True)
-			output, output_covar_from_input = calib.T47(**kwargs, error_from = 'sT' if fields[0] == 'T' else 'sD47', return_covar = True)
+		Y_SE_from_calib = _np.diag(Y_covar_from_calib)**.5
+		Y_SE_from_input = _np.diag(Y_covar_from_input)**.5
+		Y_SE_from_both = _np.diag(Y_covar_from_both)**.5
 
-		invar = fields[0]
-		outvar = 'D47' if invar == 'T' else 'T'
-
-		if return_covar:
-			if 'covar' in locals():
-				data_out = [['' for k in range(1+3*N)] for j in range(N)]
-			else:
-				data_out = [['' for k in range(1+N)] for j in range(N)]
-
-			pre = T_precision if outvar == 'T' else D47_precision
-			
-
-			for j in range(N):
-				data_out[j][0] = f'{output[j]:.{pre}f}'
-				for k in range(N):
-					data_out[j][k+1] = f'{output_covar_from_calib[j,k]:.{correl_precision}e}'
-				if 'covar' in locals():
-					for k in range(N):
-						data_out[j][k+1+N] = f'{output_covar_from_input[j,k]:.{correl_precision}e}'
-						data_out[j][k+1+2*N] = f'{output_covar_from_both[j,k]:.{correl_precision}e}'
+		if (Y_SE_from_calib**2).min():
+			Y_correl_from_calib = _np.diag(Y_SE_from_calib**-1) @ Y_covar_from_calib @ _np.diag(Y_SE_from_calib**-1)
 		else:
-			if 'covar' in locals():
-				data_out = [['' for k in range(1+3+3*N)] for j in range(N)]
-			else:
-				data_out = [['' for k in range(1+1+N)] for j in range(N)]
+			Y_correl_from_calib = _np.eye(N)
 
-			pre = T_precision if outvar == 'T' else D47_precision
-
-			for j in range(N):
-				data_out[j][0] = f'{output[j]:.{pre}f}'
-
-				se, correl = _covar2correl(output_covar_from_calib)
-				data_out[j][1] = f'{se[j]:.{pre}f}'
-				for k in range(N):
-					data_out[j][k+2] = f'{correl[j,k]:.{correl_precision}e}'
-				if 'covar' in locals():
-					se, correl = _covar2correl(output_covar_from_input)
-					data_out[j][N+2] = f'{se[j]:.{pre}f}'
-					for k in range(N):
-						data_out[j][k+3+N] = f'{correl[j,k]:.{correl_precision}e}'
-					se, correl = _covar2correl(output_covar_from_both)
-					data_out[j][2*N+3] = f'{se[j]:.{pre}f}'
-					for k in range(N):
-						data_out[j][k+4+2*N] = f'{correl[j,k]:.{correl_precision}e}'
-			
-		if ignore_correl and fields[-1].endswith('_covar'):
-			fields.insert(1, f'{fields[0]}_SE')
-			data = _np.insert(data, 1, SE, 1)
-			
-		if fields[-1].endswith('_correl') or fields[-1].endswith('_covar'):
-			fields += ['']*(N-1)
-			
-		fields.append(outvar)
-		if return_covar:
-			fields.append(outvar + '_covar_from_calib')
-			fields += ['']*(N-1)
-			if 'covar' in locals():
-				fields.append(outvar + '_covar_from_s' + ('T' if fields[0] == 'T' else 'D47'))
-				fields += ['']*(N-1)
-				fields.append(outvar + '_covar_from_both')
-				fields += ['']*(N-1)
+		if (Y_SE_from_input**2).min():
+			Y_correl_from_input = _np.diag(Y_SE_from_input**-1) @ Y_covar_from_input @ _np.diag(Y_SE_from_input**-1)
 		else:
-			fields.append(outvar + '_SE_from_calib')
-			fields.append(outvar + '_correl_from_calib')
-			fields += ['']*(N-1)
-			if 'covar' in locals():
-				fields.append(outvar + '_SE_from_s' + ('T' if fields[0] == 'T' else 'D47'))
-				fields.append(outvar + '_correl_from_s' + ('T' if fields[0] == 'T' else 'D47'))
-				fields += ['']*(N-1)
-				fields.append(outvar + '_SE_from_both')
-				fields.append(outvar + '_correl_from_both')
-				fields += ['']*(N-1)
-		
-		
-		txt = ','.join(fields)
-					
-		for x,y in zip(data, data_out):
-			pre = T_precision if invar == 'T' else D47_precision
-			txt += '\n' + ','.join([f'{c:.{pre if fields[k] == invar or "_SE" in fields[k] else correl_precision}f}' for k,c in enumerate(x)])
-			txt += ',' + ','.join(y)
-		
-		if ignore_correl:
-			txt = [l.split(',') for l in txt.split('\n')]
-			keep = [k for k,f in enumerate(txt[0]) if f in ['T', 'D47'] or '_SE' in f]
-			txt = [[l[k] for k in keep] for l in txt]
-			txt = '\n'.join([','.join(l) for l in txt])
-		
+			Y_correl_from_input = _np.eye(N)
+
+		if (Y_SE_from_both**2).min():
+			Y_correl_from_both = _np.diag(Y_SE_from_both**-1) @ Y_covar_from_both @ _np.diag(Y_SE_from_both**-1)
+		else:
+			Y_correl_from_both = _np.eye(N)
+
+		### BUILD Y STRINGS
+		Y_str = [f'{y:.{Y_precision}f}' for y in Y]
+
+		Y_SE_from_calib_str = [f'{sy:.{Y_precision}f}' for sy in Y_SE_from_calib]
+		Y_SE_from_input_str = [f'{sy:.{Y_precision}f}' for sy in Y_SE_from_input]
+		Y_SE_from_both_str = [f'{sy:.{Y_precision}f}' for sy in Y_SE_from_both]
+
+		Y_covar_from_calib_str = [[f'{c:.{covar_precision}e}' for c in l] for l in Y_covar_from_calib]
+		Y_covar_from_input_str = [[f'{c:.{covar_precision}e}' for c in l] for l in Y_covar_from_input]
+		Y_covar_from_both_str = [[f'{c:.{covar_precision}e}' for c in l] for l in Y_covar_from_both]
+
+		Y_correl_from_calib_str = [[f'{c:.{correl_precision}f}' for c in l] for l in Y_correl_from_calib]
+		Y_correl_from_input_str = [[f'{c:.{correl_precision}f}' for c in l] for l in Y_correl_from_input]
+		Y_correl_from_both_str = [[f'{c:.{correl_precision}f}' for c in l] for l in Y_correl_from_both]
+
+		### ADD SE COLUMN TO INPUT
+		if f'{infield}_covar' in fields:
+			fields.insert(1, f'{infield}_SE')
+
+		### BUILD OUTPUT DATA
+		data_out = [[] for _ in range(N+1)]
+
+		### ADD X COLUMNS TO OUTPUT DATA
+		data_out[0] += [infield]
+		for k in range(N):
+			data_out[k+1] += [X_str[k]]
+		for f in fields[1:]:
+			if f.endswith('_SE'):
+				data_out[0] += [f]
+				for k in range(N):
+					data_out[k+1] += [X_SE_str[k]]
+			if f.endswith('_covar') or f.endswith('_correl'):
+				if not ignore_correl:
+					data_out[0] += [f] + ['' for _ in range(N-1)]
+					for k in range(N):
+						data_out[k+1] += (X_covar_str if f.endswith('_covar') else X_correl_str)[k][:]
+
+		### ADD Y COLUMNS TO OUTPUT DATA
+		data_out[0] += [outfield]
+		for k in range(N):
+			data_out[k+1] += [Y_str[k]]
+
+		data_out[0] += [f'{outfield}_SE_from_calib']
+		for k in range(N):
+			data_out[k+1] += [Y_SE_from_calib_str[k]]
+		if not ignore_correl:
+			if return_covar:
+				data_out[0] += [f'{outfield}_covar_from_calib'] + ['' for _ in range(N-1)]
+				for k in range(N):
+					data_out[k+1] += Y_covar_from_calib_str[k]
+			else:
+				data_out[0] += [f'{outfield}_correl_from_calib'] + ['' for _ in range(N-1)]
+				for k in range(N):
+					data_out[k+1] += Y_correl_from_calib_str[k]
+
+		data_out[0] += [f'{outfield}_SE_from_input']
+		for k in range(N):
+			data_out[k+1] += [Y_SE_from_input_str[k]]
+		if not ignore_correl:
+			if return_covar:
+				data_out[0] += [f'{outfield}_covar_from_input'] + ['' for _ in range(N-1)]
+				for k in range(N):
+					data_out[k+1] += Y_covar_from_input_str[k]
+			else:
+				data_out[0] += [f'{outfield}_correl_from_input'] + ['' for _ in range(N-1)]
+				for k in range(N):
+					data_out[k+1] += Y_correl_from_input_str[k]
+
+		data_out[0] += [f'{outfield}_SE_from_both']
+		for k in range(N):
+			data_out[k+1] += [Y_SE_from_both_str[k]]
+		if not ignore_correl:
+			if return_covar:
+				data_out[0] += [f'{outfield}_covar_from_both'] + ['' for _ in range(N-1)]
+				for k in range(N):
+					data_out[k+1] += Y_covar_from_both_str[k]
+			else:
+				data_out[0] += [f'{outfield}_correl_from_both'] + ['' for _ in range(N-1)]
+				for k in range(N):
+					data_out[k+1] += Y_correl_from_both_str[k]
+
+
+		### PRINT OUTPUT TO STDOUT OR SAVE IT TO FILE
 		if delim_out in '<>':
-			txt = [l.split(',') for l in txt.split('\n')]
-			lengths = [max([len(txt[j][k]) for j in range(len(txt))]) for k in range(len(txt[0]))]
+			lengths = [max([len(data_out[j][k]) for j in range(len(data_out))]) for k in range(len(data_out[0]))]
 		
-			newtxt = ''
-			for l in txt:
+			txt = ''
+			for l in data_out:
 				for k in range(len(l)):
 					if k > 0:
-						newtxt += '  '
-					newtxt += f'{l[k]:{delim_out}{lengths[k]}s}'
-				newtxt += '\n'
+						txt += '  '
+					txt += f'{l[k]:{delim_out}{lengths[k]}s}'
+				txt += '\n'
 
-			txt = newtxt[:-1]
+			txt = txt[:-1]
 
 		else:
-			txt = txt.replace(',', delim_out)
+			txt = '\n'.join([delim_out.join(l) for l in data_out])
 
 		if outfile == 'none':
 			print(txt)
 		else:
 			with open(outfile, 'w') as f:
 				f.write(txt)
+
 		
 	def __cli():
 		app()
