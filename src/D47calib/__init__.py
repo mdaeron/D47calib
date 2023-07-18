@@ -976,9 +976,9 @@ Results may also be saved to a file using [bold]--output-file <filename>[/bold] 
 			with open(calib) as f:
 				calibdata = _np.array([[c.strip() for c in l.strip().split()] for l in f.readlines()[1:]], dtype = float)
 				
-				degrees = [int(d) for d in enumerate(calibdata[:,0])]
+				degrees = [int(d) for d in calibdata[:,0]]
 				bfp = {f'a{k}': a for k,a in zip(degrees, calibdata[:,1])}
-				bfp_CM = calibdata[:,1:]
+				bfp_CM = calibdata[:,2:]
 				
 				calib = D47calib(
 					samples = [], T = [], sT = [], D47 = [], sD47 = [],
