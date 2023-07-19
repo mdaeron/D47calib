@@ -1,6 +1,15 @@
 """
 Generate, combine, display and apply Δ47 calibrations
 
+This library provides support for:
+
+- computing Δ47 calibrations by applying OGLS regression to sets of (T, Δ47) observations
+- combining Δ47 datasets to produce a combined calibration
+- various methods useful for creating Δ47 calibration plots
+- Using Δ47 calibrations to convert between T and Δ47, keeping track of covariance between inputs
+and/or uncertainties/covariance originating from calibration uncertainties. This may be done within
+Python code or by using a simple command-line interface (e.g., `D47calib input.csv > output.csv`).
+
 .. include:: ../../docpages/calibs.md
 .. include:: ../../docpages/cli.md
 
