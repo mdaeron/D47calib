@@ -16,7 +16,7 @@ __date__      = '2023-04-30'
 __version__   = '0.1.0'
 
 
-import typer
+import typer, sys
 from typing_extensions import Annotated
 import ogls as _ogls
 import numpy as _np
@@ -908,11 +908,15 @@ def _covar2correl(C):
 	return SE, _np.diag(SE**-1) @ C @ _np.diag(SE**-1)
 
 try:
-	app = typer.Typer(rich_markup_mode = 'rich')
+	app = typer.Typer(
+		add_completion = False,
+		context_settings={'help_option_names': ['-h', '--help']},
+		rich_markup_mode = 'rich',
+		)
 	
 	@app.command()
 	def _cli(
-		input,
+		input: Annotated[str, typer.Argument(help = "Specify either the path of an input file or just '-' to read input from stdin")] = '-',
 		outfile: Annotated[str, typer.Option('--output-file', '-o', help = 'Write output to this file instead of printing to stdout')] = 'none',
 		calib: Annotated[str, typer.Option('--calib', '-c', help = 'D47 calibration function to use')] = 'combined_2023',
 		delim_in: Annotated[str, typer.Option('--delimiter-in', '-i', help = "Delimiter used in the input.")] = ',',
@@ -1003,8 +1007,11 @@ Results may also be saved to a file using [bold]--output-file <filename>[/bold] 
 					)
 		
 		### READ INPUT STRINGS
-		with open(input) as f:
-			data = [[c.strip() for c in l.strip().split(delim_in)] for l in f.readlines()]
+		if input == '-':
+			data = [[c.strip() for c in l.strip().split(delim_in)] for l in sys.stdin]
+		else:
+			with open(input) as f:
+				data = [[c.strip() for c in l.strip().split(delim_in)] for l in f.readlines()]
 		
 		### READ INPUT FIELDS
 		fields = data[0]
@@ -1190,7 +1197,6 @@ Results may also be saved to a file using [bold]--output-file <filename>[/bold] 
 		else:
 			with open(outfile, 'w') as f:
 				f.write(txt)
-
 		
 	def __cli():
 		app()
