@@ -969,22 +969,6 @@ The example above will thus result in an output with the following fields:
 Results may also be saved to a file using [bold]--output-file <filename>[/bold] or [bold]-o <filename>[/bold].
 """
 
-		### CALIBRATION
-		if calib in globals() and type(globals()[calib]) == D47calib:
-			calib = globals()[calib]
-		else:
-			with open(calib) as f:
-				calibdata = _np.array([[c.strip() for c in l.strip().split()] for l in f.readlines()[1:]], dtype = float)
-				
-				degrees = [int(d) for d in calibdata[:,0]]
-				bfp = {f'a{k}': a for k,a in zip(degrees, calibdata[:,1])}
-				bfp_CM = calibdata[:,2:]
-				
-				calib = D47calib(
-					samples = [], T = [], sT = [], D47 = [], sD47 = [],
-					degrees = degrees, bfp = bfp, bfp_CM = bfp_CM,
-					)
-		
 		### INCOMPATIBILITY BETWEEN --ignore-correl AND --return-covar
 		if ignore_correl:
 			return_covar = False
@@ -1000,6 +984,22 @@ Results may also be saved to a file using [bold]--output-file <filename>[/bold] 
 			else:
 				delim_out = ','
 
+		### CALIBRATION
+		if calib in globals() and type(globals()[calib]) == D47calib:
+			calib = globals()[calib]
+		else:
+			with open(calib) as f:
+				calibdata = _np.array([[c.strip() for c in l.strip().split(delim_in)] for l in f.readlines()[1:]], dtype = float)
+				
+				degrees = [int(d) for d in calibdata[:,0]]
+				bfp = {f'a{k}': a for k,a in zip(degrees, calibdata[:,1])}
+				bfp_CM = calibdata[:,2:]
+				
+				calib = D47calib(
+					samples = [], T = [], sT = [], D47 = [], sD47 = [],
+					degrees = degrees, bfp = bfp, bfp_CM = bfp_CM,
+					)
+		
 		### READ INPUT STRINGS
 		with open(input) as f:
 			data = [[c.strip() for c in l.strip().split(delim_in)] for l in f.readlines()]
