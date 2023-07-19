@@ -917,8 +917,8 @@ try:
 		delim_out: Annotated[str, typer.Option('--delimiter-out', '-j', help = "Delimiter used in the output. Use '>' or '<' for elastic white space with right- or left-justified cells.")] = "',' when writing to output file, '>' when printing to stdout",
 		T_precision: Annotated[int, typer.Option('--T-precision', '-p', help = 'Precision for T output')] = 2,
 		D47_precision: Annotated[int, typer.Option('--D47-precision', '-q', help = 'Precision for D47 output')] = 4,
-		correl_precision: Annotated[int, typer.Option('--correl-precision', '-r', help = 'Precision for covariance output')] = 3,
-		covar_precision: Annotated[int, typer.Option('--correl-precision', '-s', help = 'Precision for correlation output')] = 3,
+		correl_precision: Annotated[int, typer.Option('--correl-precision', '-r', help = 'Precision for correlation output')] = 3,
+		covar_precision: Annotated[int, typer.Option('--covar-precision', '-s', help = 'Precision for covariance output')] = 3,
 		return_covar: Annotated[bool, typer.Option('--return-covar', '-v', help = 'Output covariance matrix instead of correlation matrix')] = False,
 		ignore_correl: Annotated[bool, typer.Option('--ignore-correl', '-g', help = 'Only consider and report standard errors without correlations')] = False,
 		):
