@@ -3,6 +3,8 @@ Generate, combine, display and apply Δ47 calibrations
 
 .. include:: ../../docpages/calibs.md
 .. include:: ../../docpages/cli.md
+
+* * *
 """
 
 __author__    = 'Mathieu Daëron'
