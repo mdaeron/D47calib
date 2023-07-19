@@ -197,4 +197,4 @@ degrees  coefs   covar
 2        42614   0  0  0
 ```
 
-This will also work. All `*_from_calib` and `*_from_both` outputs will be `nan`, but the `*_from_input` uncertainties will still be valid.
+This will also work. All `*_SE_from_calib` outputs will be equal to zero, but the `*_from_input`  uncertainties will still be valid (and identical to `*_from_both` uncertainties, since we are ignoring calibration uncertainties).

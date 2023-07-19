@@ -575,19 +575,24 @@ class D47calib(_ogls.InverseTPolynomial):
 				xi = _np.linspace(0,200**-1,1001)[1:]
 				for k in range(Np):
 				
+					if self.bfp_CM[k,k]:
+						_epsilon_ = self.bfp_CM[k,k]**.5
+					else:
+						_epsilon_ = 1e-6
+
 					p1 = {_: self.bfp[_] for _ in self.bfp}
-					p1[f'a{self.degrees[k]}'] += 0.001 * self.bfp_CM[k,k]**.5
+					p1[f'a{self.degrees[k]}'] += 0.001 * _epsilon_
 					T_from_D47_p1 = _interp1d(self.model_fun(p1, xi), xi**-1 - 273.15)
 
 					p2 = {_: self.bfp[_] for _ in self.bfp}
-					p2[f'a{self.degrees[k]}'] -= 0.001 * self.bfp_CM[k,k]**.5
+					p2[f'a{self.degrees[k]}'] -= 0.001 * _epsilon_
 					T_from_D47_p2 = _interp1d(self.model_fun(p2, xi), xi**-1 - 273.15)
 
-					J[:, k] = (T_from_D47_p1(_D47) - T_from_D47_p2(_D47)) / (0.002 * self.bfp_CM[k,k]**.5)
+					J[:, k] = (T_from_D47_p1(_D47) - T_from_D47_p2(_D47)) / (0.002 * _epsilon_)
 
 			### Error propagation:
 			CM_T = J @ CM @ J.T
-
+			
 			if return_covar:
 				return T, CM_T
 			else:
@@ -1009,7 +1014,8 @@ Results may also be saved to a file using [bold]--output-file <filename>[/bold] 
 				degrees = [int(d) for d in calibdata[:,0]]
 				bfp = {f'a{k}': a for k,a in zip(degrees, calibdata[:,1])}
 				bfp_CM = calibdata[:,2:]
-				
+				if bfp_CM.shape[0] != bfp_CM.shape[1]:
+					bfp_CM = _np.zeros((len(degrees), len(degrees)))
 				calib = D47calib(
 					samples = [], T = [], sT = [], D47 = [], sD47 = [],
 					degrees = degrees, bfp = bfp, bfp_CM = bfp_CM,
