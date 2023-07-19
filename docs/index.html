@@ -281,7 +281,7 @@ Python code or by using a simple command-line interface (e.g., <code>D47calib in
 
 <h2 id="further-customizing-the-cli">Further customizing the CLI</h2>
 
-<p>A complete list of options as well is provided by <code>D47calib --help</code>.</p>
+<p>A complete list of options is provided by <code>D47calib --help</code>.</p>
 
 <h3 id="using-covariance-instead-of-correlation-matrix-as-input">Using covariance instead of correlation matrix as input</h3>
 
@@ -314,23 +314,23 @@ Python code or by using a simple command-line interface (e.g., <code>D47calib in
 
 <p>You may also specify an arbitrary polynomial function of inverse <code>T</code>, by creating a file (e.g., <code>calib.csv</code>) with the following format:</p>
 
-<pre><code>degrees  coefs        covar
+<pre><code>degree    coef        covar
 0       0.1741   2.4395e-05  -0.0262821       5.634934
 1      -17.889   -0.0262821    32.17712       -7223.86
 2        42614     5.634934    -7223.86    1654633.996
 </code></pre>
 
-<p>Then using <code>-o caib.csv</code> will use this new calibration.</p>
+<p>Then using <code>-c calib.csv</code> will use this new calibration.</p>
 
-<p>If you don't know/care about the covariance of the calibration coefficients, just leave the covar terms as zero:</p>
+<p>If you don't know/care about the covariance of the calibration coefficients, just leave out the covar terms:</p>
 
-<pre><code>degrees  coefs   covar
-0       0.1741   0  0  0
-1      -17.889   0  0  0
-2        42614   0  0  0
+<pre><code>degree    coef
+0       0.1741
+1      -17.889
+2        42614
 </code></pre>
 
-<p>This will also work. All <code>*_SE_from_calib</code> outputs will be equal to zero, but the <code>*_from_input</code>  uncertainties will still be valid (and identical to <code>*_from_both</code> uncertainties, since we are ignoring calibration uncertainties).</p>
+<p>In this case, all <code>*_SE_from_calib</code> outputs will be equal to zero, but the <code>*_from_input</code>  uncertainties will still be valid (and identical to <code>*_from_both</code> uncertainties, since we are ignoring calibration uncertainties).</p>
 
 <hr />
 </div>

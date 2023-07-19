@@ -148,7 +148,7 @@ Yields:
 
 ## Further customizing the CLI
 
-A complete list of options as well is provided by `D47calib --help`.
+A complete list of options is provided by `D47calib --help`.
 
 ### Using covariance instead of correlation matrix as input
 
@@ -180,21 +180,21 @@ You may use a different calibration than the default `combined_2023` using the `
 You may also specify an arbitrary polynomial function of inverse `T`, by creating a file (e.g., `calib.csv`) with the following format:
 
 ```csv
-degrees  coefs        covar
+degree    coef        covar
 0       0.1741   2.4395e-05  -0.0262821       5.634934
 1      -17.889   -0.0262821    32.17712       -7223.86
 2        42614     5.634934    -7223.86    1654633.996
 ```
 
-Then using `-o caib.csv` will use this new calibration.
+Then using `-c calib.csv` will use this new calibration.
 
-If you don't know/care about the covariance of the calibration coefficients, just leave the covar terms as zero:
+If you don't know/care about the covariance of the calibration coefficients, just leave out the covar terms:
 
 ```csv
-degrees  coefs   covar
-0       0.1741   0  0  0
-1      -17.889   0  0  0
-2        42614   0  0  0
+degree    coef
+0       0.1741
+1      -17.889
+2        42614
 ```
 
-This will also work. All `*_SE_from_calib` outputs will be equal to zero, but the `*_from_input`  uncertainties will still be valid (and identical to `*_from_both` uncertainties, since we are ignoring calibration uncertainties).
+In this case, all `*_SE_from_calib` outputs will be equal to zero, but the `*_from_input`  uncertainties will still be valid (and identical to `*_from_both` uncertainties, since we are ignoring calibration uncertainties).
