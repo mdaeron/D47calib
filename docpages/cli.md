@@ -89,7 +89,9 @@ Note that because `T_SE_from_input` errors are much larger than `T_SE_from_calib
 
 ### Accounting for correlations in `D47` errors
 
-Because [Δ47 measurements performed in the same analytical session(s) are not statistically independent](https://doi. org/10.1029/2020GC009588), we may add to `input.csv` a correlation matrix describing how `D47_SE` errors covary:
+Because [Δ47 measurements performed in the same analytical session(s) are not statistically independent](https://doi. org/10.1029/2020GC009588), we may add to `input.csv` a correlation matrix describing how `D47_SE` errors covary.
+
+One simple way to compute this correlation matrix is to use the `save_D47_correl()` method from the `D47crunch` library ([PyPI](https://pypi.org/project/D47crunch), [GitHub](https://github.com/mdaeron/D47crunch), [Zenodo](https://doi.org/10.5281/zenodo.4314550)) described by [Daëron (2021)](https://doi. org/10.1029/2020GC009588).
 
 ```csv
 Sample   D47  D47_SE   D47_correl
@@ -153,8 +155,6 @@ A complete list of options is provided by `D47calib --help`.
 ### Using covariance instead of correlation matrix as input
 
 Just provide `D47_covar` (or `T_covar` when converting in the other direction) in the input file instead of `D47_SE` and `D47_correl`.
-
-The `D47_covar` matrix is easily obtained using the `D47crunch` library ([PyPI](https://pypi.org/project/D47crunch), [GitHub](https://github.com/mdaeron/D47crunch), [Zenodo](https://doi.org/10.5281/zenodo.4314550)) described by [Daëron (2021)](https://doi. org/10.1029/2020GC009588).
 
 ### Reporting covariance instead of correlation matrices in the output
 
