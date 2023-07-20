@@ -41,11 +41,11 @@ D47,D47_SE
 0.567,0.008
 ```
 
-Because this is not very human-friendly, we'll replace the comma separators by whitespace:
+Because this is not very human-friendly, we'll replace the comma separators by whitespace. We'll also add a column listing sample names:
 
 ```csv
-D47    D47_SE
-0.567   0.008
+Sample   D47    D47_SE
+FOO-1  0.567   0.008
 ```
 
 Then process it. We're adding an option (`-i ' '`, or `--delimiter-in ' '`) specifying that we're no longer using commas but whitespaces as delimiters:
@@ -57,8 +57,8 @@ D47calib -i ' ' input.csv
 This yields:
 
 ```txt
-  D47  D47_SE      T  T_SE_from_calib  T_correl_from_calib  T_SE_from_input  T_correl_from_input  T_SE_from_both  T_correl_from_both
-0.567   0.008  34.20             0.38                1.000             2.91                1.000            2.94               1.000
+Sample   D47  D47_SE      T  T_SE_from_calib  T_correl_from_calib  T_SE_from_input  T_correl_from_input  T_SE_from_both  T_correl_from_both
+FOO-1  0.567   0.008  34.20             0.38                1.000             2.91                1.000            2.94               1.000
 ```
 
 You can see that `T_SE_from_input` is now much larger than `T_SE_from_calib`, and that the combined `T_SE_from_both` is equal to the quadratic sum of `T_SE_from_calib` and `T_SE_from_input`.
@@ -68,19 +68,19 @@ You can see that `T_SE_from_input` is now much larger than `T_SE_from_calib`, an
 Let's add lines to our input file:
 
 ```csv
-D47    D47_SE
-0.567   0.008
-0.575   0.009
-0.582   0.007
+Sample   D47  D47_SE
+FOO-1  0.567   0.008
+BAR-2  0.575   0.009
+BAZ-3  0.582   0.007
 ```
 
 Which yields:
 
 ```txt
-  D47  D47_SE      T  T_SE_from_calib  T_correl_from_calib                T_SE_from_input  T_correl_from_input                T_SE_from_both  T_correl_from_both              
-0.567   0.008  34.20             0.38                1.000  0.996  0.987             2.91                1.000  0.000  0.000            2.94               1.000  0.015  0.019
-0.575   0.009  31.33             0.37                0.996  1.000  0.997             3.18                0.000  1.000  0.000            3.21               0.015  1.000  0.017
-0.582   0.007  28.89             0.36                0.987  0.997  1.000             2.42                0.000  0.000  1.000            2.44               0.019  0.017  1.000
+Sample   D47  D47_SE      T  T_SE_from_calib  T_correl_from_calib                T_SE_from_input  T_correl_from_input                T_SE_from_both  T_correl_from_both              
+FOO-1  0.567   0.008  34.20             0.38                1.000  0.996  0.987             2.91                1.000  0.000  0.000            2.94               1.000  0.015  0.019
+BAR-2  0.575   0.009  31.33             0.37                0.996  1.000  0.997             3.18                0.000  1.000  0.000            3.21               0.015  1.000  0.017
+BAZ-3  0.582   0.007  28.89             0.36                0.987  0.997  1.000             2.42                0.000  0.000  1.000            2.44               0.019  0.017  1.000
 ```
 
 A notable change are the 3-by-3 correlation matrices, which tell us how the `T` errors or these three measurements covary. `T_correl_from_calib` shows that the `T_SE_from_calib` errors are strongly correlated, because the three `D47` values are close to each other. `T_correl_from_input` indicates statistically independent `T_SE_from_input` errors. This may be true or not, but it is the expected result because our input file does not include any information on how the `D47_SE` errors may covary (see below how this additional info may be specified). Thus in this case `D47calib` assumes that the `D47` values are statistically independent (gentle reminder: this is often not the case, see below).
@@ -92,19 +92,19 @@ Note that because `T_SE_from_input` errors are much larger than `T_SE_from_calib
 Because [Δ47 measurements performed in the same analytical session(s) are not statistically independent](https://doi. org/10.1029/2020GC009588), we may add to `input.csv` a correlation matrix describing how `D47_SE` errors covary:
 
 ```csv
-D47    D47_SE   D47_correl
-0.567   0.008   1.00  0.25  0.25
-0.575   0.009   0.25  1.00  0.25
-0.582   0.007   0.25  0.25  1.00
+Sample   D47  D47_SE   D47_correl
+FOO-1  0.567   0.008   1.00  0.25  0.25
+BAR-2  0.575   0.009   0.25  1.00  0.25
+BAZ-3  0.582   0.007   0.25  0.25  1.00
 ```
 
 This yields:
 
 ```txt
-  D47  D47_SE  D47_correl                  T  T_SE_from_calib  T_correl_from_calib                T_SE_from_input  T_correl_from_input                T_SE_from_both  T_correl_from_both              
-0.567   0.008        1.00  0.25  0.25  34.20             0.38                1.000  0.996  0.987             2.91                1.000  0.250  0.250            2.94               1.000  0.261  0.264
-0.575   0.009        0.25  1.00  0.25  31.33             0.37                0.996  1.000  0.997             3.18                0.250  1.000  0.250            3.21               0.261  1.000  0.263
-0.582   0.007        0.25  0.25  1.00  28.89             0.36                0.987  0.997  1.000             2.42                0.250  0.250  1.000            2.44               0.264  0.263  1.000
+Sample   D47  D47_SE  D47_correl                  T  T_SE_from_calib  T_correl_from_calib                T_SE_from_input  T_correl_from_input                T_SE_from_both  T_correl_from_both              
+FOO-1  0.567   0.008        1.00  0.25  0.25  34.20             0.38                1.000  0.996  0.987             2.91                1.000  0.250  0.250            2.94               1.000  0.261  0.264
+BAR-2  0.575   0.009        0.25  1.00  0.25  31.33             0.37                0.996  1.000  0.997             3.18                0.250  1.000  0.250            3.21               0.261  1.000  0.263
+BAZ-3  0.582   0.007        0.25  0.25  1.00  28.89             0.36                0.987  0.997  1.000             2.42                0.250  0.250  1.000            2.44               0.264  0.263  1.000
 ```
 
 What changed ? We now have propagated `D47_correl` into `T_correl_from_input`, and this is accounted for in the combined correlation matrix `T_correl_from_both`. Within the framework of our initial assumptions (multivariate Gaussian errors, first-order linear propagation of uncertainties...), this constitutes the “best” (or rather, the most “information-complete”) description of uncertainties constraining our final `T` estimates.
@@ -118,10 +118,10 @@ D47calib -i ' ' -j ',' -o output.csv input.csv
 This will create the following `output.csv` file:
 
 ```csv
-D47,D47_SE,D47_correl,,,T,T_SE_from_calib,T_correl_from_calib,,,T_SE_from_input,T_correl_from_input,,,T_SE_from_both,T_correl_from_both,,
-0.567,0.008,1.00,0.25,0.25,34.20,0.38,1.000,0.996,0.987,2.91,1.000,0.250,0.250,2.94,1.000,0.261,0.264
-0.575,0.009,0.25,1.00,0.25,31.33,0.37,0.996,1.000,0.997,3.18,0.250,1.000,0.250,3.21,0.261,1.000,0.263
-0.582,0.007,0.25,0.25,1.00,28.89,0.36,0.987,0.997,1.000,2.42,0.250,0.250,1.000,2.44,0.264,0.263,1.000
+Sample,D47,D47_SE,D47_correl,,,T,T_SE_from_calib,T_correl_from_calib,,,T_SE_from_input,T_correl_from_input,,,T_SE_from_both,T_correl_from_both,,
+FOO-1,0.567,0.008,1.00,0.25,0.25,34.20,0.38,1.000,0.996,0.987,2.91,1.000,0.250,0.250,2.94,1.000,0.261,0.264
+BAR-2,0.575,0.009,0.25,1.00,0.25,31.33,0.37,0.996,1.000,0.997,3.18,0.250,1.000,0.250,3.21,0.261,1.000,0.263
+BAZ-3,0.582,0.007,0.25,0.25,1.00,28.89,0.36,0.987,0.997,1.000,2.42,0.250,0.250,1.000,2.44,0.264,0.263,1.000
 ```
 
 Hint for Mac users: Quick Look (or “spacebar preview”, i.e. what happens when you select a file in the Finder and press the spacebar once) provides you with a nice view of a csv file when you just want to check the results visually, as long as you use a comma delimiter.

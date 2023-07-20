@@ -1027,6 +1027,15 @@ Results may also be saved to a file using [bold]--output-file <filename>[/bold] 
 		else:
 			with open(input) as f:
 				data = [[c.strip() for c in l.strip().split(delim_in)] for l in f.readlines()]
+
+		### FIND FIRST DATA COLUMN
+		k = 0
+		while data[0][k] not in ['T', 'D47']:
+			k += 1
+			if k == len(data[0]):
+				raise KeyError("None of the input column headers are 'T' or 'D47'.")			
+		data_out = [l[:k] for l in data]
+		data = [l[k:] for l in data]
 		
 		### READ INPUT FIELDS
 		fields = data[0]
@@ -1126,9 +1135,6 @@ Results may also be saved to a file using [bold]--output-file <filename>[/bold] 
 		### ADD SE COLUMN TO INPUT
 		if f'{infield}_covar' in fields:
 			fields.insert(1, f'{infield}_SE')
-
-		### BUILD OUTPUT DATA
-		data_out = [[] for _ in range(N+1)]
 
 		### ADD X COLUMNS TO OUTPUT DATA
 		data_out[0] += [infield]
