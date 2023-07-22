@@ -931,6 +931,8 @@ try:
 	@app.command()
 	def _cli(
 		input: Annotated[str, typer.Argument(help = "Specify either the path of an input file or just '-' to read input from stdin")] = '-',
+		include_samples: Annotated[str, typer.Option('--include-samples', '-u', help = 'Only include samples listed in this file')] = 'all',
+		exclude_samples: Annotated[str, typer.Option('--exclude-samples', '-x', help = 'Exclude samples listed in this file')] = 'none',
 		outfile: Annotated[str, typer.Option('--output-file', '-o', help = 'Write output to this file instead of printing to stdout')] = 'none',
 		calib: Annotated[str, typer.Option('--calib', '-c', help = 'D47 calibration function to use')] = 'combined_2023',
 		delim_in: Annotated[str, typer.Option('--delimiter-in', '-i', help = "Delimiter used in the input.")] = ',',
@@ -987,6 +989,10 @@ The example above will thus result in an output with the following fields:
 [italic]- T_correl_from_both[/italic]
 
 Results may also be saved to a file using [bold]--output-file <filename>[/bold] or [bold]-o <filename>[/bold].
+
+To filter the samples (lines) to process using [b]--exclude-samples[/b] and [b]--include-samples[/b], first add a [b]Sample[/b] column to the input data, assign a sample name to each line.
+Then to exclude some samples, provide the [b]--exclude-samples[/b] option with the name of a file where each line is one sample to exclude.
+To exclude all samples except those listed in a file, provide the [b]--include-samples[/b] option with the name of that file, where each line is one sample to include.
 """
 
 		### INCOMPATIBILITY BETWEEN --ignore-correl AND --return-covar
@@ -1027,6 +1033,28 @@ Results may also be saved to a file using [bold]--output-file <filename>[/bold] 
 		else:
 			with open(input) as f:
 				data = [[c.strip() for c in l.strip().split(delim_in)] for l in f.readlines()]
+
+		if include_samples == 'all':
+			samples_to_include = []
+		else:
+			with open(include_samples) as f:
+				samples_to_include = [l.strip() for l in f.readlines()]
+
+		if exclude_samples == 'none':
+			samples_to_exclude = []
+		else:
+			with open(exclude_samples) as f:
+				samples_to_exclude = [l.strip() for l in f.readlines()]
+		
+		if len(samples_to_include) > 0 or len(samples_to_exclude) > 0:
+			try:
+				k = data[0].index('Sample')
+			except ValueError:
+				raise KeyError("When using options --include-samples or --exclude-samples, the input file must have a column labeled 'Sample'.")
+
+			if len(samples_to_include) > 0:
+				data = [data[0]] + [l for l in data[1:] if l[k] in samples_to_include]
+			data = [data[0]] + [l for l in data[1:] if l[k] not in samples_to_exclude]
 
 		### FIND FIRST DATA COLUMN
 		k = 0

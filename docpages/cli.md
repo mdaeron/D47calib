@@ -164,6 +164,15 @@ Use the `--return-covar` option.
 
 If you don't care about all this covariance nonsense, or just wish for an output that does't hurt your eyes, you can use the `--ignore-correl` option. Standard errors will still be reported.
 
+### Excluding or only including certain lines (samples) from the input
+
+To filter the samples (lines) to process using `--exclude-samples` and `--include-samples`, first add a `Sample` column to the input data, assign a sample name to each line.                                                                                  
+
+Then to exclude some samples, provide the `--exclude-samples` option with the name of a file where each line is one sample to exclude.                                                                                                                 
+
+To exclude all samples except those listed in a file, provide the `--include-samples` option with the name of that file, where each line is one sample to include.                                                                                         
+ 
+
 ### Changing the numerical precision of the output
 
 This is controlled by the following options:
