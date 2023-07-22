@@ -1,4 +1,4 @@
-# Calibrations included
+# 1. Calibrations included
 
 `D47calib` provides the following pre-built calibrations:
 

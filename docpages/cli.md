@@ -1,8 +1,8 @@
-# Command-line interface
+# 2. Command-line interface
 
 `D47calib` also provides a command-line interface (CLI) for converting between Δ47 and temperature values, computing uncertainties for each computed value (and how these uncertainties are correlated with each other) from different sources (from calibration errors alone, from measurement errors alone, and from both). The computed uncertainties are provided as standard errors, correlation matrix and/or covariance matrix. Input and output files may be comma-separated, tab-separated, or printed out as visually aligned data columns.
 
-## Simple examples
+## 2.1 Simple examples
 
 Start with the simplest input file possible (here named `input.csv`):
 
@@ -32,7 +32,7 @@ This prints out:
 * `T_SE_from_both` is the standard error on `T` obtained by combining the two previously considered sources of uncertainties.
 * `T_correl_from_both` is what you expect it to be if you've been reading so far. Can you guess why it is a 1-by-1 matrix with a single value of one?
 
-### Adding `D47` measurement uncertainties
+### 2.1.1 Adding `D47` measurement uncertainties
 
 This can be done by adding a column to `input.csv`:
 
@@ -63,7 +63,7 @@ FOO-1  0.567   0.008  34.20             0.38                1.000             2.
 
 You can see that `T_SE_from_input` is now much larger than `T_SE_from_calib`, and that the combined `T_SE_from_both` is equal to the quadratic sum of `T_SE_from_calib` and `T_SE_from_input`.
 
-### Converting more than one measurement
+### 2.1.2 Converting more than one measurement
 
 Let's add lines to our input file:
 
@@ -87,7 +87,7 @@ A notable change are the 3-by-3 correlation matrices, which tell us how the `T` 
 
 Note that because `T_SE_from_input` errors are much larger than `T_SE_from_calib` errors, the combined `T_SE_from_both` errors are only weakly correlated, as seen in `T_correl_from_both`.
 
-### Accounting for correlations in `D47` errors
+### 2.1.3 Accounting for correlations in `D47` errors
 
 Because [Δ47 measurements performed in the same analytical session(s) are not statistically independent](https://doi. org/10.1029/2020GC009588), we may add to `input.csv` a correlation matrix describing how `D47_SE` errors covary.
 
@@ -128,7 +128,7 @@ BAZ-3,0.582,0.007,0.25,0.25,1.00,28.89,0.36,0.987,0.997,1.000,2.42,0.250,0.250,1
 
 Hint for Mac users: Quick Look (or “spacebar preview”, i.e. what happens when you select a file in the Finder and press the spacebar once) provides you with a nice view of a csv file when you just want to check the results visually, as long as you use a comma delimiter.
 
-### Converting from `T` to `D47`
+### 2.1.4 Converting from `T` to `D47`
 
 Everything described above works in the other direction as well, without changing anything to the command-line instruction:
 
@@ -148,23 +148,50 @@ Yields:
 20   2.0  0.6090             0.0011                  0.848  0.952  1.000             0.0063                  0.000  0.000  1.000            0.0064                 0.091  0.056  1.000
 ```
 
-## Further customizing the CLI
+## 2.2 Integration with [`D47crunch`](https://github.com/mdaeron/D47crunch)
+
+Starting with the following input file `rawdata.csv`:
+
+```csv
+.. include:: ../code_examples/cli/fullexample_rawdata.csv
+```
+
+The following script will read thart raw data, fully process it, convert the standardized output to temperatures, and save the final results to a file named `output.csv`:
+
+```txt
+D47crunch rawdata.csv
+D47calib -o output.csv -j '>' output/D47_correl.csv
+```
+
+With the contents of `output.csv` being:
+
+```txt
+.. include:: ../code_examples/cli/fullexample_output.csv
+```
+
+If a simpler output is required, just add the `--ignore-correl` or `-g` option to the second line above, which should yield:
+
+```txt
+.. include:: ../code_examples/cli/fullexample_output2.csv
+```
+
+## 2.3 Further customizing the CLI
 
 A complete list of options is provided by `D47calib --help`.
 
-### Using covariance instead of correlation matrix as input
+### 2.3.1 Using covariance instead of correlation matrix as input
 
 Just provide `D47_covar` (or `T_covar` when converting in the other direction) in the input file instead of `D47_SE` and `D47_correl`.
 
-### Reporting covariance instead of correlation matrices in the output
+### 2.3.2 Reporting covariance instead of correlation matrices in the output
 
 Use the `--return-covar` option.
 
-### Reporting neither covariances nor correlations in the output
+### 2.3.3 Reporting neither covariances nor correlations in the output
 
 If you don't care about all this covariance nonsense, or just wish for an output that does't hurt your eyes, you can use the `--ignore-correl` option. Standard errors will still be reported.
 
-### Excluding or only including certain lines (samples) from the input
+### 2.3.4 Excluding or only including certain lines (samples) from the input
 
 To filter the samples (lines) to process using `--exclude-samples` and `--include-samples`, first add a `Sample` column to the input data, assign a sample name to each line.                                                                                  
 
@@ -173,7 +200,7 @@ Then to exclude some samples, provide the `--exclude-samples` option with the na
 To exclude all samples except those listed in a file, provide the `--include-samples` option with the name of that file, where each line is one sample to include.                                                                                         
  
 
-### Changing the numerical precision of the output
+### 2.3.5 Changing the numerical precision of the output
 
 This is controlled by the following options:
 
@@ -182,7 +209,7 @@ This is controlled by the following options:
 * `--correl-precision` or `-r` (default: 3): All `*_correl_*` values
 * `--covar-precision` or `-s` (default: 3): All `*_covar_*` values
 
-### Using a different Δ47 calibration
+### 2.3.6 Using a different Δ47 calibration
 
 You may use a different calibration than the default `combined_2023` using the `--calib` or `-c` option. Any predefeined calibration from the `D47calib` library is a valid option.
 

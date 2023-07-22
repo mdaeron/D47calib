@@ -21,11 +21,12 @@
 
             <h2>Contents</h2>
             <ul>
-  <li><a href="#calibrations-included">Calibrations included</a></li>
-  <li><a href="#command-line-interface">Command-line interface</a>
+  <li><a href="#1-calibrations-included">1. Calibrations included</a></li>
+  <li><a href="#2-command-line-interface">2. Command-line interface</a>
   <ul>
-    <li><a href="#simple-examples">Simple examples</a></li>
-    <li><a href="#further-customizing-the-cli">Further customizing the CLI</a></li>
+    <li><a href="#21-simple-examples">2.1 Simple examples</a></li>
+    <li><a href="#22-integration-with-d47crunchhttpsgithubcommdaerond47crunch">2.2 Integration with <a href="https://github.com/mdaeron/D47crunch"><code>D47crunch</code></a></a></li>
+    <li><a href="#23-further-customizing-the-cli">2.3 Further customizing the CLI</a></li>
   </ul></li>
 </ul>
 
@@ -104,7 +105,7 @@ and/or uncertainties/covariance originating from calibration uncertainties. This
 Python code or by using a simple command-line interface (e.g., <code>D47calib input.csv &gt; output.csv</code>).</li>
 </ul>
 
-<h1 id="calibrations-included">Calibrations included</h1>
+<h1 id="1-calibrations-included">1. Calibrations included</h1>
 
 <p><code><a href="#D47calib">D47calib</a></code> provides the following pre-built calibrations:</p>
 
@@ -144,11 +145,11 @@ Python code or by using a simple command-line interface (e.g., <code>D47calib in
 
 <p>Combined data set including all of the above.</p>
 
-<h1 id="command-line-interface">Command-line interface</h1>
+<h1 id="2-command-line-interface">2. Command-line interface</h1>
 
 <p><code><a href="#D47calib">D47calib</a></code> also provides a command-line interface (CLI) for converting between Δ<sub>47</sub> and temperature values, computing uncertainties for each computed value (and how these uncertainties are correlated with each other) from different sources (from calibration errors alone, from measurement errors alone, and from both). The computed uncertainties are provided as standard errors, correlation matrix and/or covariance matrix. Input and output files may be comma-separated, tab-separated, or printed out as visually aligned data columns.</p>
 
-<h2 id="simple-examples">Simple examples</h2>
+<h2 id="21-simple-examples">2.1 Simple examples</h2>
 
 <p>Start with the simplest input file possible (here named <code>input.csv</code>):</p>
 
@@ -177,7 +178,7 @@ Python code or by using a simple command-line interface (e.g., <code>D47calib in
 <li><code>T_correl_from_both</code> is what you expect it to be if you've been reading so far. Can you guess why it is a 1-by-1 matrix with a single value of one?</li>
 </ul>
 
-<h3 id="adding-d47-measurement-uncertainties">Adding <code>D47</code> measurement uncertainties</h3>
+<h3 id="211-adding-d47-measurement-uncertainties">2.1.1 Adding <code>D47</code> measurement uncertainties</h3>
 
 <p>This can be done by adding a column to <code>input.csv</code>:</p>
 
@@ -204,7 +205,7 @@ FOO-1  0.567   0.008  34.20             0.38                1.000             2.
 
 <p>You can see that <code>T_SE_from_input</code> is now much larger than <code>T_SE_from_calib</code>, and that the combined <code>T_SE_from_both</code> is equal to the quadratic sum of <code>T_SE_from_calib</code> and <code>T_SE_from_input</code>.</p>
 
-<h3 id="converting-more-than-one-measurement">Converting more than one measurement</h3>
+<h3 id="212-converting-more-than-one-measurement">2.1.2 Converting more than one measurement</h3>
 
 <p>Let's add lines to our input file:</p>
 
@@ -226,7 +227,7 @@ BAZ-3  0.582   0.007  28.89             0.36                0.987  0.997  1.000 
 
 <p>Note that because <code>T_SE_from_input</code> errors are much larger than <code>T_SE_from_calib</code> errors, the combined <code>T_SE_from_both</code> errors are only weakly correlated, as seen in <code>T_correl_from_both</code>.</p>
 
-<h3 id="accounting-for-correlations-in-d47-errors">Accounting for correlations in <code>D47</code> errors</h3>
+<h3 id="213-accounting-for-correlations-in-d47-errors">2.1.3 Accounting for correlations in <code>D47</code> errors</h3>
 
 <p>Because <a href="https://doi. org/10.1029/2020GC009588">Δ<sub>47</sub> measurements performed in the same analytical session(s) are not statistically independent</a>, we may add to <code>input.csv</code> a correlation matrix describing how <code>D47_SE</code> errors covary.</p>
 
@@ -263,7 +264,7 @@ BAZ-3,0.582,0.007,0.25,0.25,1.00,28.89,0.36,0.987,0.997,1.000,2.42,0.250,0.250,1
 
 <p>Hint for Mac users: Quick Look (or “spacebar preview”, i.e. what happens when you select a file in the Finder and press the spacebar once) provides you with a nice view of a csv file when you just want to check the results visually, as long as you use a comma delimiter.</p>
 
-<h3 id="converting-from-t-to-d47">Converting from <code>T</code> to <code>D47</code></h3>
+<h3 id="214-converting-from-t-to-d47">2.1.4 Converting from <code>T</code> to <code>D47</code></h3>
 
 <p>Everything described above works in the other direction as well, without changing anything to the command-line instruction:</p>
 
@@ -281,23 +282,76 @@ BAZ-3,0.582,0.007,0.25,0.25,1.00,28.89,0.36,0.987,0.997,1.000,2.42,0.250,0.250,1
 20   2.0  0.6090             0.0011                  0.848  0.952  1.000             0.0063                  0.000  0.000  1.000            0.0064                 0.091  0.056  1.000
 </code></pre>
 
-<h2 id="further-customizing-the-cli">Further customizing the CLI</h2>
+<h2 id="22-integration-with-d47crunchhttpsgithubcommdaerond47crunch">2.2 Integration with <a href="https://github.com/mdaeron/D47crunch"><code>D47crunch</code></a></h2>
+
+<p>Starting with the following input file <code>rawdata.csv</code>:</p>
+
+<pre><code>UID Sample  Session d45 d46 d47 d48 d49
+1   BAZ-3   Session_01  -5.394955   7.938127    1.887702    15.671857   9.739724
+2   ETH-2   Session_01  -5.973121   -5.894178   -12.599303  -12.037594  -18.023381
+3   ETH-1   Session_01  6.050787    10.800497   16.232192   21.429453   27.780042
+4   ETH-2   Session_01  -5.991066   -5.968789   -12.685206  -12.219412  -18.023381
+5   ETH-3   Session_01  5.755765    11.179326   16.689870   22.294132   28.306614
+6   ETH-3   Session_01  5.726647    11.144602   16.634507   22.275401   28.306614
+7   ETH-1   Session_01  6.009875    10.711152   16.087994   21.275325   27.780042
+8   ETH-1   Session_01  5.994522    10.810755   16.181039   21.445703   27.780042
+9   FOO-1   Session_01  -0.848380   2.872996    1.535960    5.431873    4.665655
+10  ETH-3   Session_01  5.734551    11.043266   16.556578   22.005474   28.306614
+11  ETH-2   Session_01  -5.981599   -6.011356   -12.728742  -12.335559  -18.023381
+12  BAR-2   Session_01  -9.941731   10.985508   0.208381    21.832546   10.707292
+13  ETH-3   Session_02  5.720443    11.187928   16.689130   22.308575   28.306614
+14  ETH-1   Session_02  6.019913    10.773652   16.165645   21.309536   27.780042
+15  ETH-2   Session_02  -5.993596   -6.086738   -12.816033  -12.452397  -18.023381
+16  ETH-2   Session_02  -5.952660   -5.887239   -12.582248  -12.081588  -18.023381
+17  BAZ-3   Session_02  -5.337619   7.818571    1.818572    15.400966   9.739724
+18  ETH-3   Session_02  5.756394    11.109906   16.635806   22.189179   28.306614
+19  ETH-1   Session_02  5.995178    10.702934   16.073811   21.169324   27.780042
+20  FOO-1   Session_02  -0.835316   2.868058    1.539147    5.483628    4.665655
+21  ETH-3   Session_02  5.717666    11.175023   16.654427   22.251497   28.306614
+22  ETH-1   Session_02  6.029949    10.682183   16.080186   21.182471   27.780042
+23  ETH-2   Session_02  -5.983050   -5.953794   -12.679809  -12.224144  -18.023381
+24  BAR-2   Session_02  -9.951732   10.964153   0.171443    21.779172   10.707292
+</code></pre>
+
+<p>The following script will read thart raw data, fully process it, convert the standardized output to temperatures, and save the final results to a file named <code>output.csv</code>:</p>
+
+<pre><code>D47crunch rawdata.csv
+D47calib -o output.csv -j '&gt;' output/D47_correl.csv
+</code></pre>
+
+<p>With the contents of <code>output.csv</code> being:</p>
+
+<pre><code>Sample     D47  D47_SE  D47_correl                      T  T_SE_from_calib  T_correl_from_calib                 T_SE_from_input  T_correl_from_input                T_SE_from_both  T_correl_from_both              
+ BAR-2  0.6777  0.0066      1.0000  0.3586  0.2798   0.52             0.41                1.000  0.728  -0.042             1.68                1.000  0.359  0.280            1.73               1.000  0.373  0.262
+ BAZ-3  0.5894  0.0060      0.3586  1.0000  0.2473  26.36             0.35                0.728  1.000   0.654             2.02                0.359  1.000  0.247            2.05               0.373  1.000  0.264
+ FOO-1  0.4873  0.0056      0.2798  0.2473  1.0000  68.26             0.70               -0.042  0.654   1.000             2.82                0.280  0.247  1.000            2.90               0.262  0.264  1.000
+</code></pre>
+
+<p>If a simpler output is required, just add the <code>--ignore-correl</code> or <code>-g</code> option to the second line above, which should yield:</p>
+
+<pre><code>Sample     D47  D47_SE      T  T_SE_from_calib  T_SE_from_input  T_SE_from_both
+ BAR-2  0.6777  0.0066   0.52             0.41             1.68            1.73
+ BAZ-3  0.5894  0.0060  26.36             0.35             2.02            2.05
+ FOO-1  0.4873  0.0056  68.26             0.70             2.82            2.90
+</code></pre>
+
+<h2 id="23-further-customizing-the-cli">2.3 Further customizing the CLI</h2>
 
 <p>A complete list of options is provided by <code>D47calib --help</code>.</p>
 
-<h3 id="using-covariance-instead-of-correlation-matrix-as-input">Using covariance instead of correlation matrix as input</h3>
+<h3 id="231-using-covariance-instead-of-correlation-matrix-as-input">2.3.1 Using covariance instead of correlation matrix as input</h3>
 
 <p>Just provide <code>D47_covar</code> (or <code>T_covar</code> when converting in the other direction) in the input file instead of <code>D47_SE</code> and <code>D47_correl</code>.</p>
 
-<h3 id="reporting-covariance-instead-of-correlation-matrices-in-the-output">Reporting covariance instead of correlation matrices in the output</h3>
+<h3 id="232-reporting-covariance-instead-of-correlation-matrices-in-the-output">2.3.2 Reporting covariance instead of correlation matrices in the output</h3>
 
 <p>Use the <code>--return-covar</code> option.</p>
 
-<h3 id="reporting-neither-covariances-nor-correlations-in-the-output">Reporting neither covariances nor correlations in the output</h3>
+<h3 id="233-reporting-neither-covariances-nor-correlations-in-the-output">2.3.3 Reporting neither covariances nor correlations in the output</h3>
 
 <p>If you don't care about all this covariance nonsense, or just wish for an output that does't hurt your eyes, you can use the <code>--ignore-correl</code> option. Standard errors will still be reported.</p>
 
-<h3 id="excluding-or-only-including-certain-lines-samples-from-the-input">Excluding or only including certain lines (samples) from the input</h3>
+<h3 id="234-excluding-or-only-including-certain-lines-samples-from-the-input">2.3.4 Excluding or only including certain lines (samples) from the input</h3>
 
 <p>To filter the samples (lines) to process using <code>--exclude-samples</code> and <code>--include-samples</code>, first add a <code>Sample</code> column to the input data, assign a sample name to each line.                                                                                  </p>
 
@@ -305,7 +359,7 @@ BAZ-3,0.582,0.007,0.25,0.25,1.00,28.89,0.36,0.987,0.997,1.000,2.42,0.250,0.250,1
 
 <p>To exclude all samples except those listed in a file, provide the <code>--include-samples</code> option with the name of that file, where each line is one sample to include.                                                                                         </p>
 
-<h3 id="changing-the-numerical-precision-of-the-output">Changing the numerical precision of the output</h3>
+<h3 id="235-changing-the-numerical-precision-of-the-output">2.3.5 Changing the numerical precision of the output</h3>
 
 <p>This is controlled by the following options:</p>
 
@@ -316,7 +370,7 @@ BAZ-3,0.582,0.007,0.25,0.25,1.00,28.89,0.36,0.987,0.997,1.000,2.42,0.250,0.250,1
 <li><code>--covar-precision</code> or <code>-s</code> (default: 3): All <code>*_covar_*</code> values</li>
 </ul>
 
-<h3 id="using-a-different-sub47sub-calibration">Using a different Δ<sub>47</sub> calibration</h3>
+<h3 id="236-using-a-different-sub47sub-calibration">2.3.6 Using a different Δ<sub>47</sub> calibration</h3>
 
 <p>You may use a different calibration than the default <code>combined_2023</code> using the <code>--calib</code> or <code>-c</code> option. Any predefeined calibration from the <code><a href="#D47calib">D47calib</a></code> library is a valid option.</p>
 

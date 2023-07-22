@@ -38,4 +38,5 @@ calibs:
 
 doc:
 	@echo "Building documentation..."
+	@cd ./code_examples/cli; zsh fullexample.sh
 	@python build_doc.py
