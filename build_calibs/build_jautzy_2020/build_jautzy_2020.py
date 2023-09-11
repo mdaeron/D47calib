@@ -17,10 +17,10 @@ data.read('input/jautzy_2020_rawdata.csv')
 data.wg()
 data.crunch()
 
-for s in data.sessions:
-# 	data.sessions[s]['scrambling_drift'] = True
-# 	data.sessions[s]['slope_drift'] = True
-	data.sessions[s]['wg_drift'] = True
+# for s in data.sessions:
+# # 	data.sessions[s]['scrambling_drift'] = True
+# # 	data.sessions[s]['slope_drift'] = True
+# 	data.sessions[s]['wg_drift'] = True
 
 data.standardize()
 data.summary()
