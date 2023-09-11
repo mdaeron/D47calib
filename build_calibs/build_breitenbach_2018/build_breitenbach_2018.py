@@ -233,16 +233,18 @@ def rawdata_import():
 					exit()
 			r['TimeTag'] = (2000+int(y), int(m), int(d), 0, 0, 0)
 		r['TimeTag'] = (date(*r['TimeTag'][:3]) - date(2015, 1, 1)).days - 228
-		
-		if r['TimeTag'] < 33:
-			r['Session'] = 'Session_A'
-		elif r['TimeTag'] < 150:
-			r['Session'] = 'Session_B'
-		elif r['TimeTag'] < 260:
-			r['Session'] = 'Session_C'
+
+		if CUT_SESSIONS:
+			if r['TimeTag'] < 33:
+				r['Session'] = 'Session_A'
+			elif r['TimeTag'] < 150:
+				r['Session'] = 'Session_B'
+			elif r['TimeTag'] < 260:
+				r['Session'] = 'Session_C'
+			else:
+				r['Session'] = 'Session_D'
 		else:
-			r['Session'] = 'Session_D'
-# 		r['Session'] = 'Session_1' if r['Session'] < 70 else 'Session_2'
+			r['Session'] = 'Session_1' if r['Session'] < 70 else 'Session_2'
 
 # 	for s in sorted({r['Sample'] for r in rawdata}):
 # 		print(s)		
@@ -281,7 +283,8 @@ def icdes_process(_rawdata_):
 
 	dir = f'{basedir}'
 
-	data.sessions['Session_B']['wg_drift'] = True
+	if CUT_SESSIONS:
+		data.sessions['Session_B']['wg_drift'] = True
 
 	data.wg()
 	data.crunch()
@@ -297,6 +300,7 @@ def icdes_process(_rawdata_):
 
 	data.table_of_sessions(verbose = False, dir = dir, filename = 'sessions.csv')
 	data.table_of_samples(dir = dir, filename = 'samples.csv')
+	data.plot_distribution_of_analyses(dir = dir, filename = 'distribution_of_analyses.pdf')
 
 	data.plot_residuals(dir = dir, filename = 'D47_residuals_with_drift_corrections.pdf')
 
