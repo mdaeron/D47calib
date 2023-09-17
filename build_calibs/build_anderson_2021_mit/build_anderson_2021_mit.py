@@ -18,8 +18,8 @@ anderson_data = D47data()
 anderson_data.read('input/anderson_2021_data.csv')
 
 for r in anderson_data:
-	r['Session'] = f'anderson_session_{int(r["Session"][7:]):02.0f}'
-anderson_data = D47data([r for r in anderson_data if r['Session'][-2:] not in ['05', '25']])
+	r['Session'] = f'session_{int(r["Session"][7:]):02.0f}'
+anderson_data = D47data([r for r in anderson_data if r['Session'][-2:] not in ['05', '25']]) # sessions 05 and 25 don't have enough analyses
 
 anderson_data.refresh()
 
@@ -29,6 +29,7 @@ anderson_data.standardize()
 anderson_data.summary()
 anderson_data.plot_sessions(dir = 'sessions')
 anderson_data.plot_residuals(filename = 'D47residuals.pdf')
+anderson_data.plot_distribution_of_analyses()
 anderson_data.summary(dir = 'tables', verbose = False)
 anderson_data.table_of_sessions(dir = 'tables', verbose = False)
 anderson_data.table_of_samples(dir = 'tables', verbose = False)
@@ -42,20 +43,20 @@ for sample in anderson_calib_samples:
 		anderson_calib_data += [{
 			'Sample': sample,
 			'T': meta['Temperature'],
+			'sT': meta['sT'],
 			'D47': anderson_data.samples[sample]['D47'],
 			'sD47': anderson_data.samples[sample]['SE_D47'],
 			}]
 # 		print(pretty_listofdict(anderson_calib_data))
 
 anderson_CM_D47 = [[anderson_data.sample_D4x_covar(sample1, sample2) for sample1 in anderson_calib_samples] for sample2 in anderson_calib_samples]
-anderson_CM_T = eye(len(anderson_metadata)) * ANDERSON_DEFAULT_SIGMA_T**2
+anderson_CM_T = diag([float(s['sT'])**2 for s in anderson_calib_data])
 
-for k,s in enumerate(anderson_calib_samples):
-	if '-1100-SAM' in s:
-		anderson_CM_T[k,k] = 10**2
-
-# for l in anderson_CM_T:
-# 	print(' '.join([f'{e**.5:04.2f}' if e else '----' for e in l]))
+# anderson_CM_T = eye(len(anderson_metadata)) * ANDERSON_DEFAULT_SIGMA_T**2
+# 
+# for k,s in enumerate(anderson_calib_samples):
+# 	if '-1100-SAM' in s:
+# 		anderson_CM_T[k,k] = 10**2
 
 C = D47calib(
 	samples = [s['Sample'] for s in anderson_calib_data],
