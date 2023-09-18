@@ -1,5 +1,5 @@
 from matplotlib import pyplot as ppl
-from D47calib import combined_2023 as calib
+from D47calib import ogls_2023 as calib
 
 fig = ppl.figure(figsize = (5,3))
 ppl.subplots_adjust(bottom = .25, left = .15)

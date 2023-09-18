@@ -24,7 +24,7 @@ This prints out:
 0.567  34.20             0.38                1.000             0.00                1.000            0.38               1.000
 ```
 
-* `T` is the temperature corresponding to a `D47` value of 0.567 ‰ according to the default calibration (`combined_2023`).
+* `T` is the temperature corresponding to a `D47` value of 0.567 ‰ according to the default calibration (`ogls_2023`).
 * `T_SE_from_calib` is the standard error on `T` from the calibration uncertainty
 * `T_correl_from_calib` is the correlation matrix for the `T_SE_from_calib` values. Because here there is only one value, this is a 1-by-1 matrix with a single value of one, which is not very exciting.
 * `T_SE_from_input` is the standard error on `T` from the measurement uncertainties on `D47`. Because these are not specified here, `T_SE_from_input` is equal to zero.
@@ -211,7 +211,7 @@ This is controlled by the following options:
 
 ### 2.3.6 Using a different Δ47 calibration
 
-You may use a different calibration than the default `combined_2023` using the `--calib` or `-c` option. Any predefeined calibration from the `D47calib` library is a valid option.
+You may use a different calibration than the default `ogls_2023` using the `--calib` or `-c` option. Any predefeined calibration from the `D47calib` library is a valid option.
 
 You may also specify an arbitrary polynomial function of inverse `T`, by creating a file (e.g., `calib.csv`) with the following format:
 

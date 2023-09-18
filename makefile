@@ -10,8 +10,8 @@ clean:
 	@rm -f ./build_calibs/fiebig*.py
 	@rm -f ./build_calibs/huyghe*.py
 	@rm -f ./build_calibs/devils*.py
-	@rm -f ./build_calibs/combined*.py
-	@rm -f ./build_calibs/combined*.csv
+	@rm -f ./build_calibs/ogls*.py
+	@rm -f ./build_calibs/ogls*.csv
 
 combine:
 	@echo "Building Devils Laghetto (2023)..."

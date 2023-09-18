@@ -94,12 +94,12 @@ C = combine_D47calibs(
 
 C.color = (0,0,0)
 C.description = 'Combined I-CDES calibration'
-C.name = 'combined_2023'
+C.name = 'ogls_2023'
 C.label = 'Combined I-CDES calibration'
 
-C.export('combined_2023', 'combined_2023.py')
-C.export_data('combined_2023_data.csv', label = True, T_correl = True, D47_correl = True)
+C.export('ogls_2023', 'ogls_2023.py')
+C.export_data('ogls_2023_data.csv', label = True, T_correl = True, D47_correl = True)
 
 with open('../src/D47calib/_calibs.py', 'a') as fid:
-		with open('combined_2023.py') as gid:
+		with open('ogls_2023.py') as gid:
 			fid.write(gid.read())

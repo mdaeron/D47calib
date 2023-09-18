@@ -84,7 +84,7 @@ shutil.move(
 	)
 
 
-calib = combined_2023
+calib = ogls_2023
 
 # fig = ppl.figure(figsize = (5,3))
 # ppl.subplots_adjust(bottom = .25, left = .15)
@@ -152,7 +152,7 @@ ppl.legend()
 ppl.savefig('docs/example_plot_bff_ci.png', dpi = 100)
 
 import numpy as np
-calib = combined_2023
+calib = ogls_2023
 
 X = np.linspace(1473**-2, 270**-2)
 D47, sD47 = calib.T47(T = X**-0.5 - 273.15)
