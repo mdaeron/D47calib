@@ -5,10 +5,11 @@ build-backend = "flit_core.buildapi"
 [project]
 name = "D47calib"
 authors = [{name = "Mathieu Daëron", email = "daeron@lsce.ipsl.fr"}]
-readme = "README.md"
+readme = "readme.md"
 license = {file = "LICENSE"}
 classifiers = ["License :: OSI Approved :: MIT License"]
 dynamic = ["version", "description"]
+requires-python = ">=3.11"
 dependencies = [
 	"ogls",
 	"click",
@@ -16,6 +17,7 @@ dependencies = [
 
 [project.urls]
 Home = "https://github.com/mdaeron/D47calib"
+Documentation = "https://mdaeron.github.io/D47calib"
 
 [project.scripts]
 D47calib = "D47calib:__cli"
