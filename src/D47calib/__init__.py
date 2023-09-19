@@ -10,6 +10,7 @@ This library provides support for:
 and/or uncertainties/covariance originating from calibration uncertainties. This may be done within
 Python code or by using a simple command-line interface (e.g., `D47calib input.csv > output.csv`).
 
+.. include:: ../../docpages/install.md
 .. include:: ../../docpages/calibs.md
 .. include:: ../../docpages/cli.md
 

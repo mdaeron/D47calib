@@ -1,6 +1,6 @@
-# 1. Calibrations included
+# 2. Calibrations included
 
-`D47calib` provides the following pre-built calibrations:
+`D47calib` provides the following pre-built calibrations. All code and raw data used to compute these calibrations can be found in the `build_calibs` directory.
 
 ##### **`breitenbach_2018`:**
 Cave pearls analyzed by [Breitenbach et al. (2018)](https://doi.org/10.1016/j.gca.2018.03.010).
