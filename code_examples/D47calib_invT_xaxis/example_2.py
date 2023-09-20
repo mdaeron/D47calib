@@ -1,5 +1,5 @@
 from matplotlib import pyplot as ppl
-from D47calib import ogls_2023 as calib
+from D47calib import OGLS23 as calib
 
 calib.xpower = 4
 

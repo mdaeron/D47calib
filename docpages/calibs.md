@@ -42,5 +42,5 @@ Marine calcitic bivalves analyzed by [Huyghe et al. (2022)](https://doi.org/10.1
 ##### **`devils_laghetto_2023`:**
 Combined data set of slow-growing mammillary calcite from Devils Hole and Laghetto Basso, analyzed both at LSCE by [Anderson et al. (2021)](https://doi.org/10.1029/2020gl092069) and at GU by [Fiebig et al. (2021)](https://doi.org/10.1016/j.gca.2021.07.012). 
 
-##### **`ogls_2023`:**
-Combined data set including all of the above. For a detailed discussion of goodness-of-fit and regression uncertainties, see *Daëron & Vermeesch* (2023).
+##### **`OGLS23`:**
+Combined data set including all of the above. For a detailed discussion of goodness-of-fit and regression uncertainties, see *Daëron & Vermeesch* (2023). Also aliased as `ogls_2023` for backward-compatibility.

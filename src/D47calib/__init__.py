@@ -463,7 +463,7 @@ class D47calib(_ogls.InverseTPolynomial):
 		````py
 		import numpy as np
 		from matplotlib import pyplot as ppl
-		from D47calib import ogls_2023 as calib
+		from D47calib import OGLS23 as calib
 
 		X = np.linspace(1473**-2, 270**-2)
 		D47, sD47 = calib.T47(T = X**-0.5 - 273.15)
@@ -853,7 +853,7 @@ def combine_D47calibs(calibs, degrees = [0,2], same_T = []):
 	and `anderson_2021_lsce` data sets). Each element of `same_T` is a `list` with the names
 	of two or more samples formed at the same temperature.
 	
-	For example, the `ogls_2023` calibration is computed with:
+	For example, the `OGLS23` calibration is computed with:
 	
 	`same_T = [['DVH-2', DHC-2-8'], ['ETH-1-1100-SAM', 'ETH-1-1100']]`
 
@@ -935,7 +935,7 @@ try:
 		include_samples: Annotated[str, typer.Option('--include-samples', '-u', help = 'Only include samples listed in this file')] = 'all',
 		exclude_samples: Annotated[str, typer.Option('--exclude-samples', '-x', help = 'Exclude samples listed in this file')] = 'none',
 		outfile: Annotated[str, typer.Option('--output-file', '-o', help = 'Write output to this file instead of printing to stdout')] = 'none',
-		calib: Annotated[str, typer.Option('--calib', '-c', help = 'D47 calibration function to use')] = 'ogls_2023',
+		calib: Annotated[str, typer.Option('--calib', '-c', help = 'D47 calibration function to use')] = 'OGLS23',
 		delim_in: Annotated[str, typer.Option('--delimiter-in', '-i', help = "Delimiter used in the input.")] = ',',
 		delim_out: Annotated[str, typer.Option('--delimiter-out', '-j', help = "Delimiter used in the output. Use '>' or '<' for elastic white space with right- or left-justified cells.")] = "',' when writing to output file, '>' when printing to stdout",
 		T_precision: Annotated[int, typer.Option('--T-precision', '-p', help = 'Precision for T output')] = 2,
