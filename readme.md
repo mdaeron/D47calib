@@ -1,4 +1,5 @@
 [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.8357232.svg)](https://doi.org/10.5281/zenodo.8357232)
+[![PyPI version](https://badge.fury.io/py/D47calib.svg)](https://badge.fury.io/py/D47calib)
 
 # D47calib
 
