@@ -8,7 +8,7 @@ pip install D47calib
 
 Alternatively:
 
-1. download or clone the source from [https://github.com/mdaeron/D47calib]()
+1. download or clone the source from [https://github.com/mdaeron/D47calib](https://github.com/mdaeron/D47calib)
 2. chose one of one of the following options:
 	+ copy/move the `/src/D47calib` directory to somewhere in your Python path
 	+ copy/move the `/src/D47calib` directory to your current working directory

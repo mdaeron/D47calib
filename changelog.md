@@ -1,5 +1,8 @@
 # Changelog
 
+## v1.2
+*Released on 2023-09-19*
+
 ### Namespace
 * Use `OLGS23` instead of `ogls_2023` as default name for the combined calibration, but keep `ogls_2023` as an alias for now.
 
