@@ -22,8 +22,8 @@ __contact__   = 'daeron@lsce.ipsl.fr'
 __copyright__ = 'Copyright (c) 2023 Mathieu Daëron'
 __license__   = 'MIT License - https://opensource.org/licenses/MIT'
 # __docformat__ = "restructuredtext"
-__date__      = '2023-09-19'
-__version__   = '1.1'
+__date__      = '2023-09-20'
+__version__   = '1.2'
 
 
 import typer, sys
