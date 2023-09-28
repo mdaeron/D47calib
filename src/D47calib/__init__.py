@@ -1254,3 +1254,45 @@ To exclude all samples except those listed in a file, provide the [b]--include-s
 except NameError:
 	pass
 
+class D48calib(D47calib):
+	"""
+	Δ48 calibration class based on OGLS regression
+	of Δ47 as a polynomial function of inverse T.
+	
+	Currently implemented as `D47calib`-in-disguise.
+	"""
+
+	def __init__(self,
+		samples, T, D48,
+		sT = None,
+		sD48 = None,
+		**kwargs,
+		):
+		D47calib.__init__(self, samples=samples, T=T, D47=D48, sT=sT, sD47=sD48, **kwargs)
+
+	@property
+	def D48(self):
+		return self.D47
+
+	@D48.setter
+	def D48(self, x):
+		self.D47 = x
+
+	@property
+	def sD48(self):
+		return self.sD47
+
+	@D48.setter
+	def sD48(self, x):
+		self.sD47 = x
+
+	def T48(self,
+		D48 = None,
+		sD48 = None,
+		T=None,
+		sT = None,
+		error_from = 'both',
+		return_covar = False,
+		):
+		return self.T47(D47=D48, sD47=sD48, T=T, sT=sT, error_from=error_from, return_covar=return_covar)
+
