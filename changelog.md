@@ -1,5 +1,11 @@
 # Changelog
 
+## v1.3.1
+*Released on 2023-09-30*
+
+### Minor new feature
+* Add `--version` option to CLI
+
 ## v1.3
 *Released on 2023-09-27*
 

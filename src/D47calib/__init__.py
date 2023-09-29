@@ -22,8 +22,8 @@ __contact__   = 'daeron@lsce.ipsl.fr'
 __copyright__ = 'Copyright (c) 2023 Mathieu Daëron'
 __license__   = 'MIT License - https://opensource.org/licenses/MIT'
 # __docformat__ = "restructuredtext"
-__date__      = '2023-09-27'
-__version__   = '1.3'
+__date__      = '2023-09-29'
+__version__   = '1.3.1'
 
 
 import typer, sys
@@ -939,6 +939,7 @@ try:
 		covar_precision: Annotated[int, typer.Option('--covar-precision', '-s', help = 'Precision for covariance output')] = 3,
 		return_covar: Annotated[bool, typer.Option('--return-covar', '-v', help = 'Output covariance matrix instead of correlation matrix')] = False,
 		ignore_correl: Annotated[bool, typer.Option('--ignore-correl', '-g', help = 'Only consider and report standard errors without correlations')] = False,
+		version: Annotated[bool, typer.Option('--version', '-V', help = 'Print D47calib version')] = False,
 		):
 		"""
 [b]Purpose:[/b]
@@ -990,6 +991,10 @@ To filter the samples (lines) to process using [b]--exclude-samples[/b] and [b]-
 Then to exclude some samples, provide the [b]--exclude-samples[/b] option with the name of a file where each line is one sample to exclude.
 To exclude all samples except those listed in a file, provide the [b]--include-samples[/b] option with the name of that file, where each line is one sample to include.
 """
+
+		if version:
+			print(__version__)
+			return None
 
 		### INCOMPATIBILITY BETWEEN --ignore-correl AND --return-covar
 		if ignore_correl:
