@@ -879,14 +879,9 @@ def combine_D47calibs(calibs, degrees = [0,2], same_T = []):
 		)
 
 	devils_laghetto_2023 = combine_D47calibs(
-		calibs = [
-			anderson_2021_lsce,
-			fiebig_temp,
-			],
+		calibs = [anderson_2021_lsce, fiebig_temp],
 		degrees = [0,2],
-		same_T = [
-			{'DVH-2', 'DHC2-8'},
-			],
+		same_T = [{'DVH-2', 'DHC2-8'}],
 		)
 	````
 	'''
