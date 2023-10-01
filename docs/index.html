@@ -4,7 +4,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="generator" content="pdoc 13.1.1"/>
-    <title>D47calib API documentation</title>
+    <title>D47calib Documentation</title>
 
     <style>/*! * Bootstrap Reboot v5.0.0 (https://getbootstrap.com/) * Copyright 2011-2021 The Bootstrap Authors * Copyright 2011-2021 Twitter, Inc. * Licensed under MIT (https://github.com/twbs/bootstrap/blob/main/LICENSE) * Forked from Normalize.css, licensed MIT (https://github.com/necolas/normalize.css/blob/master/LICENSE.md) */*,::after,::before{box-sizing:border-box}@media (prefers-reduced-motion:no-preference){:root{scroll-behavior:smooth}}body{margin:0;font-family:system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial,"Noto Sans","Liberation Sans",sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol","Noto Color Emoji";font-size:1rem;font-weight:400;line-height:1.5;color:#212529;background-color:#fff;-webkit-text-size-adjust:100%;-webkit-tap-highlight-color:transparent}hr{margin:1rem 0;color:inherit;background-color:currentColor;border:0;opacity:.25}hr:not([size]){height:1px}h1,h2,h3,h4,h5,h6{margin-top:0;margin-bottom:.5rem;font-weight:500;line-height:1.2}h1{font-size:calc(1.375rem + 1.5vw)}@media (min-width:1200px){h1{font-size:2.5rem}}h2{font-size:calc(1.325rem + .9vw)}@media (min-width:1200px){h2{font-size:2rem}}h3{font-size:calc(1.3rem + .6vw)}@media (min-width:1200px){h3{font-size:1.75rem}}h4{font-size:calc(1.275rem + .3vw)}@media (min-width:1200px){h4{font-size:1.5rem}}h5{font-size:1.25rem}h6{font-size:1rem}p{margin-top:0;margin-bottom:1rem}abbr[data-bs-original-title],abbr[title]{-webkit-text-decoration:underline dotted;text-decoration:underline dotted;cursor:help;-webkit-text-decoration-skip-ink:none;text-decoration-skip-ink:none}address{margin-bottom:1rem;font-style:normal;line-height:inherit}ol,ul{padding-left:2rem}dl,ol,ul{margin-top:0;margin-bottom:1rem}ol ol,ol ul,ul ol,ul ul{margin-bottom:0}dt{font-weight:700}dd{margin-bottom:.5rem;margin-left:0}blockquote{margin:0 0 1rem}b,strong{font-weight:bolder}small{font-size:.875em}mark{padding:.2em;background-color:#fcf8e3}sub,sup{position:relative;font-size:.75em;line-height:0;vertical-align:baseline}sub{bottom:-.25em}sup{top:-.5em}a{color:#0d6efd;text-decoration:underline}a:hover{color:#0a58ca}a:not([href]):not([class]),a:not([href]):not([class]):hover{color:inherit;text-decoration:none}code,kbd,pre,samp{font-family:SFMono-Regular,Menlo,Monaco,Consolas,"Liberation Mono","Courier New",monospace;font-size:1em;direction:ltr;unicode-bidi:bidi-override}pre{display:block;margin-top:0;margin-bottom:1rem;overflow:auto;font-size:.875em}pre code{font-size:inherit;color:inherit;word-break:normal}code{font-size:.875em;color:#d63384;word-wrap:break-word}a>code{color:inherit}kbd{padding:.2rem .4rem;font-size:.875em;color:#fff;background-color:#212529;border-radius:.2rem}kbd kbd{padding:0;font-size:1em;font-weight:700}figure{margin:0 0 1rem}img,svg{vertical-align:middle}table{caption-side:bottom;border-collapse:collapse}caption{padding-top:.5rem;padding-bottom:.5rem;color:#6c757d;text-align:left}th{text-align:inherit;text-align:-webkit-match-parent}tbody,td,tfoot,th,thead,tr{border-color:inherit;border-style:solid;border-width:0}label{display:inline-block}button{border-radius:0}button:focus:not(:focus-visible){outline:0}button,input,optgroup,select,textarea{margin:0;font-family:inherit;font-size:inherit;line-height:inherit}button,select{text-transform:none}[role=button]{cursor:pointer}select{word-wrap:normal}select:disabled{opacity:1}[list]::-webkit-calendar-picker-indicator{display:none}[type=button],[type=reset],[type=submit],button{-webkit-appearance:button}[type=button]:not(:disabled),[type=reset]:not(:disabled),[type=submit]:not(:disabled),button:not(:disabled){cursor:pointer}::-moz-focus-inner{padding:0;border-style:none}textarea{resize:vertical}fieldset{min-width:0;padding:0;margin:0;border:0}legend{float:left;width:100%;padding:0;margin-bottom:.5rem;font-size:calc(1.275rem + .3vw);line-height:inherit}@media (min-width:1200px){legend{font-size:1.5rem}}legend+*{clear:left}::-webkit-datetime-edit-day-field,::-webkit-datetime-edit-fields-wrapper,::-webkit-datetime-edit-hour-field,::-webkit-datetime-edit-minute,::-webkit-datetime-edit-month-field,::-webkit-datetime-edit-text,::-webkit-datetime-edit-year-field{padding:0}::-webkit-inner-spin-button{height:auto}[type=search]{outline-offset:-2px;-webkit-appearance:textfield}::-webkit-search-decoration{-webkit-appearance:none}::-webkit-color-swatch-wrapper{padding:0}::file-selector-button{font:inherit}::-webkit-file-upload-button{font:inherit;-webkit-appearance:button}output{display:inline-block}iframe{border:0}summary{display:list-item;cursor:pointer}progress{vertical-align:baseline}[hidden]{display:none!important}</style>
     <style>/*! syntax-highlighting.css */pre{line-height:125%;}span.linenos{color:inherit; background-color:transparent; padding-left:5px; padding-right:20px;}.pdoc-code .hll{background-color:#ffffcc}.pdoc-code{background:#f8f8f8;}.pdoc-code .c{color:#3D7B7B; font-style:italic}.pdoc-code .err{border:1px solid #FF0000}.pdoc-code .k{color:#008000; font-weight:bold}.pdoc-code .o{color:#666666}.pdoc-code .ch{color:#3D7B7B; font-style:italic}.pdoc-code .cm{color:#3D7B7B; font-style:italic}.pdoc-code .cp{color:#9C6500}.pdoc-code .cpf{color:#3D7B7B; font-style:italic}.pdoc-code .c1{color:#3D7B7B; font-style:italic}.pdoc-code .cs{color:#3D7B7B; font-style:italic}.pdoc-code .gd{color:#A00000}.pdoc-code .ge{font-style:italic}.pdoc-code .gr{color:#E40000}.pdoc-code .gh{color:#000080; font-weight:bold}.pdoc-code .gi{color:#008400}.pdoc-code .go{color:#717171}.pdoc-code .gp{color:#000080; font-weight:bold}.pdoc-code .gs{font-weight:bold}.pdoc-code .gu{color:#800080; font-weight:bold}.pdoc-code .gt{color:#0044DD}.pdoc-code .kc{color:#008000; font-weight:bold}.pdoc-code .kd{color:#008000; font-weight:bold}.pdoc-code .kn{color:#008000; font-weight:bold}.pdoc-code .kp{color:#008000}.pdoc-code .kr{color:#008000; font-weight:bold}.pdoc-code .kt{color:#B00040}.pdoc-code .m{color:#666666}.pdoc-code .s{color:#BA2121}.pdoc-code .na{color:#687822}.pdoc-code .nb{color:#008000}.pdoc-code .nc{color:#0000FF; font-weight:bold}.pdoc-code .no{color:#880000}.pdoc-code .nd{color:#AA22FF}.pdoc-code .ni{color:#717171; font-weight:bold}.pdoc-code .ne{color:#CB3F38; font-weight:bold}.pdoc-code .nf{color:#0000FF}.pdoc-code .nl{color:#767600}.pdoc-code .nn{color:#0000FF; font-weight:bold}.pdoc-code .nt{color:#008000; font-weight:bold}.pdoc-code .nv{color:#19177C}.pdoc-code .ow{color:#AA22FF; font-weight:bold}.pdoc-code .w{color:#bbbbbb}.pdoc-code .mb{color:#666666}.pdoc-code .mf{color:#666666}.pdoc-code .mh{color:#666666}.pdoc-code .mi{color:#666666}.pdoc-code .mo{color:#666666}.pdoc-code .sa{color:#BA2121}.pdoc-code .sb{color:#BA2121}.pdoc-code .sc{color:#BA2121}.pdoc-code .dl{color:#BA2121}.pdoc-code .sd{color:#BA2121; font-style:italic}.pdoc-code .s2{color:#BA2121}.pdoc-code .se{color:#AA5D1F; font-weight:bold}.pdoc-code .sh{color:#BA2121}.pdoc-code .si{color:#A45A77; font-weight:bold}.pdoc-code .sx{color:#008000}.pdoc-code .sr{color:#A45A77}.pdoc-code .s1{color:#BA2121}.pdoc-code .ss{color:#19177C}.pdoc-code .bp{color:#008000}.pdoc-code .fm{color:#0000FF}.pdoc-code .vc{color:#19177C}.pdoc-code .vg{color:#19177C}.pdoc-code .vi{color:#19177C}.pdoc-code .vm{color:#19177C}.pdoc-code .il{color:#666666}</style>
@@ -37,8 +37,8 @@
 
 
 
-            <h2>API Documentation</h2>
-                <ul class="memberlist">
+		<h2>Reference</h2>
+		    <ul class="memberlist">
             <li>
                     <a class="class" href="#D47calib">D47calib</a>
                             <ul class="memberlist">
@@ -93,11 +93,11 @@
 </div>
     </nav>
     <main class="pdoc">
-            <section class="module-info">
-                    <h1 class="modulename">
+	<section class="module-info">
+		    <h1 class="modulename">
 D47calib    </h1>
 
-                		<div class="docstring"><p>Generate, combine, display and apply Δ<sub>47</sub> calibrations</p>
+				<div class="docstring"><p>Generate, combine, display and apply Δ<sub>47</sub> calibrations</p>
 
 <p>This library provides support for:</p>
 
@@ -348,30 +348,30 @@ BAZ-3,0.582,0.007,0.25,0.25,1.00,28.89,0.36,0.987,0.997,1.000,2.42,0.250,0.250,1
 <p>Starting with the following input file <code>rawdata.csv</code>:</p>
 
 <pre><code>UID Sample  Session d45 d46 d47 d48 d49
-1   ETH-2   Session_01  -5.991066   -5.968789   -12.685206  -12.219412  -18.023381
-2   ETH-1   Session_01  6.009875    10.711152   16.087994   21.275325   27.780042
-3   ETH-3   Session_01  5.755765    11.179326   16.689870   22.294132   28.306614
-4   ETH-3   Session_01  5.726647    11.144602   16.634507   22.275401   28.306614
-5   ETH-2   Session_01  -5.973121   -5.894178   -12.599303  -12.037594  -18.023381
-6   FOO-1   Session_01  -0.848380   2.872996    1.535960    5.431873    4.665655
-7   ETH-2   Session_01  -5.981599   -6.011356   -12.728742  -12.335559  -18.023381
-8   BAZ-3   Session_01  -5.394955   7.938127    1.887702    15.671857   9.739724
-9   ETH-3   Session_01  5.734551    11.043266   16.556578   22.005474   28.306614
-10  BAR-2   Session_01  -9.941731   10.985508   0.208381    21.832546   10.707292
-11  ETH-1   Session_01  5.994522    10.810755   16.181039   21.445703   27.780042
-12  ETH-1   Session_01  6.050787    10.800497   16.232192   21.429453   27.780042
-13  ETH-2   Session_02  -5.952660   -5.887239   -12.582248  -12.081588  -18.023381
-14  ETH-3   Session_02  5.720443    11.187928   16.689130   22.308575   28.306614
-15  ETH-2   Session_02  -5.993596   -6.086738   -12.816033  -12.452397  -18.023381
-16  ETH-1   Session_02  5.995178    10.702934   16.073811   21.169324   27.780042
+1   ETH-3   Session_01  5.726647    11.144602   16.634507   22.275401   28.306614
+2   ETH-2   Session_01  -5.973121   -5.894178   -12.599303  -12.037594  -18.023381
+3   ETH-2   Session_01  -5.981599   -6.011356   -12.728742  -12.335559  -18.023381
+4   ETH-3   Session_01  5.755765    11.179326   16.689870   22.294132   28.306614
+5   BAZ-3   Session_01  -5.394955   7.938127    1.887702    15.671857   9.739724
+6   ETH-1   Session_01  6.050787    10.800497   16.232192   21.429453   27.780042
+7   ETH-1   Session_01  5.994522    10.810755   16.181039   21.445703   27.780042
+8   BAR-2   Session_01  -9.941731   10.985508   0.208381    21.832546   10.707292
+9   FOO-1   Session_01  -0.848380   2.872996    1.535960    5.431873    4.665655
+10  ETH-3   Session_01  5.734551    11.043266   16.556578   22.005474   28.306614
+11  ETH-1   Session_01  6.009875    10.711152   16.087994   21.275325   27.780042
+12  ETH-2   Session_01  -5.991066   -5.968789   -12.685206  -12.219412  -18.023381
+13  ETH-1   Session_02  5.995178    10.702934   16.073811   21.169324   27.780042
+14  ETH-3   Session_02  5.756394    11.109906   16.635806   22.189179   28.306614
+15  ETH-2   Session_02  -5.952660   -5.887239   -12.582248  -12.081588  -18.023381
+16  ETH-2   Session_02  -5.983050   -5.953794   -12.679809  -12.224144  -18.023381
 17  ETH-3   Session_02  5.717666    11.175023   16.654427   22.251497   28.306614
-18  ETH-3   Session_02  5.756394    11.109906   16.635806   22.189179   28.306614
-19  ETH-1   Session_02  6.029949    10.682183   16.080186   21.182471   27.780042
-20  BAZ-3   Session_02  -5.337619   7.818571    1.818572    15.400966   9.739724
-21  BAR-2   Session_02  -9.951732   10.964153   0.171443    21.779172   10.707292
-22  FOO-1   Session_02  -0.835316   2.868058    1.539147    5.483628    4.665655
-23  ETH-1   Session_02  6.019913    10.773652   16.165645   21.309536   27.780042
-24  ETH-2   Session_02  -5.983050   -5.953794   -12.679809  -12.224144  -18.023381
+18  ETH-3   Session_02  5.720443    11.187928   16.689130   22.308575   28.306614
+19  ETH-1   Session_02  6.019913    10.773652   16.165645   21.309536   27.780042
+20  ETH-2   Session_02  -5.993596   -6.086738   -12.816033  -12.452397  -18.023381
+21  BAZ-3   Session_02  -5.337619   7.818571    1.818572    15.400966   9.739724
+22  BAR-2   Session_02  -9.951732   10.964153   0.171443    21.779172   10.707292
+23  ETH-1   Session_02  6.029949    10.682183   16.080186   21.182471   27.780042
+24  FOO-1   Session_02  -0.835316   2.868058    1.539147    5.483628    4.665655
 </code></pre>
 
 <p>The following script will read thart raw data, fully process it, convert the standardized output to temperatures, and save the final results to a file named <code>output.csv</code>:</p>
@@ -458,11 +458,11 @@ D47calib -o output.csv -j '&gt;' output/D47_correl.csv
 <hr />
 </div>
 
-                        <input id="mod-D47calib-view-source" class="view-source-toggle-state" type="checkbox" aria-hidden="true" tabindex="-1">
+		        <input id="mod-D47calib-view-source" class="view-source-toggle-state" type="checkbox" aria-hidden="true" tabindex="-1">
 
-                        <label class="view-source-button" for="mod-D47calib-view-source"><span>View Source</span></label>
+		        <label class="view-source-button" for="mod-D47calib-view-source"><span>View Source</span></label>
 
-                        <div class="pdoc-code codehilite"><pre><span></span><span id="L-1"><a href="#L-1"><span class="linenos">   1</span></a><span class="sd">&quot;&quot;&quot;</span>
+		        <div class="pdoc-code codehilite"><pre><span></span><span id="L-1"><a href="#L-1"><span class="linenos">   1</span></a><span class="sd">&quot;&quot;&quot;</span>
 </span><span id="L-2"><a href="#L-2"><span class="linenos">   2</span></a><span class="sd">Generate, combine, display and apply Δ47 calibrations</span>
 </span><span id="L-3"><a href="#L-3"><span class="linenos">   3</span></a>
 </span><span id="L-4"><a href="#L-4"><span class="linenos">   4</span></a><span class="sd">This library provides support for:</span>
@@ -1720,7 +1720,8 @@ D47calib -o output.csv -j '&gt;' output/D47_correl.csv
 </span></pre></div>
 
 
-            </section>
+	</section>
+	<h1>Reference</h1>
 		<section id="D47calib">
 			        <input id="D47calib-view-source" class="view-source-toggle-state" type="checkbox" aria-hidden="true" tabindex="-1">
 <div class="attr class">
