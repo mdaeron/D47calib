@@ -22,7 +22,7 @@ __contact__   = 'daeron@lsce.ipsl.fr'
 __copyright__ = 'Copyright (c) 2023 Mathieu Daëron'
 __license__   = 'MIT License - https://opensource.org/licenses/MIT'
 # __docformat__ = "restructuredtext"
-__date__      = '2023-09-29'
+__date__      = '2023-11-15'
 __version__   = '1.3.1'
 
 
@@ -837,7 +837,7 @@ class D47calib(_ogls.InverseTPolynomial):
 	)
 ''')
 
-def combine_D47calibs(calibs, degrees = [0,2], same_T = []):
+def combine_D47calibs(calibs, degrees = [0,2], same_T = [], exclude_samples = []):
 	'''
 	Combine data from several `D47calib` instances.
 	
@@ -852,6 +852,8 @@ def combine_D47calibs(calibs, degrees = [0,2], same_T = []):
 	to have formed at the same temperature (e.g. `DVH-2` and `DHC2-8` from the `fiebig_2021`
 	and `anderson_2021_lsce` data sets). Each element of `same_T` is a `list` with the names
 	of two or more samples formed at the same temperature.
+	+ **exclude_samples**: Use this `list` to specify the names of samples to exclude from
+	the combined calibration.
 	
 	For example, the `OGLS23` calibration is computed with:
 	
@@ -899,13 +901,15 @@ def combine_D47calibs(calibs, degrees = [0,2], same_T = []):
 					any([samples[i] in _ and samples[j] in _ for _ in same_T])):
 
 					sT[i,j] = (sT[i,i] * sT[j,j])**.5
+
+	k = [_ for _, s in enumerate(samples) if s not in exclude_samples]
 	
 	calib = D47calib(
-		samples = samples,
-		T = T,
-		D47 = D47,
-		sT = sT,
-		sD47 = sD47,
+		samples = [samples[_] for _ in k],
+		T = [T[_] for _ in k],
+		D47 = [D47[_] for _ in k],
+		sT = sT[k,:][:,k],
+		sD47 = sD47[k,:][:,k],
 		degrees = degrees,
 		)
 
@@ -1253,4 +1257,4 @@ To exclude all samples except those listed in a file, provide the [b]--include-s
 
 except NameError:
 	pass
-
+	
