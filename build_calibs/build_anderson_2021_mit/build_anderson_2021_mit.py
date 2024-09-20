@@ -33,6 +33,7 @@ anderson_data.plot_distribution_of_analyses()
 anderson_data.summary(dir = 'tables', verbose = False)
 anderson_data.table_of_sessions(dir = 'tables', verbose = False)
 anderson_data.table_of_samples(dir = 'tables', verbose = False)
+anderson_data.table_of_analyses(dir = 'tables', verbose = False)
 
 anderson_metadata = read_csv('input/anderson_2021_metadata.csv')
 anderson_calib_samples = [m['Sample'] for m in anderson_metadata]

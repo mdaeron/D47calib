@@ -30,6 +30,7 @@ data.plot_distribution_of_analyses()
 data.summary(dir = 'tables', verbose = False)
 data.table_of_sessions(dir = 'tables', verbose = False)
 data.table_of_samples(dir = 'tables', verbose = False)
+data.table_of_analyses(dir = 'tables', verbose = False)
 
 
 jautzy_metadata = read_csv('input/jautzy_2020_metadata.csv')

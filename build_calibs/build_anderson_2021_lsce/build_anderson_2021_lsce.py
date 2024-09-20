@@ -16,6 +16,7 @@ rawdata.plot_sessions(dir = 'sessions')
 rawdata.summary(dir = 'tables', verbose = False)
 rawdata.table_of_sessions(dir = 'tables', verbose = False)
 rawdata.table_of_samples(dir = 'tables', verbose = False)
+rawdata.table_of_analyses(dir = 'tables', verbose = False)
 
 devils_laghetto_2021_metadata = read_csv('input/devils_laghetto_2021_metadata.csv')
 calib_samples = [m['Sample'] for m in devils_laghetto_2021_metadata]

@@ -100,6 +100,7 @@ rawdata.standardize()
 rawdata.summary(dir = 'output', verbose = False)
 rawdata.table_of_sessions(dir = 'output', verbose = False)
 rawdata.table_of_samples(dir = 'output', verbose = False)
+rawdata.table_of_analyses(dir = 'output', verbose = False)
 
 ### Define sample groups to bin together:
 groups = {l['Sample']: [] for l in metadata}

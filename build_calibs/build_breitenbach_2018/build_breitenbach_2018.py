@@ -300,6 +300,7 @@ def icdes_process(_rawdata_):
 
 	data.table_of_sessions(verbose = False, dir = dir, filename = 'sessions.csv')
 	data.table_of_samples(dir = dir, filename = 'samples.csv')
+	data.table_of_analyses(dir = dir, filename = 'analyses.csv')
 	data.plot_distribution_of_analyses(dir = dir, filename = 'distribution_of_analyses.pdf')
 
 	data.plot_residuals(dir = dir, filename = 'D47_residuals_with_drift_corrections.pdf')

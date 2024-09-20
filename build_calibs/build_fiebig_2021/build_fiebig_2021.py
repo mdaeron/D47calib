@@ -394,7 +394,8 @@ def icdes_process(_rawdata_):
 	data.plot_residuals(filename = 'D47residuals.pdf')
 	data.summary(dir = 'tables', verbose = False)
 	data.table_of_sessions(dir = 'tables', verbose = False)
-# 	data.table_of_samples(dir = 'tables', verbose = False)
+	data.table_of_samples(dir = 'tables', verbose = False)
+	data.table_of_analyses(dir = 'tables', verbose = False)
 
 # 	data.table_of_samples(dir = dir, filename = 'samples.csv')
 # 	plot_residuals(data, filename = f'{dir}/D47_residuals_with_drift_corrections.pdf', title_txt = 'Δ$_{47}$ residuals (I-CDES)')

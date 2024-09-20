@@ -47,6 +47,7 @@ rawdata.standardize()
 rawdata.summary()
 rawdata.table_of_sessions()
 rawdata.table_of_samples()
+rawdata.table_of_analyses()
 
 groups = {
 	'Ad': {s for s in rawdata.unknowns if s.startswith('Ad')},
