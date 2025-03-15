@@ -3,6 +3,9 @@
 ### Minor new feature
 * Add `ignore_samples` option to `combine_D47calibs()`
 
+### Bugfixes
+* Fix bug that caused `D47calib.export()` to print out floats as `np.float64()` values with recent versions of numpy
+
 ## v1.3.1
 *Released on 2023-09-30*
 
