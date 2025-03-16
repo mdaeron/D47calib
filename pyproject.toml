@@ -25,7 +25,7 @@ D47calib = "D47calib:__cli"
 
 [tool.uv]
 dev-dependencies = [
-    "d47crunch>=2.4.1",
+    "d47crunch>=2.4.2",
     "pdoc>=15.0.1",
     "xlrd==1.2.0",
 ]

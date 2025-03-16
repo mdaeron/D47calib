@@ -156,7 +156,7 @@ class D47calib(_ogls.InverseTPolynomial):
 		xlabel = None,
 		Ti = [0,20,50,100,250,1000],
 		):
-		"""
+		r"""
 		Create and return an `Axes` object with X values equal to 1/T<sup>2</sup>,
 		but labeled in degrees Celsius.
 		
