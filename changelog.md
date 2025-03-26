@@ -1,6 +1,7 @@
 # Changelog
 
 ## v1.3.2
+*Released on 2025-03-26*
 
 ### Minor new feature
 * Add `ignore_samples` option to `combine_D47calibs()`
