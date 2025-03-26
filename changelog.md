@@ -1,10 +1,13 @@
 # Changelog
 
+## v1.3.2
+
 ### Minor new feature
 * Add `ignore_samples` option to `combine_D47calibs()`
 
 ### Bugfixes
 * Fix bug that caused `D47calib.export()` to print out floats as `np.float64()` values with recent versions of numpy
+* Fix `SyntaxWarning` related to LaTeX in docstrings
 
 ## v1.3.1
 *Released on 2023-09-30*

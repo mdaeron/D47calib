@@ -19,11 +19,11 @@ Python code or by using a simple command-line interface (e.g., `D47calib input.c
 
 __author__    = 'Mathieu Daëron'
 __contact__   = 'daeron@lsce.ipsl.fr'
-__copyright__ = 'Copyright (c) 2023 Mathieu Daëron'
+__copyright__ = 'Copyright (c) 2025 Mathieu Daëron'
 __license__   = 'MIT License - https://opensource.org/licenses/MIT'
 # __docformat__ = "restructuredtext"
-__date__      = '2023-11-15'
-__version__   = '1.3.1'
+__date__      = '2025-03-26'
+__version__   = '1.3.2'
 
 
 import typer, sys
@@ -156,14 +156,14 @@ class D47calib(_ogls.InverseTPolynomial):
 		xlabel = None,
 		Ti = [0,20,50,100,250,1000],
 		):
-		r"""
+		"""
 		Create and return an `Axes` object with X values equal to 1/T<sup>2</sup>,
 		but labeled in degrees Celsius.
 		
 		### Parameters
 		
 		+ **xlabel**:
-		Custom label for X axis (`r'$1\,/\,T^2$'` by default)
+		Custom label for X axis (`r'$1\\,/\\,T^2$'` by default)
 		+ **Ti**:
 		Specify tick locations for X axis, in degrees C.
 
