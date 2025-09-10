@@ -9,11 +9,11 @@ readme = "readme.md"
 license = {file = "LICENSE"}
 classifiers = ["License :: OSI Approved :: MIT License"]
 dynamic = ["version", "description"]
-requires-python = ">=3.11"
+requires-python = ">=3.12"
 dependencies = [
-	"ogls",
-	"typer",
-    "rich",
+	"ogls<2",
+	"typer>=0.17.4,<0.18",
+    "rich>=13.9.4,<13.10",
 ]
 
 [project.urls]

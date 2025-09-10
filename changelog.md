@@ -1,5 +1,11 @@
 # Changelog
 
+## v1.3.3
+*Released on 2025-09-10*
+
+### Bugfix
+* Fix error introduced by lazy-loading of `typer.rich_utils`.
+
 ## v1.3.2
 *Released on 2025-03-26*
 

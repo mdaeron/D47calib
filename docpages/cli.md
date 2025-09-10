@@ -148,7 +148,7 @@ Yields:
 20   2.0  0.6090             0.0011                  0.848  0.952  1.000             0.0063                  0.000  0.000  1.000            0.0064                 0.091  0.056  1.000
 ```
 
-## 3.2 Integration with [`D47crunch`](https://github.com/mdaeron/D47crunch)
+## 3.2 Integration with D47crunch
 
 Starting with the following input file `rawdata.csv`:
 

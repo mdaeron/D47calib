@@ -22,11 +22,13 @@ __contact__   = 'daeron@lsce.ipsl.fr'
 __copyright__ = 'Copyright (c) 2025 Mathieu Daëron'
 __license__   = 'MIT License - https://opensource.org/licenses/MIT'
 # __docformat__ = "restructuredtext"
-__date__      = '2025-03-26'
-__version__   = '1.3.2'
+__date__      = '2025-09-10'
+__version__   = '1.3.3'
 
 
-import typer, sys
+import typer
+import typer.rich_utils
+import sys
 from typing_extensions import Annotated
 import ogls as _ogls
 import numpy as _np

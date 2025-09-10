@@ -23,7 +23,7 @@ sys.path.append('/foo/bar')
 
 I you don't install from pip, you will probably need to install the requirements listed in `pyproject.toml`.
 
-## 1.2 Only install command-line interface using `pipx`
+## 1.2 Only install command-line interface using pipx
 
 If you only want to install the CLI, one easy option is to do so using `pipx`:
 
