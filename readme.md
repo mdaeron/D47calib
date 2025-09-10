@@ -7,7 +7,7 @@ Generate, combine, display and apply Δ<sub>47</sub> calibrations.
 
 ## Link with OGLS regression
 
-The calibrations use *Omnivariant Generalized Least Squares*, a generalized from of least-squares regression combining the features of GLS and York regression. It is described in an upcoming paper by *Daëron & Vermeesch* (preprint [here](https://hal.science/hal-04211269)), where the full reprocessing and regression of the various `D47calib` calibrations is described. See the `build_calibs` directory in this repo for the corresponding reprocessing code.
+The calibrations use *Omnivariant Generalized Least Squares*, a generalized from of least-squares regression combining the features of GLS and York regression. It is described in an upcoming paper by [*Daëron & Vermeesch* (2024)](https://doi.org/10.1016/j.chemgeo.2023.121881), where the full reprocessing and regression of the various `D47calib` calibrations is described. See the `build_calibs` directory in this repo for the corresponding reprocessing code.
 
 ## Contact
 
