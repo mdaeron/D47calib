@@ -1,3 +1,4 @@
+#! /usr/bin/env uv run python
 '''
 Apply an arbitrary filter to each docstring
 '''
