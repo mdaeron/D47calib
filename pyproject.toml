@@ -23,8 +23,8 @@ Documentation = "https://mdaeron.github.io/D47calib"
 [project.scripts]
 D47calib = "D47calib:__cli"
 
-[tool.uv]
-dev-dependencies = [
+[dependency-groups]
+dev = [
     "d47crunch>=2.4.2",
     "pdoc>=15.0.1",
     "xlrd==1.2.0",
