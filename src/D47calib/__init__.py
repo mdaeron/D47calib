@@ -945,6 +945,7 @@ try:
 		covar_precision: Annotated[int, typer.Option('--covar-precision', '-s', help = 'Precision for covariance output')] = 3,
 		return_covar: Annotated[bool, typer.Option('--return-covar', '-v', help = 'Output covariance matrix instead of correlation matrix')] = False,
 		ignore_correl: Annotated[bool, typer.Option('--ignore-correl', '-g', help = 'Only consider and report standard errors without correlations')] = False,
+		uncertainty_sources: Annotated[bool, typer.Option('--uncertainty-sources', '-U', help = 'Output different sources of uncertainty')] = False,
 		version: Annotated[bool, typer.Option('--version', '-V', help = 'Print D47calib version')] = False,
 		):
 		"""
@@ -974,9 +975,9 @@ The rest of the input must be any number of lines with float values correspondin
 [italic]0.6281  0.0087  0.25  1.00  0.25[/italic]
 [italic]0.6385  0.0095  0.25  0.25  1.00[/italic]
 
-The corresponding D47 (options 1-4) or T (options 4-8) values are computed, along with standard errors and error correlations from calibration uncertainties.
+The corresponding D47 (options 1-4) or T (options 4-8) values are computed, along with the combined standard errors accounting for both calibration and any (correlated or uncorrelated) uncertainties in the input values.
 
-For options 2-4 and 5-8, which specify standard errors or covariances for the input values, the standard errors and error correlations resulting from these input uncertainties are also computed, as well as the combined standard errors accounting for both calibration and input uncertainties.
+For options 2-4 and 5-8, which specify standard errors or covariances for the input values, one may obtain (using option `-U`) the separate components of uncertainty from (a) calibration uncertainties and (b) input uncertainties.
 
 The example above will thus result in an output with the following fields:
 
@@ -1191,42 +1192,43 @@ To exclude all samples except those listed in a file, provide the [b]--include-s
 		for k in range(N):
 			data_out[k+1] += [Y_str[k]]
 
-		data_out[0] += [f'{outfield}_SE_from_calib']
-		for k in range(N):
-			data_out[k+1] += [Y_SE_from_calib_str[k]]
-		if not ignore_correl:
-			if return_covar:
-				data_out[0] += [f'{outfield}_covar_from_calib'] + ['' for _ in range(N-1)]
-				for k in range(N):
-					data_out[k+1] += Y_covar_from_calib_str[k]
-			else:
-				data_out[0] += [f'{outfield}_correl_from_calib'] + ['' for _ in range(N-1)]
-				for k in range(N):
-					data_out[k+1] += Y_correl_from_calib_str[k]
+		if uncertainty_sources:
+			data_out[0] += [f'{outfield}_SE_from_calib']
+			for k in range(N):
+				data_out[k+1] += [Y_SE_from_calib_str[k]]
+			if not ignore_correl:
+				if return_covar:
+					data_out[0] += [f'{outfield}_covar_from_calib'] + ['' for _ in range(N-1)]
+					for k in range(N):
+						data_out[k+1] += Y_covar_from_calib_str[k]
+				else:
+					data_out[0] += [f'{outfield}_correl_from_calib'] + ['' for _ in range(N-1)]
+					for k in range(N):
+						data_out[k+1] += Y_correl_from_calib_str[k]
 
-		data_out[0] += [f'{outfield}_SE_from_input']
-		for k in range(N):
-			data_out[k+1] += [Y_SE_from_input_str[k]]
-		if not ignore_correl:
-			if return_covar:
-				data_out[0] += [f'{outfield}_covar_from_input'] + ['' for _ in range(N-1)]
-				for k in range(N):
-					data_out[k+1] += Y_covar_from_input_str[k]
-			else:
-				data_out[0] += [f'{outfield}_correl_from_input'] + ['' for _ in range(N-1)]
-				for k in range(N):
-					data_out[k+1] += Y_correl_from_input_str[k]
+			data_out[0] += [f'{outfield}_SE_from_input']
+			for k in range(N):
+				data_out[k+1] += [Y_SE_from_input_str[k]]
+			if not ignore_correl:
+				if return_covar:
+					data_out[0] += [f'{outfield}_covar_from_input'] + ['' for _ in range(N-1)]
+					for k in range(N):
+						data_out[k+1] += Y_covar_from_input_str[k]
+				else:
+					data_out[0] += [f'{outfield}_correl_from_input'] + ['' for _ in range(N-1)]
+					for k in range(N):
+						data_out[k+1] += Y_correl_from_input_str[k]
 
-		data_out[0] += [f'{outfield}_SE_from_both']
+		data_out[0] += [f'{outfield}_SE_from_both' if uncertainty_sources else f'{outfield}_SE']
 		for k in range(N):
 			data_out[k+1] += [Y_SE_from_both_str[k]]
 		if not ignore_correl:
 			if return_covar:
-				data_out[0] += [f'{outfield}_covar_from_both'] + ['' for _ in range(N-1)]
+				data_out[0] += [f'{outfield}_covar_from_both' if uncertainty_sources else f'{outfield}_covar'] + ['' for _ in range(N-1)]
 				for k in range(N):
 					data_out[k+1] += Y_covar_from_both_str[k]
 			else:
-				data_out[0] += [f'{outfield}_correl_from_both'] + ['' for _ in range(N-1)]
+				data_out[0] += [f'{outfield}_correl_from_both' if uncertainty_sources else f'{outfield}_correl'] + ['' for _ in range(N-1)]
 				for k in range(N):
 					data_out[k+1] += Y_correl_from_both_str[k]
 
