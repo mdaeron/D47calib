@@ -1,5 +1,11 @@
 # Changelog
 
+## v1.4.0
+*Released on 2025-12-16*
+
+### CLI change
+* Added `-U` option to CLI. This breaks backward-compatibility because the default behavior has changed (`D47calib` used to return the different component of uncertainty by default, and now only returns combined uncertainties by default).
+
 ## v1.3.3
 *Released on 2025-09-10*
 
