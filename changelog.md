@@ -1,5 +1,11 @@
 # Changelog
 
+## v1.4.1
+*Released on 2025-12-20*
+
+### Bugfix
+* Fix `TypeError` in `D47calib.T47()` ("only 0-dimensional arrays can be converted to Python scalars")
+
 ## v1.4.0
 *Released on 2025-12-16*
 

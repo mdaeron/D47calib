@@ -21,8 +21,8 @@ __author__    = 'Mathieu Daëron'
 __contact__   = 'daeron@lsce.ipsl.fr'
 __copyright__ = 'Copyright (c) 2025 Mathieu Daëron'
 __license__   = 'MIT License - https://opensource.org/licenses/MIT'
-__date__      = '2025-12-15'
-__version__   = '1.4.0'
+__date__      = '2025-12-20'
+__version__   = '1.4.1'
 
 
 import typer
@@ -598,7 +598,7 @@ class D47calib(_ogls.InverseTPolynomial):
 			if return_covar:
 				return T, CM_T
 			else:
-				return T, float(_np.diag(CM_T)**.5) if T.ndim == 0 else _np.diag(CM_T)**.5
+				return T, CM_T[0,0]**.5 if T.ndim == 0 else _np.diag(CM_T)**.5
 	
 
 	def plot_T47_errors(
