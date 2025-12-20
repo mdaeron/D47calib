@@ -22,7 +22,7 @@ __contact__   = 'daeron@lsce.ipsl.fr'
 __copyright__ = 'Copyright (c) 2025 Mathieu Daëron'
 __license__   = 'MIT License - https://opensource.org/licenses/MIT'
 __date__      = '2025-12-20'
-__version__   = '1.4.1'
+__version__   = '1.4.2'
 
 
 import typer

@@ -1,5 +1,11 @@
 # Changelog
 
+## v1.4.2
+*Released on 2025-12-20*
+
+### Update dependency
+* Require `ogls>=1.0.1`
+
 ## v1.4.1
 *Released on 2025-12-20*
 
